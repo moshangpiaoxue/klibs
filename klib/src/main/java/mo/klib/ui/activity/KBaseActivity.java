@@ -1,0 +1,254 @@
+package mo.klib.ui.activity;
+
+import android.app.Activity;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.graphics.Rect;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.view.View;
+
+import mo.klib.modle.manager.KInputMethodManager;
+import mo.klib.modle.viewHolder.ViewHolder;
+import mo.klib.utils.appUtils.SratusBarUtil;
+import mo.klib.utils.bengUtil.NextActivityUtil;
+import mo.klib.utils.logUtils.LogUtil;
+import mo.klib.utils.systemUtils.ScreenUtil;
+import mo.klib.utils.tipsUtil.ToastUtil;
+
+
+/**
+ * description: 基础activity
+ * autour: mo
+ * date: 2017/11/14 0014 14:44
+ */
+public abstract class KBaseActivity extends KMediaActivity {
+    /**
+     * 碎片集合上一个显示的索引
+     */
+    protected int currentTabIndex;
+    /**
+     * 布局id
+     */
+    protected int layoutId;
+    /**
+     * 根view
+     */
+    protected View rootView;
+    /**
+     * View 管理
+     */
+    protected ViewHolder mViewHolder;
+
+    /**
+     * 判断键盘的高度
+     */
+    private int keyHeight;
+
+    /**
+     * 系统返回键是否起作用
+     */
+    protected Boolean isCanBack = false;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Boolean isShowStatusBar = getShowStatusBar();
+        if (!isShowStatusBar) {
+            SratusBarUtil.setStatusBar(mActivity, isShowStatusBar);
+        }
+        Boolean isShowSteep = getShowSteep();
+        if (isShowSteep) {
+            ScreenUtil.setBarTransparent(mActivity);
+        }
+        Boolean isShowFullScreen = getShowFullScreen();
+        if (isShowFullScreen) {
+            ScreenUtil.setFullScreen(mActivity);
+        }
+        layoutId = getLayoutId();
+        mViewHolder = layoutId == 0 ? null : new ViewHolder(getLayoutInflater(), null, layoutId);
+        rootView = layoutId == 0 ? null : mViewHolder.getRootView();
+        if (rootView != null) {
+            setContentView(rootView);
+        }
+        initView(mViewHolder, rootView);
+    }
+
+    /**
+     * 获取全屏状态 默认false
+     */
+    protected Boolean getShowFullScreen() {
+        return false;
+    }
+
+    /**
+     * 获取沉浸式状态 默认false
+     */
+    protected Boolean getShowSteep() {
+        return false;
+    }
+
+    /**
+     * 获取状态栏显示状态 默认显示
+     */
+    protected Boolean getShowStatusBar() {
+        return true;
+    }
+
+    /**
+     * 获取布局id
+     */
+
+    protected abstract int getLayoutId();
+
+    /**
+     * 具体操作
+     */
+    protected abstract void initView(ViewHolder mViewHolder, View rootView);
+
+
+    /**
+     * 吐司提示
+     */
+    public void showToast(String string) {
+        ToastUtil.showToast(string);
+    }
+
+    /**
+     * 开启软键盘弹出关闭监听
+     */
+    protected void actionSoftInputChangeListener() {
+        //阀值设置为屏幕高度的1/3    
+        keyHeight = ScreenUtil.getScreenHeight() * 2 / 3;
+        getWindow().getDecorView().addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft,
+                                       int oldTop, int oldRight, int oldBottom) {
+                Rect rect = new Rect();
+                getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
+                if (bottom != 0 && oldBottom != 0 && rect.bottom <= keyHeight) {
+                    onInputShow();
+                } else if (bottom != 0 && oldBottom != 0) {
+                    onInputHide();
+                }
+            }
+        });
+    }
+
+    /**
+     * 软键盘监听--弹出
+     */
+    protected void onInputShow() {
+        LogUtil.i("软键盘弹出");
+    }
+
+    /**
+     * 软键盘监听--关闭
+     */
+    protected void onInputHide() {
+        LogUtil.i("软键盘关闭");
+    }
+
+    /**
+     * 开启键盘
+     */
+    protected void openInput() {
+        KInputMethodManager.INSTANCE.openKeybord(mActivity, true);
+    }
+
+    /**
+     * 关闭键盘
+     */
+    protected void closeInput() {
+        KInputMethodManager.INSTANCE.openKeybord(mActivity, false);
+    }
+
+    public ViewHolder getViewHolder() {
+        return mViewHolder;
+    }
+
+    /**
+     * 通用findViewById
+     */
+    protected <T extends View> T findView(int viewId) {
+        return (T) findViewById(viewId);
+    }
+
+
+    /**
+     * 让字体不随系统字体改变
+     */
+    @Override
+    public Resources getResources() {
+        Resources res = super.getResources();
+        Configuration config = new Configuration();
+        config.setToDefaults();
+        res.updateConfiguration(config, res.getDisplayMetrics());
+        return res;
+    }
+
+    @Override
+    public void onBackPressed() {
+        finishActivity(mActivity);
+    }
+    /**
+     * 关闭当前activity
+     */
+    public void finishActivity(Activity activity) {
+        NextActivityUtil.finishActivity(activity);
+    }
+
+    /**
+     * 添加fragment
+     *
+     * @param fragmentLayoutId 承载布局id
+     * @param fragment         碎片实例
+     * @param isShow           是否显示
+     */
+    protected void addFragment(int fragmentLayoutId, Fragment fragment, Boolean isShow) {
+        if (fragment != null && fragmentLayoutId != 0) {
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.add(fragmentLayoutId, fragment);
+            if (isShow) {
+                transaction.show(fragment);
+            }
+            transaction.commit();
+        }
+    }
+
+    /**
+     * 移除fragment
+     */
+    protected void removeFragment() {
+        if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
+            getSupportFragmentManager().popBackStack();
+        } else {
+            finish();
+        }
+    }
+
+    /**
+     * 碎片变化
+     */
+    protected int changeFragments(int fragmentLayoutId, Fragment[] fragments, int index) {
+        if (currentTabIndex != index) {
+            FragmentTransaction trx = getSupportFragmentManager().beginTransaction();
+            trx.hide(fragments[currentTabIndex]);
+            if (!fragments[index].isAdded()) {
+                trx.add(fragmentLayoutId, fragments[index]);
+            } else {
+                trx.show(fragments[index]);
+            }
+            trx.commit();
+        }
+        currentTabIndex = index;
+        return currentTabIndex;
+    }
+
+
+    public Activity getActivity() {
+        return this;
+    }
+
+}
