@@ -22,7 +22,7 @@ public class TimeUtils {
      * @return 秒数
      */
     public static long getSeconds(long m) {
-        return new BigDecimal((float) (DateUtils.getMS(m)/1000)).setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
+        return new BigDecimal((float) (DateUtil.getMS(m)/1000)).setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
     }
     /**
      * 获取秒数  时分秒 --》》 秒数
@@ -180,7 +180,7 @@ public class TimeUtils {
             } else if (day == 2) { // 前天
                 sb.append("前天 ");
             } else {
-                sb.append(DateUtils.getWeek(milliseconds));
+                sb.append(DateUtil.getWeek(milliseconds));
             }
             // 添加后缀
             sb.append(time);

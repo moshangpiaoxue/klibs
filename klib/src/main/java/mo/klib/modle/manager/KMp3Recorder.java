@@ -7,7 +7,7 @@ import java.io.IOException;
 
 import mo.klib.KApplication;
 import mo.klib.utils.dataUtil.StringUtil;
-import mo.klib.utils.dataUtil.date.DateUtils;
+import mo.klib.utils.dataUtil.date.DateUtil;
 import mo.klib.utils.fileUtil.FileUtil;
 import mo.klib.utils.logUtils.LogUtil;
 import mo.klib.utils.systemUtils.storageUtil.SDCardUtil;
@@ -45,7 +45,7 @@ public class KMp3Recorder {
         this.name = name;
 
         path = SDCardUtil.getSDCardPath() + "/sounds/" +
-                (StringUtil.isEmpty(name) ? DateUtils.getString("yyyy_MM_dd_HH_mm_ss") : name) + ".mp3";
+                (StringUtil.isEmpty(name) ? DateUtil.getString("yyyy_MM_dd_HH_mm_ss") : name) + ".mp3";
     }
 
 

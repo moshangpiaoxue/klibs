@@ -45,7 +45,7 @@ import static mo.klib.utils.dataUtil.date.DateFormatUtil.getSDF;
  * K：小时，从0到11，区分上下午
  * 输入的个数就是现实的位数
  */
-public class DateUtils {
+public class DateUtil {
     /**
      * 是否闰年
      *
@@ -519,16 +519,16 @@ public class DateUtils {
      */
     public static String getCustomDate(long milliseconds) {
         String returnSre = "";
-        if (DateUtils.isThisYear(milliseconds)) {
-            if (DateUtils.isToday(milliseconds)) {
-                returnSre = "今天 " + DateUtils.getString(milliseconds, "HH:mm");
-            } else if (DateUtils.isYesterday(milliseconds)) {
-                returnSre = "昨天 " + DateUtils.getString(milliseconds, "HH:mm");
+        if (DateUtil.isThisYear(milliseconds)) {
+            if (DateUtil.isToday(milliseconds)) {
+                returnSre = "今天 " + DateUtil.getString(milliseconds, "HH:mm");
+            } else if (DateUtil.isYesterday(milliseconds)) {
+                returnSre = "昨天 " + DateUtil.getString(milliseconds, "HH:mm");
             } else {
-                returnSre = DateUtils.getString(milliseconds, "MM-dd HH:mm");
+                returnSre = DateUtil.getString(milliseconds, "MM-dd HH:mm");
             }
         } else {
-            returnSre = DateUtils.getString(milliseconds, "yyyy-MM-dd HH:mm");
+            returnSre = DateUtil.getString(milliseconds, "yyyy-MM-dd HH:mm");
         }
         return returnSre;
     }

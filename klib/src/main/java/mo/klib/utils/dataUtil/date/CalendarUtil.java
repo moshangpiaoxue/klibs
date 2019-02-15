@@ -7,8 +7,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import static mo.klib.utils.dataUtil.date.DateUtils.getDate;
-import static mo.klib.utils.dataUtil.date.DateUtils.getMS;
+import static mo.klib.utils.dataUtil.date.DateUtil.getDate;
+import static mo.klib.utils.dataUtil.date.DateUtil.getMS;
 
 /**
  * @ author：mo
