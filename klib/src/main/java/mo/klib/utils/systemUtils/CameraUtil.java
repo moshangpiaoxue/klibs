@@ -62,7 +62,7 @@ public class CameraUtil {
     public static Uri actionPhoneTake(Activity mActivity) {
 
         Uri imageUri;
-        File outImage = new File(k.app().getExternalCacheDir(), DateUtil.getNowM() + "_phone.img");
+        File outImage = new File(k.app().getExternalCacheDir(), DateUtil.getM() + "_phone.img");
         try {
             if (outImage.exists()) {
                 outImage.delete();
@@ -93,7 +93,7 @@ public class CameraUtil {
     public static Uri actionMediaTakeVideo(Activity mActivity) {
 
         Uri videoUri;
-        File outVideo = new File(k.app().getExternalCacheDir(), DateUtil.getNowM() + "_video.mp4");
+        File outVideo = new File(k.app().getExternalCacheDir(), DateUtil.getM() + "_video.mp4");
         try {
             if (outVideo.exists()) {
                 outVideo.delete();

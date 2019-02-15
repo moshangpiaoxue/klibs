@@ -196,8 +196,8 @@ public class DateUtil {
      *
      * @return 10位时间戳
      */
-    public static long getNowM() {
-        return ms2Unit(getNowMS(), ConstUtil.TimeUnit.SEC);
+    public static long getM() {
+        return ms2Unit(getMS(), ConstUtil.TimeUnit.SEC);
     }
 
     /**
@@ -205,7 +205,7 @@ public class DateUtil {
      *
      * @return 13位时间戳
      */
-    public static long getNowMS() {
+    public static long getMS() {
         return System.currentTimeMillis();
     }
 
@@ -222,7 +222,7 @@ public class DateUtil {
         } else if (size == 13) {
             return time;
         } else {
-            return getNowMS();
+            return getMS();
         }
     }
 
@@ -243,7 +243,7 @@ public class DateUtil {
      * @return 默认日期格式："yyyy-MM-dd"
      */
     public static String getString() {
-        return getString(getNowMS(), getSDF());
+        return getString(getMS(), getSDF());
     }
 
 
@@ -254,7 +254,7 @@ public class DateUtil {
      * @return 自定义时间格式的当前日期
      */
     public static String getString(String formatStr) {
-        return getString(getNowMS(), getSDF(formatStr));
+        return getString(getMS(), getSDF(formatStr));
     }
 
     /**

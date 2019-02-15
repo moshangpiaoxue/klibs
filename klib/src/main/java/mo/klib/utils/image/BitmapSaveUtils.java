@@ -32,7 +32,7 @@ public class BitmapSaveUtils {
      * @throws IOException
      */
     public static File saveBitmapToJPG(Bitmap bitmap) throws IOException {
-        return saveBitmapToJPG(bitmap, DateUtil.getNowMS() + ".jpg");
+        return saveBitmapToJPG(bitmap, DateUtil.getMS() + ".jpg");
     }
 
     public static File saveBitmapToJPG(Bitmap bitmap, String name) throws IOException {
