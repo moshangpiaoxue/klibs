@@ -1,6 +1,7 @@
 package mo.klib.utils.tipsUtil;
 
 import android.app.Activity;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
@@ -20,7 +21,7 @@ public class ToastUtil {
 
     public static void showToast(final String msg) {
         //如果是主线程，直接弹出toast
-        if ("main".equals(Thread.currentThread().getName())) {
+        if (TextUtils.equals("main",Thread.currentThread().getName())) {
             Toast.makeText(k.app(), msg, Toast.LENGTH_SHORT).show();
         }
     }

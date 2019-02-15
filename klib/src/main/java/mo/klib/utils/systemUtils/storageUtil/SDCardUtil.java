@@ -1,5 +1,6 @@
 package mo.klib.utils.systemUtils.storageUtil;
 
+import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
 import android.text.format.Formatter;
@@ -7,6 +8,8 @@ import android.text.format.Formatter;
 import java.io.File;
 
 import mo.klib.k;
+import mo.klib.modle.constants.Limits;
+import mo.klib.utils.fileUtil.FileSize;
 
 
 /**
@@ -16,8 +19,22 @@ import mo.klib.k;
 public class SDCardUtil {
 
     private SDCardUtil() {
-        /* cannot be instantiated */
         throw new UnsupportedOperationException("SDCardUtil cannot be instantiated");
+    }
+
+    /**
+     * 获取SD卡状态
+     *
+     * @return SD卡状态:
+     * MEDIA_UNKNOWN=不能识别SD卡
+     * MEDIA_REMOVED=没有SD卡
+     * MEDIA_UNMOUNTED=SD卡存在但是没有挂载（4.0之前版本会出现，有卸载SD卡的选项）
+     * MEDIA_CHECKING=SD卡正在检测
+     * MEDIA_MOUNTED=SD卡已经挂载并且可用
+     * MEDIA_MOUNTED_READ_ONLY=只读
+     */
+    public static String getState() {
+        return Environment.getExternalStorageState();
     }
 
     /**
@@ -25,8 +42,17 @@ public class SDCardUtil {
      *
      * @return
      */
-    public static boolean isSDCardEnable() {
-        return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
+    public static boolean isEnable() {
+        return getState().equals(Environment.MEDIA_MOUNTED);
+    }
+
+    /**
+     * 获取 SD卡的根目录
+     *
+     * @return 根目录文件对象, 不存在 SD卡返回 null
+     */
+    public static File getRootDirectory() {
+        return isEnable() ? Environment.getExternalStorageDirectory() : null;
     }
 
     /**
@@ -35,20 +61,79 @@ public class SDCardUtil {
      * @return
      */
     public static String getSDCardPath() {
-        return Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator;
+        return isEnable() ? Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator : "";
     }
 
     /**
+     * 获取 Download 文件夹
+     *
+     * @return 系统级 Download 文件夹对象
+     */
+    public static File getDownloadDir() {
+        return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+    }
+
+    /**
+     * 获取 SD卡容量
+     *
+     * @return SD卡容量, 单位: B
+     */
+    public static long getSize() {
+        if (!isEnable()) {return 0;}
+        StatFs statFs = new StatFs(Environment.getExternalStorageDirectory().getAbsolutePath());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            return statFs.getBlockCountLong() * statFs.getBlockSizeLong();
+        } else {
+            return statFs.getBlockCount() * statFs.getBlockSize();
+        }
+    }
+    /**
+     * 指定单位下, 获取 SD卡容量
+     *
+     * @param unit 单位
+     * @return 指定单位下的 SD卡容量
+     */
+    public static float getSize(@Limits.FileSizeDef int unit) {
+        return FileSize.formatByte(getSize(), unit);
+    }
+
+    /**
+     * 获取 SD卡可用容量
+     *
+     * @return SD卡可用容量, 单位: B
+     */
+    public static long getSdCardAvailableSize() {
+        if (!isEnable()) {return 0;}
+
+        StatFs statFs = new StatFs(Environment.getExternalStorageDirectory().getAbsolutePath());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            return statFs.getAvailableBlocksLong() * statFs.getBlockSizeLong();
+        } else {
+            return statFs.getAvailableBlocks() * statFs.getBlockSize();
+        }
+    }
+
+    /**
+     * 指定单位下, 获取 SD卡可用容量
+     *
+     * @param unit 单位
+     * @return 指定单位下的 SD卡可用容量
+     */
+    public static float getSdCardAvailableSize(@Limits.FileSizeDef int unit) {
+        return FileSize.formatByte(getSdCardAvailableSize(), unit);
+    }
+
+
+    /**
      * 获得SD卡总大小
+     *
      * @return
      */
     public static String getSDTotalSize() {
-        File path = Environment.getExternalStorageDirectory();
-        StatFs stat = new StatFs(path.getPath());
-        long blockSize = stat.getBlockSize();
-        long totalBlocks = stat.getBlockCount();
-        return Formatter.formatFileSize(k.app(), blockSize * totalBlocks);
+        StatFs stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
+        return Formatter.formatFileSize(k.app(), stat.getBlockSize() * stat.getBlockCount());
     }
+
     /**
      * 获得sd卡剩余容量，即可用大小
      *
@@ -74,6 +159,7 @@ public class SDCardUtil {
         long totalBlocks = stat.getBlockCount();
         return Formatter.formatFileSize(k.app(), blockSize * totalBlocks);
     }
+
     /**
      * 获得机身可用内存
      *
@@ -86,13 +172,6 @@ public class SDCardUtil {
         long availableBlocks = stat.getAvailableBlocks();
         return Formatter.formatFileSize(k.app(), blockSize * availableBlocks);
     }
-
-
-
-
-
-
-
 
 
     /**
@@ -123,20 +202,14 @@ public class SDCardUtil {
     }
 
 
-
     public static String getExternalStoragePublicDirectory(String type) {
         String path;
-        if (!isSDCardEnable()) {
+        if (!isEnable()) {
             return "";
         }
 
         return Environment.getExternalStoragePublicDirectory(type).getPath();
     }
-
-
-
-
-
 
 
     /**

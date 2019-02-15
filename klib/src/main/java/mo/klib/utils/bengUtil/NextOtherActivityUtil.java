@@ -35,7 +35,7 @@ public class NextOtherActivityUtil {
         if (StringUtil.isSpace(packageName)) {
             return;
         }
-        k.app().startActivity(IntentUtil.getLaunchAppIntent(packageName, true));
+        k.app().startActivity(IntentUtil.getLaunchAppIntent(packageName));
     }
 
     /**
@@ -58,7 +58,7 @@ public class NextOtherActivityUtil {
      * @param phoneNumber 电话号码
      */
     public static void toDial(final String phoneNumber) {
-        k.app().startActivity(IntentUtil.getDialIntent(phoneNumber, true));
+        k.app().startActivity(IntentUtil.getDialIntent(phoneNumber));
     }
 
     /**
@@ -71,7 +71,7 @@ public class NextOtherActivityUtil {
         if (PermissionUtil.INSTANCE.checkSelfPermission(Manifest.permission.CALL_PHONE)) {
             return;
         }
-        k.app().startActivity(IntentUtil.getCallIntent(phoneNumber, true));
+        k.app().startActivity(IntentUtil.getCallIntent(phoneNumber));
     }
 
     /**
@@ -81,7 +81,7 @@ public class NextOtherActivityUtil {
      * @param content     短信内容
      */
     public static void toSendSms(final String phoneNumber, final String content) {
-        k.app().startActivity(IntentUtil.getSendSmsIntent(phoneNumber, content, true));
+        k.app().startActivity(IntentUtil.getSendSmsIntent(phoneNumber, content));
     }
 
     /**
@@ -127,14 +127,14 @@ public class NextOtherActivityUtil {
         if (StringUtil.isSpace(packageName)) {
             return;
         }
-        k.app().startActivity(IntentUtil.getSettingAppIntent(packageName, true));
+        k.app().startActivity(IntentUtil.getSettingAppIntent(packageName));
     }
 
     /**
      * 跳网络设置
      */
     public static void toSettingNet() {
-        k.app().startActivity(IntentUtil.getSettingNetIntent(true));
+        k.app().startActivity(IntentUtil.getSettingNetIntent());
     }
 
     /**

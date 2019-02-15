@@ -7,7 +7,7 @@ import android.util.Log;
 /**
  * @ author：mo
  * @ data：2019/1/4
- * @ 功能：
+ * @ 功能：数学相关
  */
 public class MathUtil {
 
@@ -122,4 +122,27 @@ public class MathUtil {
 
     }
 
+    public static int limit(int src, int max, int min) {
+        if (src >= max) return max;
+        if (src < min) return min;
+        return src;
+    }
+
+    public static long limit(long src, long max, long min) {
+        if (src >= max) return max;
+        if (src < min) return min;
+        return src;
+    }
+
+    public static float limit(float src, float max, float min) {
+        if (src >= max) return max;
+        if (src < min) return min;
+        return src;
+    }
+
+    public static double limit(double src, double max, double min) {
+        if (src >= max) return max;
+        if (src < min) return min;
+        return src;
+    }
 }

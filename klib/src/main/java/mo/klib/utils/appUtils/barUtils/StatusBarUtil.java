@@ -1,4 +1,4 @@
-package mo.klib.utils.appUtils;//package mo.kklib.utils.appUtils;
+package mo.klib.utils.appUtils.barUtils;//package mo.kklib.utils.appUtils;
 //import android.annotation.TargetApi;
 //import android.app.Activity;
 //import android.content.Context;

@@ -17,6 +17,7 @@ public class CacheUtil {
      * 获取缓存大小
      */
     public String getCacheSize(Context context) {
+
         String cacheSize = null;
         try {
             File cacheDir = new File(FileUtil.getExternalCacheDir(context));

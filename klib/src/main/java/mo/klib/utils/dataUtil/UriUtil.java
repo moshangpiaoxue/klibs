@@ -37,7 +37,7 @@ public class UriUtil {
         return path;
     }
 
-    public static String getRealPathFromUriBelowAPI19(Uri contentUri) {
+    private static String getRealPathFromUriBelowAPI19(Uri contentUri) {
         String res = null;
         String[] proj = {MediaStore.Images.Media.DATA};
         Cursor cursor = k.app().getContentResolver().query(contentUri, proj, null, null, null);
@@ -55,7 +55,7 @@ public class UriUtil {
      * 专为Android4.4以后的从Uri获取文件绝对路径，以前的方法已不好使
      */
     @SuppressLint("NewApi")
-    public static String getRealPathFromUriAboveApi19(Uri uri) {
+    private static String getRealPathFromUriAboveApi19(Uri uri) {
         String path = null;
         // 以 file:// 开头的
         if (ContentResolver.SCHEME_FILE.equals(uri.getScheme())) {

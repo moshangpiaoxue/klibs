@@ -4,11 +4,12 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.Spanned;
-import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.widget.EditText;
+
+import mo.klib.modle.listener.textListener.KOnTextChangedListener;
 
 /**
  * @author：mo
@@ -19,6 +20,37 @@ import android.widget.EditText;
 public class EditTextUtil {
     public interface InputListener {
         void onInputAfter(Boolean allComplete);
+    }
+
+    /**
+     * 将 EditText 的光标移动至所显示文字的末尾
+     *
+     * @param editText EditText
+     */
+    public static void setCursorToLast(EditText editText) {
+        editText.setSelection(editText.getText().length());
+    }
+
+    /**
+     * 打开/关闭 EditText 的输入 & 编辑功能
+     * @param editText 载体
+     * @param isOpen    是否开启输入/编辑
+     * @param focusNeeded   是否移动光标到最后
+     */
+    public static void disableEditState(EditText editText, boolean isOpen, boolean focusNeeded) {
+        if (isOpen) {
+            editText.setFocusableInTouchMode(true);
+            editText.setFocusable(true);
+            if (focusNeeded) {
+                editText.requestFocus();
+                setCursorToLast(editText);
+            }
+        } else {
+            editText.clearFocus();
+            editText.setFocusable(false);
+            editText.setFocusableInTouchMode(false);
+        }
+
     }
 
     /**
@@ -46,31 +78,20 @@ public class EditTextUtil {
 
     /**
      * 监听若干个输入框，是否全部输入了数据
+     *
      * @param inputListener 监听接口回调
      * @param mEditTexts    edittext数组
      */
     public static void setInpListener(final InputListener inputListener, final EditText... mEditTexts) {
         for (int i = 0; i < mEditTexts.length; i++) {
-            mEditTexts[i].addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                }
-
+            mEditTexts[i].addTextChangedListener(new KOnTextChangedListener() {
                 @Override
                 public void afterTextChanged(Editable s) {
                     if (s.length() == 0) {
                         inputListener.onInputAfter(false);
                         return;
                     }
-
                     boolean tag = false;
-
                     for (int i = 0; i < mEditTexts.length; i++) {
                         if (mEditTexts[i].getText().length() != 0) {
                             tag = true;
@@ -80,7 +101,6 @@ public class EditTextUtil {
                         }
                     }
                     inputListener.onInputAfter(tag);
-
                 }
             });
         }

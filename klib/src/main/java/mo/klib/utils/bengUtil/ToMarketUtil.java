@@ -54,7 +54,7 @@ public class ToMarketUtil {
      * @return
      */
     public static void toMarket(String marketPkg) {
-        Uri uri = Uri.parse("market://details?id=" + AppInfoUtil.getAppPackageName());
+        Uri uri = Uri.parse("market://details?id=" + AppInfoUtil.getAppInfo().getPackageName());
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         // 如果没给市场的包名，则系统会弹出市场的列表让你进行选择。
@@ -76,7 +76,7 @@ public class ToMarketUtil {
      * @return
      */
     public static void goToSamsungMarket() {
-        Uri uri = Uri.parse("http://www.samsungapps.com/appquery/appDetail.as?appId=" + AppInfoUtil.getAppPackageName());
+        Uri uri = Uri.parse("http://www.samsungapps.com/appquery/appDetail.as?appId=" + AppInfoUtil.getAppInfo().getPackageName());
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         intent.setPackage("com.sec.android.app.samsungapps");
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

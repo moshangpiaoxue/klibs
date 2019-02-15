@@ -31,12 +31,29 @@ public class ConstUtil {
         GB
     }
 
-
+    /**
+     * 时间单位
+     */
     public enum TimeUnit {
+        /**
+         * 毫秒
+         */
         MSEC,
+        /**
+         * 秒
+         */
         SEC,
+        /**
+         * 分
+         */
         MIN,
+        /**
+         * 小时
+         */
         HOUR,
+        /**
+         * 天
+         */
         DAY
     }
 

@@ -1,4 +1,4 @@
-package mo.klib.utils.dataUtil;
+package mo.klib.utils.dataUtil.date;
 
 import java.text.DateFormat;
 import java.text.ParsePosition;
@@ -7,6 +7,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import static mo.klib.utils.dataUtil.date.DateUtils.getDate;
+import static mo.klib.utils.dataUtil.date.DateUtils.getMS;
+
 /**
  * @ author：mo
  * @ data：2018/1/5 0005
@@ -14,17 +17,39 @@ import java.util.GregorianCalendar;
  */
 public class CalendarUtil {
     /**
-    *  用来全局控制 上一周，本周，下一周的周数变化
-    */
+     * 用来全局控制 上一周，本周，下一周的周数变化
+     */
     private int weeks = 0;
     /**
-    *  一月最大天数
-    */
+     * 一月最大天数
+     */
     private int MaxDate;
     /**
-    * 一年最大天数
-    */
+     * 一年最大天数
+     */
     private int MaxYear;
+
+    /**
+     * 获取 Calendar类
+     *
+     * @param time Date类型时间  null为获取当前时间
+     * @return Calendar类
+     */
+    public static Calendar getCalendar(Date time) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(time);
+        return calendar;
+    }
+
+    /**
+     * 获取 Calendar类
+     *
+     * @param time 时间戳  null为获取当前时间
+     * @return Calendar类
+     */
+    public static Calendar getCalendar(long time) {
+        return CalendarUtil.getCalendar(getDate(getMS(time)));
+    }
 
     /**
      * 测试
@@ -200,10 +225,12 @@ public class CalendarUtil {
      * @return
      */
     public static long getDays(String date1, String date2) {
-        if (date1 == null || date1.equals("")){
-            return 0;}
-        if (date2 == null || date2.equals("")){
-            return 0;}
+        if (date1 == null || date1.equals("")) {
+            return 0;
+        }
+        if (date2 == null || date2.equals("")) {
+            return 0;
+        }
         // 转换为标准时间
         SimpleDateFormat myFormatter = new SimpleDateFormat("yyyy-MM-dd");
         Date date = null;
@@ -583,7 +610,7 @@ public class CalendarUtil {
      * @return
      */
     public String getThisSeasonFirstTime(int month) {
-        int array[][] = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 }, { 10, 11, 12 } };
+        int array[][] = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {10, 11, 12}};
         int season = 1;
         if (month >= 1 && month <= 3) {
             season = 1;
@@ -619,7 +646,7 @@ public class CalendarUtil {
      * @return
      */
     public String getThisSeasonFinallyTime(int month) {
-        int array[][] = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 }, { 10, 11, 12 } };
+        int array[][] = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {10, 11, 12}};
         int season = 1;
         if (month >= 1 && month <= 3) {
             season = 1;
@@ -651,10 +678,8 @@ public class CalendarUtil {
     /**
      * 获取某年某月的最后一天
      *
-     * @param year
-     *            年
-     * @param month
-     *            月
+     * @param year  年
+     * @param month 月
      * @return 最后一天
      */
     private int getLastDayOfMonth(int year, int month) {
@@ -678,8 +703,7 @@ public class CalendarUtil {
     /**
      * 是否闰年
      *
-     * @param year
-     *            年
+     * @param year 年
      * @return
      */
     public boolean isLeapYear(int year) {

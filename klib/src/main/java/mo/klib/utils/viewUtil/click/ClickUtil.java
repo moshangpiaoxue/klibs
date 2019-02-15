@@ -6,8 +6,13 @@ package mo.klib.utils.viewUtil.click;
  * @ 功能：
  */
 public class ClickUtil {
-    // 两次点击按钮之间的点击间隔不能少于1000毫秒
-    private static final int MIN_CLICK_DELAY_TIME = 5000;
+    /**
+    *  间隔时间
+    */
+    private static final int MIN_CLICK_DELAY_TIME = 1000;
+    /**
+    * 上次点击时间
+    */
     private static long lastClickTime;
 
     public static boolean isFastClick() {

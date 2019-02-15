@@ -12,7 +12,6 @@ import android.text.style.AbsoluteSizeSpan;
 import android.text.style.CharacterStyle;
 import android.text.style.ForegroundColorSpan;
 
-
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -20,9 +19,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.text.DecimalFormat;
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.UUID;
 import java.util.regex.Matcher;
@@ -42,12 +41,28 @@ import static java.util.regex.Pattern.compile;
 public class StringUtil {
     private static final DecimalFormat amountFormat = new DecimalFormat("###,###,###,##0.00");
 
-    public static boolean isSpace(final String s) {
-        if (StringUtil.isEmpty(s)) {
+    /**
+     * 字符串是否为空
+     *
+     * @param str 字符串
+     */
+    public static boolean isEmpty(@Nullable String str) {
+        return str == null || TextUtils.isEmpty(str) || str.equals("\n") || str.equals("\t") ||
+                TextUtils.isEmpty(str.trim()) || str.length() == 0 || "".equals(str) || "null".equals(str);
+    }
+
+    /**
+     * 是否是空格
+     *
+     * @param str
+     * @return
+     */
+    public static boolean isSpace(final String str) {
+        if (str == null) {
             return true;
         }
-        for (int i = 0, len = s.length(); i < len; ++i) {
-            if (!Character.isWhitespace(s.charAt(i))) {
+        for (int i = 0, len = str.length(); i < len; ++i) {
+            if (!Character.isWhitespace(str.charAt(i))) {
                 return false;
             }
         }
@@ -55,60 +70,24 @@ public class StringUtil {
     }
 
     /**
-     * double转String,保留小数点后几位
+     * 两个字符串是否相同
      *
-     * @param num     double值
-     * @param pattern 保留几位  使用0.00不足位补0，#.##仅保留有效位
-     * @return
+     * @param a 作为对比的字符串
+     * @param b 作为对比的字符串
+     * @return 是否相同
      */
-    public static String double2String(double num, String pattern) {
-        return new DecimalFormat(pattern).format(num);
-    }
-
-    /***半角转换为全角
-     *
-     *@paraminput
-     *@return
-     */
-    public static String half2Full(String input) {
-        char[] c = input.toCharArray();
-        for (int i = 0; i < c.length; i++) {
-            if (c[i] == 12288) {
-                c[i] = (char) 32;
-                continue;
-            }
-            if (c[i] > 65280 && c[i] < 65375) {
-                c[i] = (char) (c[i] - 65248);
-            }
-        }
-        return new String(c);
-    }
-
-    /***去除特殊字符或将所有中文标号替换为英文标号
-     *@paramstr
-     *@return
-     */
-    public static String stringFilter(String str) {
-        str = str.replaceAll("【", "[").replaceAll("】", "]")
-                .replaceAll("!", "!").replaceAll(":", ":");//替换中文标号
-        String regEx = "[『』]";//清除掉特殊字符
-        Pattern p = compile(regEx);
-        Matcher m = p.matcher(str);
-        return m.replaceAll("").trim();
+    public static boolean isEquals(String a, String b) {
+        return a == b || (a != null && a.equals(b));
     }
 
     /**
      * 是否是URL格式
-     *
-     * @param url
-     * @return
      */
     public static boolean isUrl(String url) {
         return url.startsWith("http://") || url.startsWith("https://");
     }
-
     /**
-     * 判断后缀是不是图片类型的
+     * String后缀是不是图片类型的
      *
      * @param imageUrl imageUrl
      */
@@ -120,143 +99,29 @@ public class StringUtil {
                 || imageUrl.endsWith(".jpeg")
                 || imageUrl.endsWith(".JPEG");
     }
-
-    /**
-     * 获取后缀名
-     */
-    public static String getSuffix(String url) {
-        if ((url != null) && (url.length() > 0)) {
-            int dot = url.lastIndexOf('.');
-            if ((dot > -1) && (dot < (url.length() - 1))) {
-                return url.substring(dot + 1);
-            }
-        }
-        return url;
-    }
-
-    /**
-     * 获取 mimeType
-     */
-    public static String getMimeType(String url) {
-        if (url.endsWith(".png") || url.endsWith(".PNG")) {
-            return "data:image/png;base64,";
-        } else if (url.endsWith(".jpg") || url.endsWith(".jpeg") || url.endsWith(".JPG") || url.endsWith(".JPEG")) {
-            return "data:image/jpg;base64,";
-        } else if (url.endsWith(".gif") || url.endsWith(".GIF")) {
-            return "data:image/gif;base64,";
-        } else {
-            return "";
-        }
-    }
-
     /**
      * 判断后缀是不是 GIF
      *
      * @param imageUrl imageUrl
      */
     public static boolean isGifSuffix(String imageUrl) {
-        return imageUrl.endsWith(".gif")
-                || imageUrl.endsWith(".GIF");
+        return imageUrl.endsWith(".gif") || imageUrl.endsWith(".GIF");
     }
-
     /**
-     * 根据 url 获取 host name
-     * http://www.gcssloop.com/ => www.gcssloop.com
+     * 判断字符串中是否存在中文汉字
+     *
+     * @param string 指定字符串
+     * @return 是否存在
      */
-    public static String getHost(String url) {
-        if (url == null || url.trim().equals("")) {
-            return "";
+    public static boolean isChinese(String string) {
+        boolean temp = false;
+        Pattern p = Pattern.compile("[\u4e00-\u9fa5]");
+        Matcher m = p.matcher(string);
+        if (m.find()) {
+            temp = true;
         }
-        String host = "";
-        Pattern p = compile("(?<=//|)((\\w)+\\.)+\\w+");
-        Matcher matcher = p.matcher(url);
-        if (matcher.find()) {
-            host = matcher.group();
-        }
-        return host;
+        return temp;
     }
-
-    /**
-     * Object
-     *
-     * @param obj
-     * @return
-     */
-    public static String getString(Object obj) {
-        if (ObjectUtil.isEmpty(obj)) {
-            return "";
-        }
-//        return obj.toString();
-        return String.valueOf(obj);
-
-    }
-
-    /**
-     * 字符串拼接
-     *
-     * @param str
-     * @return
-     */
-    public static String getString(String... str) {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (String temp : str) {
-            stringBuilder.append(temp);
-        }
-        return stringBuilder.toString();
-    }
-
-    /**
-     * 保留小数点后的几位
-     *
-     * @param in int
-     * @param dd String
-     * @return
-     */
-    public static String getString(int in, String dd) {
-
-        return getString(in, string2Double(dd));
-    }
-
-    /**
-     * 保留小数点后的几位
-     *
-     * @param in int
-     * @param dd double
-     * @return
-     */
-    public static String getString(int in, double dd) {
-        return String.format("%." + in + "f", dd);
-    }
-
-    /**
-     * 字符串转换成double ,转换失败将会 return 0;
-     *
-     * @param str 字符串
-     * @return
-     */
-    public static double string2Double(String str) {
-        if (isEmpty(str)) {
-            return 0;
-        } else {
-            try {
-                return Double.parseDouble(str);
-            } catch (NumberFormatException e) {
-                return 0;
-            }
-        }
-    }
-
-    /**
-     * 判断字符串是否为空 为空即true
-     *
-     * @param str 字符串
-     * @return
-     */
-    public static boolean isEmpty(@Nullable String str) {
-        return str == null || TextUtils.isEmpty(str) || str.equals("\n") || str.equals("\t") ||
-                TextUtils.isEmpty(str.trim()) || str.length() == 0 || "".equals(str) || "null".equals(str);
-    }
-
     /**
      * 判断字符串是否是数字
      */
@@ -289,6 +154,273 @@ public class StringUtil {
             return false;
         }
     }
+
+    /**
+     * Object 转 String
+     */
+    public static String getString(Object obj) {
+        return (ObjectUtil.isEmpty(obj) ? "" : (obj instanceof String ? (String) obj : obj.toString()));
+    }
+
+    /**
+     * Double转String,保留小数点后几位
+     *
+     * @param num     double值
+     * @param pattern 保留几位  使用0.00不足位补0，#.##仅保留有效位
+     */
+    public static String getString(double num, String pattern) {
+        return new DecimalFormat(pattern).format(num);
+    }
+    /**
+     * 保留小数点后的几位
+     *
+     * @param in int
+     * @param dd String
+     * @return
+     */
+    public static String getString(int in, String dd) {
+
+        return getString(in, toDouble(dd));
+    }
+
+    /**
+     * 保留小数点后的几位
+     *
+     * @param in int
+     * @param dd double
+     * @return
+     */
+    public static String getString(int in, double dd) {
+        return String.format("%." + in + "f", dd);
+    }
+    /**
+     * 半角 转 全角
+     */
+    public static String getStringHalf2Full(String input) {
+        char[] c = input.toCharArray();
+        for (int i = 0; i < c.length; i++) {
+            if (c[i] == 12288) {
+                c[i] = (char) 32;
+                continue;
+            }
+            if (c[i] > 65280 && c[i] < 65375) {
+                c[i] = (char) (c[i] - 65248);
+            }
+        }
+        return new String(c);
+    }
+
+    /**
+     * 特殊字符、中文标号  转  英文标号
+     */
+    public static String getStringFilter(String str) {
+        //替换中文标号
+        str = str.replaceAll("【", "[").replaceAll("】", "]").replaceAll("!", "!").replaceAll(":", ":");
+        //清除掉特殊字符
+        String regEx = "[『』]";
+        Pattern p = compile(regEx);
+        Matcher m = p.matcher(str);
+        return m.replaceAll("").trim();
+    }
+    /**
+     * 获取后缀名
+     */
+    public static String getStringSuffix(String url) {
+        if ((url != null) && (url.length() > 0)) {
+            int dot = url.lastIndexOf('.');
+            if ((dot > -1) && (dot < (url.length() - 1))) {
+                return url.substring(dot + 1);
+            }
+        }
+        return url;
+    }
+
+    /**
+     * 获取 mimeType
+     */
+    public static String getStringMimeType(String url) {
+        if (url.endsWith(".png") || url.endsWith(".PNG")) {
+            return "data:image/png;base64,";
+        } else if (url.endsWith(".jpg") || url.endsWith(".jpeg") || url.endsWith(".JPG") || url.endsWith(".JPEG")) {
+            return "data:image/jpg;base64,";
+        } else if (url.endsWith(".gif") || url.endsWith(".GIF")) {
+            return "data:image/gif;base64,";
+        } else {
+            return "";
+        }
+    }
+    /**
+     * 根据 url 获取 host name
+     * http://www.gcssloop.com/ => www.gcssloop.com
+     */
+    public static String getStringHost(String url) {
+        if (isEmpty(url)) {
+            return "";
+        }
+        String host = "";
+        Pattern p = compile("(?<=//|)((\\w)+\\.)+\\w+");
+        Matcher matcher = p.matcher(url);
+        if (matcher.find()) {
+            host = matcher.group();
+        }
+        return host;
+    }
+    /**
+     * 将字符串进行 UTF-8 编码
+     *
+     * @param string 指定字符串
+     * @return 编码后的字符串
+     */
+    public static String getStringUtf8Encode(String string) {
+        if (!isEmpty(string) && string.getBytes().length != string.length()) {
+            try {
+                return URLEncoder.encode(string, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                throw new RuntimeException("UnsupportedEncodingException occurred. ", e);
+            }
+        }
+        return string;
+    }
+    /**
+     * 字符串拼接
+     *
+     * @param str
+     * @return
+     */
+    public static String getString(String... str) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (String temp : str) {
+            stringBuilder.append(temp);
+        }
+        return stringBuilder.toString();
+    }
+
+
+    /**
+     * 格式化字符串, 用参数进行替换, 例子: format("I am {arg1}, {arg2}", arg1, arg2);
+     *
+     * @param format 需要格式化的字符串
+     * @param args   格式化参数
+     * @return 格式化后的字符串
+     */
+    public static String getString(String format, Object... args) {
+        for (Object arg : args) {
+            format = format.replaceFirst("\\{[^\\}]+\\}", arg.toString());
+        }
+        return format;
+    }
+    /**
+     * 获取中文空格 (宽度和中文字符一致)
+     *
+     * @param length 空格数
+     * @return 中文空格字符串
+     */
+    public static String getChineseSpaces(int length) {
+        if (length < 100) {
+            String spaces = "";
+            for (int i = 0; i < length; i++) {
+                spaces += (char) 12288;
+            }
+            return spaces;
+        } else {
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i < length; i++) {
+                builder.append((char) 12288);
+            }
+            return builder.toString();
+        }
+    }
+    /**
+     * String 转 Double ,转换失败将会 return 0;
+     */
+    public static double toDouble(String str) {
+        if (isEmpty(str)) {
+            return 0;
+        } else {
+            try {
+                return Double.parseDouble(str);
+            } catch (NumberFormatException e) {
+                return 0;
+            }
+        }
+    }
+    /**
+     * String  转  int ,转换失败将会 return 0;
+     */
+    public static int toInt(String str) {
+        if (isEmpty(str)) {
+            return 0;
+        } else {
+            try {
+                return Integer.parseInt(str);
+            } catch (NumberFormatException e) {
+                return 0;
+            }
+        }
+    }
+
+    /**
+     * String  转  int[]
+     */
+    public static int[] toInts(String s) {
+        int[] n = new int[s.length()];
+        if (isEmpty(s)) {
+
+        } else {
+            for (int i = 0; i < s.length(); i++) {
+                n[i] = Integer.parseInt(s.substring(i, i + 1));
+            }
+        }
+        return n;
+    }
+
+    /**
+     * String  转  Long ,转换失败将会 return 0;
+     */
+    public static long toLong(String str) {
+        if (isEmpty(str)) {
+            return 0;
+        } else {
+            try {
+                return Long.parseLong(str);
+            } catch (NumberFormatException e) {
+                return 0;
+            }
+        }
+    }
+
+    /**
+     * String  转   Float
+     *
+     * @param str 待转换的字符串
+     * @return 转换后的 float
+     */
+    public static float toFloat(String str) {
+        if (isEmpty(str)) {
+            return 0;
+        } else {
+            try {
+                return Float.parseFloat(str);
+            } catch (NumberFormatException e) {
+                return 0;
+            }
+        }
+    }
+
+
+    /**
+     * String  转  InputStream
+     *
+     * @param str
+     * @return
+     */
+    public static InputStream toInputStream(String str) {
+        InputStream in_nocode = new ByteArrayInputStream(str.getBytes());
+        //InputStream   in_withcode   =   new ByteArrayInputStream(str.getBytes("UTF-8"));
+        return in_nocode;
+    }
+
+
 
     /**
      * @param string
@@ -331,102 +463,13 @@ public class StringUtil {
         spannableString.setSpan(new AbsoluteSizeSpan(afterSize, true), split[0].length(), string.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         return spannableString;
     }
-
-    /**
-     * 是否是中文
-     *
-     * @param str
-     * @return
-     */
-    public static boolean isChinese(String str) {
-        if (str.length() == 0) {
-            return false;
-        }
-
-        boolean flag = false;
-        try {
-            Pattern p = compile("^[\\u4E00-\\u9FA5\\uF900-\\uFA2D]+$");
-            Matcher m = p.matcher(str);
-            flag = m.matches();
-        } catch (Exception e) {
-            flag = false;
-        }
-        return flag;
-    }
-
-    /**
-     * 是否是身份证号码
-     *
-     * @param IDCard
-     * @return
-     */
-    public static boolean isIDCard(String IDCard) {
-        if (IDCard != null) {
-            String IDCardRegex = "(^\\d{15}$)|(^\\d{18}$)|(^\\d{17}(\\d|X|x|Y|y)$)";
-            return IDCard.matches(IDCardRegex);
-        }
-        return false;
-    }
-
-    /**
-     * 判断密码是不是至少6位且不能超过16位的字母和数字组合，不能有特殊符号
-     *
-     * @param pwd
-     * @return
-     */
-    public static boolean isPassWord6t16(String pwd) {
-        String regex = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$";
-        return pwd.matches(regex);
-    }
-
-    /**
-     * 密码验证
-     *
-     * @param pwd
-     * @return
-     */
-    public static boolean isPassWord6t30(String pwd) {
-//        String regex = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,30}$";// 6-30位字母加数字组合，不能有特殊符号
-        String regex = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~！@#￥%……&*（）—+|{}【】‘；：”“’。，、_[-]——？]{6,30}$";// 6-30位字母加数字组合，可以有特殊符号，也可以没有
-        return pwd.matches(regex);
-    }
-
-    /**
-     * 验证手机格式
-     * <p>
-     * <p>
-     * 移动：134、135、136、137、138、139、150、151、157(TD)、158、159、187、188
-     * 联通：130、131、132、152、155、156、185、186
-     * 电信：133、153、180、189、（1349卫通）
-     * 总结起来就是第一位必定为1，第二位必定为3或5或8，其他位置的可以为0-9
-     * <p>
-     * ------------------------------------------------
-     * 13(老)号段：130、131、132、133、134、135、136、137、138、139
-     * 14(新)号段：145、147
-     * 15(新)号段：150、151、152、153、154、155、156、157、158、159
-     * 17(新)号段：170、171、173、175、176、177、178
-     * 18(3G)号段：180、181、182、183、184、185、186、187、188、189
-     *
-     * @param mobiles
-     * @return
-     */
-    public static boolean isMobile(String mobiles) {
-
-        String telRegex = "[1][34578]\\d{9}";//"[1]"代表第1位为数字1，"[34578]"代表第二位可以为3、4、5、7、8中的一个，"\\d{9}"代表后面是可以是0～9的数字，有9位。
-        if (TextUtils.isEmpty(mobiles)) {
-            return false;
-        } else {
-            return mobiles.matches(telRegex);
-        }
-    }
-
     /**
      * 设置字符为蓝色
      *
      * @param string
      * @return
      */
-    public static String getColorText(String string) {
+    public static String getStringColor(String string) {
         return String.format("<font color=\"#0000FF\">%s</font>", string); // string 会替换 %s
     }
 
@@ -502,7 +545,7 @@ public class StringUtil {
      * @param content
      * @return String
      */
-    public static String removeBlanks(String content) {
+    public static String getStringRemoveBlanks(String content) {
         if (content == null) {
             return null;
         }
@@ -586,180 +629,10 @@ public class StringUtil {
         return amountFormat.format(Double.parseDouble(value));
     }
 
-    /**
-     * 四舍五入
-     *
-     * @param value 数值
-     * @param digit 保留小数位
-     * @return
-     */
-    public static String getRoundUp(BigDecimal value, int digit) {
-        return value.setScale(digit, BigDecimal.ROUND_HALF_UP).toString();
-    }
-
-    /**
-     * 四舍五入
-     *
-     * @param value 数值
-     * @param digit 保留小数位
-     * @return
-     */
-    public static String getRoundUp(double value, int digit) {
-        return getRoundUp(new BigDecimal(value), digit);
-    }
-
-    /**
-     * 四舍五入
-     *
-     * @param value 数值
-     * @param digit 保留小数位
-     * @return
-     */
-    public static String getRoundUp(String value, int digit) {
-        if (isEmpty(value)) {
-            return "0";
-        }
-        return getRoundUp(Double.parseDouble(value), digit);
-    }
-
-    /**
-     * 获取百分比（乘100）
-     *
-     * @param value 数值
-     * @param digit 保留小数位
-     * @return
-     */
-    public static String getPercentValue(double value, int digit) {
-        BigDecimal result = new BigDecimal(value);
-        return getPercentValue(result, digit);
-    }
-
-    /**
-     * 获取百分比（乘100）
-     *
-     * @param value 数值
-     * @param digit 保留小数位
-     * @return
-     */
-    public static String getPercentValue(BigDecimal value, int digit) {
-        BigDecimal result = value.multiply(new BigDecimal(100));
-        return getRoundUp(result, digit);
-    }
-
-
-    /**
-     * 获取百分比（乘100,保留两位小数）
-     *
-     * @param value 数值
-     * @return
-     */
-    public static String getPercentValue(double value) {
-        BigDecimal result = new BigDecimal(value);
-        return getPercentValue(result, 2);
-    }
-
     public static String getPercentString(float percent) {
         return String.format(Locale.US, "%d%%", (int) (percent * 100));
     }
 
-    /**
-     * 字符串转换成整数 ,转换失败将会 return 0;
-     *
-     * @param str 字符串
-     * @return
-     */
-    public static int stringToInt(String str) {
-        if (isEmpty(str)) {
-            return 0;
-        } else {
-            try {
-                return Integer.parseInt(str);
-            } catch (NumberFormatException e) {
-                return 0;
-            }
-        }
-    }
-
-    /**
-     * 字符串转换成整型数组
-     *
-     * @param s
-     * @return
-     */
-    public static int[] stringToInts(String s) {
-        int[] n = new int[s.length()];
-        if (isEmpty(s)) {
-
-        } else {
-            for (int i = 0; i < s.length(); i++) {
-                n[i] = Integer.parseInt(s.substring(i, i + 1));
-            }
-        }
-        return n;
-    }
-
-    /**
-     * 字符串转换成long ,转换失败将会 return 0;
-     *
-     * @param str 字符串
-     * @return
-     */
-    public static long stringToLong(String str) {
-        if (isEmpty(str)) {
-            return 0;
-        } else {
-            try {
-                return Long.parseLong(str);
-            } catch (NumberFormatException e) {
-                return 0;
-            }
-        }
-    }
-
-    /**
-     * 字符串转换成浮点型 Float
-     *
-     * @param str 待转换的字符串
-     * @return 转换后的 float
-     */
-    public static float stringToFloat(String str) {
-        if (isEmpty(str)) {
-            return 0;
-        } else {
-            try {
-                return Float.parseFloat(str);
-            } catch (NumberFormatException e) {
-                return 0;
-            }
-        }
-    }
-
-    /**
-     * 将字符串格式化为带两位小数的字符串
-     *
-     * @param str 字符串
-     * @return
-     */
-    public static String format2Decimals(String str) {
-        DecimalFormat df = new DecimalFormat("#.00");
-        if (df.format(string2Double(str)).startsWith(".")) {
-            return "0" + df.format(string2Double(str));
-        } else {
-            return df.format(string2Double(str));
-        }
-    }
-
-    /**
-     * 字符串转InputStream
-     *
-     * @param str
-     * @return
-     */
-    public static InputStream StringToInputStream(String str) {
-        InputStream in_nocode = new ByteArrayInputStream(str.getBytes());
-        //InputStream   in_withcode   =   new ByteArrayInputStream(str.getBytes("UTF-8"));
-        return in_nocode;
-    }
 
     /**
      * 首字母大写

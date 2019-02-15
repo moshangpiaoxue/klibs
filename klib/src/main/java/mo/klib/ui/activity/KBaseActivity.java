@@ -11,7 +11,7 @@ import android.view.View;
 
 import mo.klib.modle.manager.KInputMethodManager;
 import mo.klib.modle.viewHolder.ViewHolder;
-import mo.klib.utils.appUtils.SratusBarUtil;
+import mo.klib.utils.appUtils.barUtils.SratusBarUtil;
 import mo.klib.utils.bengUtil.NextActivityUtil;
 import mo.klib.utils.logUtils.LogUtil;
 import mo.klib.utils.systemUtils.ScreenUtil;

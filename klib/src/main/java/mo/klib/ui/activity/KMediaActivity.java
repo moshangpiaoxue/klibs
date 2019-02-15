@@ -12,7 +12,7 @@ import mo.klib.modle.constants.ConstansePermissionGroup;
 import mo.klib.modle.constants.KConstans;
 import mo.klib.utils.dataUtil.KUriUtil;
 import mo.klib.utils.image.BitmapUtil;
-import mo.klib.utils.systemUtils.CameraUtil2;
+import mo.klib.utils.systemUtils.CameraUtil;
 import mo.klib.utils.systemUtils.storageUtil.SDCardUtil;
 import mo.klib.utils.tipsUtil.ToastUtil;
 
@@ -66,7 +66,7 @@ public class KMediaActivity extends KReceiverActivity {
             case KConstans.MEDIA_CHOOSE_PIC:
                 if (phoneStatus == KConstans.MEDIA_CHOOSE_PIC) {
                     if (resultCode == RESULT_OK) {
-                        String imagePath = CameraUtil2.handlerImageChooseResult(data);
+                        String imagePath = CameraUtil.handlerImageChooseResult(data);
                         setMediaResult(phoneStatus, BitmapFactory.decodeFile(imagePath), imagePath, data);
                     }
                 }
@@ -129,9 +129,9 @@ public class KMediaActivity extends KReceiverActivity {
     public void requestPermissionSuccess(int requestCode) {
         super.requestPermissionSuccess(requestCode);
         if (phoneStatus == KConstans.MEDIA_TAKE_PIC) {
-            imageUri = CameraUtil2.actionPhoneTake(mActivity);
+            imageUri = CameraUtil.actionPhoneTake(mActivity);
         } else if (phoneStatus == KConstans.MEDIA_CHOOSE_PIC) {
-            CameraUtil2.actionPhoneChoose(mActivity);
+            CameraUtil.actionPhoneChoose(mActivity);
         } else if (phoneStatus == KConstans.MEDIA_TAKE_VIDEO) {
             Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
             intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, videoQuality);
@@ -150,8 +150,8 @@ public class KMediaActivity extends KReceiverActivity {
      * 开启拍照
      */
     protected void actionMediaTakePic() {
-        if (CameraUtil2.isExistCamera()) {
-//            imageUri = CameraUtil2.actionPhoneTake(mActivity);
+        if (CameraUtil.isExistCamera()) {
+//            imageUri = CameraUtil.actionPhoneTake(mActivity);
             phoneStatus = KConstans.MEDIA_TAKE_PIC;
             requestPermission(ConstansePermissionGroup.PERMISSIONS_STORAGE);
 
@@ -164,7 +164,7 @@ public class KMediaActivity extends KReceiverActivity {
      * 开启从相册选取图片
      */
     protected void actionMediaChoosePic() {
-        if (SDCardUtil.isSDCardEnable()) {
+        if (SDCardUtil.isEnable()) {
             phoneStatus = KConstans.MEDIA_CHOOSE_PIC;
             requestPermission(ConstansePermissionGroup.PERMISSIONS_STORAGE);
 
@@ -178,7 +178,7 @@ public class KMediaActivity extends KReceiverActivity {
      * 默认调用系统录像，可先调用setVideoParame（）方法设置录像质量，最大长度和文件大小
      */
     protected void actionMediaTakeVideo() {
-        if (CameraUtil2.isExistCamera()) {
+        if (CameraUtil.isExistCamera()) {
             phoneStatus = KConstans.MEDIA_TAKE_VIDEO;
             requestPermission(ConstansePermissionGroup.PERMISSIONS_CAMERA);
 
@@ -191,7 +191,7 @@ public class KMediaActivity extends KReceiverActivity {
      * 从相册选视频
      */
     protected void actionMediaChooseVideo() {
-        if (SDCardUtil.isSDCardEnable()) {
+        if (SDCardUtil.isEnable()) {
             phoneStatus = KConstans.MEDIA_CHOOSE_VIDEO;
             requestPermission(ConstansePermissionGroup.PERMISSIONS_STORAGE);
 

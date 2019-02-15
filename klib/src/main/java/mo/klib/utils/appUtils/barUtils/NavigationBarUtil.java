@@ -1,4 +1,4 @@
-package mo.klib.utils.appUtils;
+package mo.klib.utils.appUtils.barUtils;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;

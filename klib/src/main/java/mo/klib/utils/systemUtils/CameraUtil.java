@@ -19,39 +19,38 @@ import java.io.IOException;
 import mo.klib.k;
 import mo.klib.modle.constants.KConstans;
 import mo.klib.utils.appUtils.AppInfoUtil;
-import mo.klib.utils.dataUtil.DateUtil;
+import mo.klib.utils.dataUtil.date.DateUtils;
 import mo.klib.utils.logUtils.LogUtil;
 
-
 /**
- * Created by Administrator on 2017/6/8 0008.
- * 相机工具类
+ * @ author：mo
+ * @ data：2017/6/13：11:03
+ * @ 功能：相机工具类
  */
-
 public class CameraUtil {
+
     /**
-     * 检测相机是否存在 s
+     * 检测相机是否存在 、摄像头硬件是否可用
      */
     public static boolean isExistCamera() {
-        PackageManager packageManager = k.app().getPackageManager();
-        if (packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
+        if (k.app().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
             return true;
         }
         return false;
     }
 
     /**
-     * 相机是否支持变焦
-     *
-     * @param mCamera
-     * @return
+     * 判断是否有后置摄像头
      */
-    public static boolean isSupportZoom(Camera mCamera) {
-        boolean isSuppport = true;
-        if (mCamera.getParameters().isSmoothZoomSupported()) {
-            isSuppport = false;
-        }
-        return isSuppport;
+    public static boolean hasBackFacingCamera() {
+        return checkCameraFacing(Camera.CameraInfo.CAMERA_FACING_BACK);
+    }
+
+    /**
+     * 判断是否有前置摄像头
+     */
+    public static boolean hasFrontFacingCamera() {
+        return checkCameraFacing(Camera.CameraInfo.CAMERA_FACING_FRONT);
     }
 
     /**
@@ -63,7 +62,7 @@ public class CameraUtil {
     public static Uri actionPhoneTake(Activity mActivity) {
 
         Uri imageUri;
-        File outImage = new File(k.app().getExternalCacheDir(), DateUtil.getNowM() + "_phone.img");
+        File outImage = new File(k.app().getExternalCacheDir(), DateUtils.getNowM() + "_phone.img");
         try {
             if (outImage.exists()) {
                 outImage.delete();
@@ -73,8 +72,7 @@ public class CameraUtil {
             e.printStackTrace();
         }
         if (Build.VERSION.SDK_INT >= 24) {
-            imageUri = FileProvider.getUriForFile(mActivity, AppInfoUtil.getAppPackageName() + ".fileprovider", outImage);
-            LogUtil.i(AppInfoUtil.getAppPackageName() + ".fileprovider");
+            imageUri = FileProvider.getUriForFile(mActivity, AppInfoUtil.getAppInfo().getPackageName() + ".fileprovider", outImage);
 
         } else {
             imageUri = Uri.fromFile(outImage);
@@ -90,6 +88,37 @@ public class CameraUtil {
         Intent intent = new Intent("android.intent.action.GET_CONTENT");
         intent.setType("image/*");
         mActivity.startActivityForResult(intent, KConstans.MEDIA_CHOOSE_PIC);
+    }
+
+    public static Uri actionMediaTakeVideo(Activity mActivity) {
+
+        Uri videoUri;
+        File outVideo = new File(k.app().getExternalCacheDir(), DateUtils.getNowM() + "_video.mp4");
+        try {
+            if (outVideo.exists()) {
+                outVideo.delete();
+            }
+            outVideo.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (Build.VERSION.SDK_INT >= 24) {
+            videoUri = FileProvider.getUriForFile(mActivity, AppInfoUtil.getAppInfo().getPackageName() + ".fileprovider", outVideo);
+            LogUtil.i(AppInfoUtil.getAppInfo().getPackageName() + ".fileprovider");
+
+        } else {
+            videoUri = Uri.fromFile(outVideo);
+        }
+
+//        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        intent.putExtra(MediaStore.EXTRA_OUTPUT, videoUri);
+//        mActivity.startActivityForResult(intent, KConstans.MEDIA_TAKE_PIC);
+        Intent intent = new Intent();
+        intent.setAction("android.media.action.VIDEO_CAPTURE");
+        intent.addCategory("android.intent.category.DEFAULT");
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, videoUri);
+        mActivity.startActivityForResult(intent, KConstans.MEDIA_TAKE_VIDEO);
+        return videoUri;
     }
 
     /**
@@ -155,5 +184,22 @@ public class CameraUtil {
             cursor.close();
         }
         return path;
+    }
+
+    /**
+     * 判断是否有某朝向的摄像头
+     *
+     * @param facing 摄像头朝向, 前置或后置
+     */
+    private static boolean checkCameraFacing(final int facing) {
+        final int cameraCount = Camera.getNumberOfCameras();
+        Camera.CameraInfo info = new Camera.CameraInfo();
+        for (int i = 0; i < cameraCount; i++) {
+            Camera.getCameraInfo(i, info);
+            if (facing == info.facing) {
+                return true;
+            }
+        }
+        return false;
     }
 }

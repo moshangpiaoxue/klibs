@@ -1,6 +1,8 @@
 package mo.klib.utils.appUtils;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
@@ -11,6 +13,9 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.pm.Signature;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
+import android.support.annotation.RequiresPermission;
 import android.util.Log;
 
 import java.io.File;
@@ -48,111 +53,27 @@ public class AppInfoUtil {
     }
 
     /**
-     * 获取 App 名称
-     *
-     * @return App 名称
+     * 获取活动管理器
      */
-    public static String getAppName() {
-        return getAppName(k.app().getPackageName());
+    public static ActivityManager getActivityManager() {
+        return (ActivityManager) k.app().getSystemService(Context.ACTIVITY_SERVICE);
     }
 
     /**
-     * 获取 App 名称
-     *
-     * @param packageName 包名
-     * @return App 名称
+     * 获取包管理器
      */
-    public static String getAppName(final String packageName) {
-        if (isSpace(packageName)) {return null;}
-        try {
-            PackageManager pm = k.app().getPackageManager();
-            PackageInfo pi = pm.getPackageInfo(packageName, 0);
-            return pi == null ? null : pi.applicationInfo.loadLabel(pm).toString();
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-            return null;
-        }
+    public static PackageManager getPackageManager() {
+        return k.app().getPackageManager();
     }
 
     /**
-     * 获取 App 图标
+     * 获取 App 信息
+     * <p>AppInfo（名称，图标，包名，版本号，版本 Code，是否系统应用）</p>
      *
-     * @return App 图标
+     * @return 当前应用的 AppInfo
      */
-    public static Drawable getAppIcon() {
-        return getAppIcon(k.app().getPackageName());
-    }
-
-    /**
-     * 获取 App 图标
-     *
-     * @param packageName 包名
-     * @return App 图标
-     */
-    public static Drawable getAppIcon(final String packageName) {
-        if (isSpace(packageName)) {return null;}
-        try {
-            PackageManager pm = k.app().getPackageManager();
-            PackageInfo pi = pm.getPackageInfo(packageName, 0);
-            return pi == null ? null : pi.applicationInfo.loadIcon(pm);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    /**
-     * 获取 App 版本
-     *
-     * @return App 版本
-     */
-    public static String getAppVersionName() {
-        return getAppVersionName(k.app().getPackageName());
-    }
-
-    /**
-     * 获取 App 版本
-     *
-     * @param packageName 包名
-     * @return App 版本
-     */
-    public static String getAppVersionName(final String packageName) {
-        if (isSpace(packageName)) {return null;}
-        try {
-            PackageManager pm = k.app().getPackageManager();
-            PackageInfo pi = pm.getPackageInfo(packageName, 0);
-            return pi == null ? null : pi.versionName;
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    /**
-     * 获取 App 版本码
-     *
-     * @return App 版本码
-     */
-    public static int getAppVersionCode() {
-        return getAppVersionCode(k.app().getPackageName());
-    }
-
-    /**
-     * 获取 App 版本码
-     *
-     * @param packageName 包名
-     * @return App 版本码
-     */
-    public static int getAppVersionCode(final String packageName) {
-        if (isSpace(packageName)) {return -1;}
-        try {
-            PackageManager pm = k.app().getPackageManager();
-            PackageInfo pi = pm.getPackageInfo(packageName, 0);
-            return pi == null ? -1 : pi.versionCode;
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-            return -1;
-        }
+    public static AppInfo getAppInfo() {
+        return getAppInfo(k.app().getPackageName());
     }
 
 
@@ -182,71 +103,24 @@ public class AppInfoUtil {
     }
 
     /**
-     * 安装 App(支持 8.0)
-     * <p>8.0 需添加权限
-     * {@code <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />}</p>
-     *
-     * @param filePath  文件路径
-     * @param authority 7.0 及以上安装需要传入清单文件中的{@code <provider>}的 authorities 属性
-     *                  <br>参看 https://developer.android.com/reference/android/support/v4/content/FileProvider.html
+     * 安装 APK
      */
-    public static void installApp(final String filePath, final String authority) {
-        installApp(FileUtil.getFileByPath(filePath), authority);
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public static void installApp(final String filePath) {
+        installApp(FileUtil.getFileByPath(filePath));
     }
 
     /**
-     * 安装 App（支持 8.0）
-     * <p>8.0 需添加权限
-     * {@code <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />}</p>
-     *
-     * @param file      文件
-     * @param authority 7.0 及以上安装需要传入清单文件中的{@code <provider>}的 authorities 属性
-     *                  <br>参看 https://developer.android.com/reference/android/support/v4/content/FileProvider.html
+     * 安装 APK 文件
      */
-    public static void installApp(final File file, final String authority) {
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public static void installApp(final File file) {
         if (!FileUtil.isFileExists(file)) {
             return;
         }
-        k.app().startActivity(IntentUtil.getInstallAppIntent(file, authority, true));
+        k.app().startActivity(IntentUtil.getInstallAppIntent(file));
     }
 
-    /**
-     * 安装 App（支持 8.0）
-     * <p>8.0 需添加权限
-     * {@code <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />}</p>
-     *
-     * @param activity    activity
-     * @param filePath    文件路径
-     * @param authority   7.0 及以上安装需要传入清单文件中的{@code <provider>}的 authorities 属性
-     *                    <br>参看 https://developer.android.com/reference/android/support/v4/content/FileProvider.html
-     * @param requestCode 请求值
-     */
-    public static void installApp(final Activity activity,
-                                  final String filePath,
-                                  final String authority,
-                                  final int requestCode) {
-        installApp(activity, FileUtil.getFileByPath(filePath), authority, requestCode);
-    }
-
-    /**
-     * 安装 App（支持 8.0）
-     * <p>8.0 需添加权限
-     * {@code <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />}</p>
-     *
-     * @param activity    activity
-     * @param file        文件
-     * @param authority   7.0 及以上安装需要传入清单文件中的{@code <provider>}的 authorities 属性
-     *                    <br>参看 https://developer.android.com/reference/android/support/v4/content/FileProvider.html
-     * @param requestCode 请求值
-     */
-    public static void installApp(final Activity activity,
-                                  final File file,
-                                  final String authority,
-                                  final int requestCode) {
-        if (!FileUtil.isFileExists(file)){ return;}
-        activity.startActivityForResult(IntentUtil.getInstallAppIntent(file, authority),
-                requestCode);
-    }
 
     /**
      * 静默安装 App
@@ -258,7 +132,9 @@ public class AppInfoUtil {
      */
     public static boolean installAppSilent(final String filePath) {
         File file = FileUtil.getFileByPath(filePath);
-        if (!FileUtil.isFileExists(file)) {return false;}
+        if (!FileUtil.isFileExists(file)) {
+            return false;
+        }
         boolean isRoot = isDeviceRooted();
         String command = "LD_LIBRARY_PATH=/vendor/lib:/system/lib pm install " + filePath;
         ShellUtil.CommandResult commandResult = ShellUtil.execCmd(command, isRoot);
@@ -322,7 +198,7 @@ public class AppInfoUtil {
         if (isSpace(packageName)) {
             return;
         }
-        k.app().startActivity(IntentUtil.getUninstallAppIntent(packageName, true));
+        k.app().startActivity(IntentUtil.getUninstallAppIntent(packageName));
     }
 
 
@@ -380,52 +256,6 @@ public class AppInfoUtil {
         ActivitysUtil.AppExit();
     }
 
-    /**
-     * 获取 App 包名
-     *
-     * @return App 包名
-     */
-    public static String getAppPackageName() {
-        return k.app().getPackageName();
-    }
-
-
-
-    /**
-     * 获取 App 路径
-     *
-     * @ param packageName 包名
-     */
-    public static String getAppPath(final String packageName) {
-        if (isSpace(packageName)) return null;
-        try {
-            PackageManager pm = k.app().getPackageManager();
-            PackageInfo pi = pm.getPackageInfo(packageName, 0);
-            return pi == null ? null : pi.applicationInfo.sourceDir;
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-
-    /**
-     * 判断 App 是否是系统应用
-     *
-     * @param packageName 包名
-     *
-     */
-    public static boolean isSystemApp(final String packageName) {
-        if (isSpace(packageName)){ return false;}
-        try {
-            PackageManager pm = k.app().getPackageManager();
-            ApplicationInfo ai = pm.getApplicationInfo(packageName, 0);
-            return ai != null && (ai.flags & ApplicationInfo.FLAG_SYSTEM) != 0;
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
 
     /**
      * 判断 App 是否是 Debug 版本
@@ -443,7 +273,9 @@ public class AppInfoUtil {
      * @return {@code true}: 是<br>{@code false}: 否
      */
     public static boolean isAppDebug(final String packageName) {
-        if (isSpace(packageName)) {return false;}
+        if (isSpace(packageName)) {
+            return false;
+        }
         try {
             PackageManager pm = k.app().getPackageManager();
             ApplicationInfo ai = pm.getApplicationInfo(packageName, 0);
@@ -459,7 +291,7 @@ public class AppInfoUtil {
      *
      * @return App 签名
      */
-    public static Signature[] getAppSignature() {
+    public static String getAppSignature() {
         return getAppSignature(k.app().getPackageName());
     }
 
@@ -469,13 +301,15 @@ public class AppInfoUtil {
      * @param packageName 包名
      * @return App 签名
      */
-    public static Signature[] getAppSignature(final String packageName) {
-        if (isSpace(packageName)) {return null;}
+    public static String getAppSignature(final String packageName) {
+        if (isSpace(packageName)) {
+            return null;
+        }
         try {
             PackageManager pm = k.app().getPackageManager();
             @SuppressLint("PackageManagerGetSignatures")
             PackageInfo pi = pm.getPackageInfo(packageName, PackageManager.GET_SIGNATURES);
-            return pi == null ? null : pi.signatures;
+            return pi == null ? "" : pi.signatures[0].toCharsString();
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
             return null;
@@ -526,43 +360,50 @@ public class AppInfoUtil {
         return "";
     }
 
+
     /**
-     * 获取应用签名的的 SHA1 值
-     * <p>可据此判断高德，百度地图 key 是否正确</p>
-     *
-     * @return 应用签名的 SHA1 字符串, 比如：53:FD:54:DC:19:0F:11:AC:B5:22:9E:F1:1A:68:88:1B:8B:E8:54:42
+     * 判断当前 APP 是否正在前台运行 ,原理是判断 APP 是否处于栈顶, 屏幕是否关闭不会影响结果
      */
-    public static String getAppSignatureSHA1() {
-        return getAppSignatureSHA1(k.app().getPackageName());
+    @RequiresPermission(Manifest.permission.GET_TASKS)
+    public static boolean isAppOnForeground() {
+        return isAppOnForeground(getAppInfo().packageName);
     }
 
     /**
-     * 获取应用签名的的 SHA1 值
-     * <p>可据此判断高德，百度地图 key 是否正确</p>
+     * 判断某应用程序(App)是否正在前台运行,原理是判断 APP 是否处于栈顶, 屏幕是否关闭不会影响结果
      *
-     * @param packageName 包名
-     * @return 应用签名的 SHA1 字符串, 比如：53:FD:54:DC:19:0F:11:AC:B5:22:9E:F1:1A:68:88:1B:8B:E8:54:42
+     * @param packageName 应用程序包名
+     * @return true 为是, false 为否
      */
-    public static String getAppSignatureSHA1(final String packageName) {
-        Signature[] signature = getAppSignature(packageName);
-        if (signature == null){ return null;}
-        return EncryptUtil.encryptSHA1ToString(signature[0].toByteArray()).
-                replaceAll("(?<=[0-9A-F]{2})[0-9A-F]{2}", ":$0");
-    }
-
-    /**
-     * 判断 App 是否处于前台
-     */
-    public static boolean isAppForeground() {
-        ActivityManager manager =(ActivityManager) k.app().getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningAppProcessInfo> info = manager.getRunningAppProcesses();
-        if (info == null || info.size() == 0){ return false;}
-        for (ActivityManager.RunningAppProcessInfo aInfo : info) {
-            if (aInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
-                return aInfo.processName.equals(k.app().getPackageName());
+    @RequiresPermission(Manifest.permission.GET_TASKS)
+    public static boolean isAppOnForeground(String packageName) {
+        ActivityManager activityManager = getActivityManager();
+        List<ActivityManager.RunningTaskInfo> tasksInfo = activityManager.getRunningTasks(1);
+        if (tasksInfo.size() > 0) {
+            // 应用程序位于堆栈的顶层
+            if (tasksInfo.get(0).topActivity.getPackageName().equals(packageName)) {
+                return true;
             }
+//            for (ActivityManager.RunningAppProcessInfo aInfo : tasksInfo) {
+//                if (aInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
+//                    return aInfo.processName.equals(k.app().getPackageName());
+//                }
+//            }
         }
         return false;
+    }
+
+    /**
+     * 获取栈顶 Activity 的名称
+     *
+     * @return 栈顶 Activity 的名称
+     */
+    public static String getTopActivityName(ActivityManager activityManager) {
+        ActivityManager mActivityManager = activityManager == null ? getActivityManager() : activityManager;
+        if (activityManager != null) {
+            return activityManager.getRunningTasks(1).get(0).topActivity.getClassName();
+        }
+        return null;
     }
 
     /**
@@ -607,8 +448,8 @@ public class AppInfoUtil {
             if (appProcess.processName.equals(context.getPackageName())) {
                 /*
                  * BACKGROUND=400 EMPTY=500 FOREGROUND=100
-				 * GONE=1000 PERCEPTIBLE=130 SERVICE=300 ISIBLE=200
-				 */
+                 * GONE=1000 PERCEPTIBLE=130 SERVICE=300 ISIBLE=200
+                 */
                 Log.i(context.getPackageName(), "此appimportace ="
                         + appProcess.importance
                         + ",context.getClass().getName()="
@@ -629,13 +470,19 @@ public class AppInfoUtil {
      * 封装 App 信息的 Bean 类
      */
     public static class AppInfo {
-
+        //app名称
         private String name;
+        //app图标
         private Drawable icon;
+        //包名
         private String packageName;
+        //包路径
         private String packagePath;
+        //版本号
         private String versionName;
+        //版本码
         private int versionCode;
+        //是否系统应用
         private boolean isSystem;
 
         public Drawable getIcon() {
@@ -694,24 +541,7 @@ public class AppInfoUtil {
             this.versionName = versionName;
         }
 
-        /**
-         * @param name        名称
-         * @param icon        图标
-         * @param packageName 包名
-         * @param packagePath 包路径
-         * @param versionName 版本号
-         * @param versionCode 版本码
-         * @param isSystem    是否系统应用
-         */
-        public AppInfo(String packageName, String name, Drawable icon, String packagePath,
-                       String versionName, int versionCode, boolean isSystem) {
-            this.setName(name);
-            this.setIcon(icon);
-            this.setPackageName(packageName);
-            this.setPackagePath(packagePath);
-            this.setVersionName(versionName);
-            this.setVersionCode(versionCode);
-            this.setSystem(isSystem);
+        public AppInfo() {
         }
 
         @Override
@@ -725,15 +555,6 @@ public class AppInfoUtil {
         }
     }
 
-    /**
-     * 获取 App 信息
-     * <p>AppInfo（名称，图标，包名，版本号，版本 Code，是否系统应用）</p>
-     *
-     * @return 当前应用的 AppInfo
-     */
-    public static AppInfo getAppInfo() {
-        return getAppInfo(k.app().getPackageName());
-    }
 
     /**
      * 获取 App 信息
@@ -745,8 +566,8 @@ public class AppInfoUtil {
     public static AppInfo getAppInfo(final String packageName) {
         try {
             PackageManager pm = k.app().getPackageManager();
-            PackageInfo pi = pm.getPackageInfo(packageName, 0);
-            return getBean(pm, pi);
+            PackageInfo packageInfo = pm.getPackageInfo(packageName, 0);
+            return getBean(pm, packageInfo);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
             return null;
@@ -761,16 +582,19 @@ public class AppInfoUtil {
      * @return AppInfo 类
      */
     private static AppInfo getBean(final PackageManager pm, final PackageInfo pi) {
-        if (pm == null || pi == null) {return null;}
+        if (pm == null || pi == null) {
+            return null;
+        }
         ApplicationInfo ai = pi.applicationInfo;
-        String packageName = pi.packageName;
-        String name = ai.loadLabel(pm).toString();
-        Drawable icon = ai.loadIcon(pm);
-        String packagePath = ai.sourceDir;
-        String versionName = pi.versionName;
-        int versionCode = pi.versionCode;
-        boolean isSystem = (ApplicationInfo.FLAG_SYSTEM & ai.flags) != 0;
-        return new AppInfo(packageName, name, icon, packagePath, versionName, versionCode, isSystem);
+        AppInfo appInfo = new AppInfo();
+        appInfo.setName(ai.loadLabel(pm).toString());
+        appInfo.setIcon(ai.loadIcon(pm));
+        appInfo.setPackageName(pi.packageName);
+        appInfo.setPackagePath(ai.sourceDir);
+        appInfo.setVersionName(pi.versionName);
+        appInfo.setVersionCode(pi.versionCode);
+        appInfo.setSystem((ApplicationInfo.FLAG_SYSTEM & ai.flags) != 0);
+        return appInfo;
     }
 
     /**
@@ -788,7 +612,9 @@ public class AppInfoUtil {
         List<PackageInfo> installedPackages = pm.getInstalledPackages(0);
         for (PackageInfo pi : installedPackages) {
             AppInfo ai = getBean(pm, pi);
-            if (ai == null){ continue;}
+            if (ai == null) {
+                continue;
+            }
             list.add(ai);
         }
         return list;
@@ -849,22 +675,17 @@ public class AppInfoUtil {
     /**
      * 检测服务是否运行
      *
-     * @param context   上下文
-     * @param className 类名
+     * @param serviceClassName 类名
      * @return 是否运行的状态
      */
-    public static boolean isServiceRunning(Context context, String className) {
-        boolean isRunning = false;
-        ActivityManager activityManager = (ActivityManager) context
-                .getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningServiceInfo> servicesList = activityManager
-                .getRunningServices(Integer.MAX_VALUE);
-        for (ActivityManager.RunningServiceInfo si : servicesList) {
-            if (className.equals(si.service.getClassName())) {
-                isRunning = true;
+    public static boolean isServiceRunning(String serviceClassName) {
+        List<ActivityManager.RunningServiceInfo> services = getActivityManager().getRunningServices(Integer.MAX_VALUE);
+        for (ActivityManager.RunningServiceInfo runningServiceInfo : services) {
+            if (runningServiceInfo.service.getClassName().equals(serviceClassName)) {
+                return true;
             }
         }
-        return isRunning;
+        return false;
     }
 
     /**
@@ -888,28 +709,7 @@ public class AppInfoUtil {
         return ret;
     }
 
-    /**
-     * 得到CPU核心数
-     *
-     * @return CPU核心数
-     */
-    public static int getNumCores() {
-        try {
-            File dir = new File("/sys/devices/system/cpu/");
-            File[] files = dir.listFiles(new FileFilter() {
-                @Override
-                public boolean accept(File pathname) {
-                    if (Pattern.matches("cpu[0-9]", pathname.getName())) {
-                        return true;
-                    }
-                    return false;
-                }
-            });
-            return files.length;
-        } catch (Exception e) {
-            return 1;
-        }
-    }
+
 
 
     /**
@@ -920,24 +720,26 @@ public class AppInfoUtil {
     public static int gc() {
         long i = getDeviceUsableMemory();
         int count = 0; // 清理掉的进程数
-        ActivityManager am = (ActivityManager) k.app() .getSystemService(Context.ACTIVITY_SERVICE);
+        ActivityManager am = (ActivityManager) k.app().getSystemService(Context.ACTIVITY_SERVICE);
         // 获取正在运行的service列表
         List<ActivityManager.RunningServiceInfo> serviceList = am.getRunningServices(100);
-        if (serviceList != null){
+        if (serviceList != null) {
             for (ActivityManager.RunningServiceInfo service : serviceList) {
-                if (service.pid == android.os.Process.myPid()){
-                    continue;}
+                if (service.pid == android.os.Process.myPid()) {
+                    continue;
+                }
                 try {
                     android.os.Process.killProcess(service.pid);
                     count++;
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
-            }}
+            }
+        }
 
         // 获取正在运行的进程列表
         List<ActivityManager.RunningAppProcessInfo> processList = am.getRunningAppProcesses();
-        if (processList != null){
+        if (processList != null) {
             for (ActivityManager.RunningAppProcessInfo process : processList) {
                 // 一般数值大于RunningAppProcessInfo.IMPORTANCE_SERVICE的进程都长时间没用或者空进程了
                 // 一般数值大于RunningAppProcessInfo.IMPORTANCE_VISIBLE的进程都是非可见进程，也就是在后台运行着
@@ -956,7 +758,8 @@ public class AppInfoUtil {
                         }
                     }
                 }
-            }}
+            }
+        }
         if (DEBUG) {
             LogUtil.d("清理了" + (getDeviceUsableMemory() - i) + "M内存");
         }

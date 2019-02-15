@@ -19,6 +19,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import mo.klib.k;
+import mo.klib.modle.constants.Limits;
 import mo.klib.modle.manager.KWindowManager;
 
 
@@ -241,6 +242,16 @@ public class ScreenUtil {
     }
 
     /**
+     * 设置屏幕方向
+     *
+     * @param activity             Activity
+     * @param requestedOrientation 方向
+     */
+    public static void setScreenOrientation(Activity activity, @Limits.ScreenOrientation int requestedOrientation) {
+        activity.setRequestedOrientation(requestedOrientation);
+    }
+
+    /**
      * 设置屏幕为横屏
      * <p>还有一种就是在Activity中加属性android:screenOrientation="landscape"</p>
      * <p>不设置Activity的android:configChanges时，切屏会重新调用各个生命周期，切横屏时会执行一次，切竖屏时会执行两次</p>
@@ -250,8 +261,8 @@ public class ScreenUtil {
      *
      * @param activity activity
      */
-    public static void setLandscape(Activity activity) {
-        activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+    public static void setScreenOrientationLandscape(Activity activity) {
+        setScreenOrientation(activity, ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     }
 
     /**
@@ -259,8 +270,8 @@ public class ScreenUtil {
      *
      * @param activity activity
      */
-    public static void setPortrait(Activity activity) {
-        activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+    public static void setScreenOrientationPortrait(Activity activity) {
+        setScreenOrientation(activity, ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
     /**
@@ -291,7 +302,6 @@ public class ScreenUtil {
      */
     public static int getScreenRotation(Activity activity) {
         switch (activity.getWindowManager().getDefaultDisplay().getRotation()) {
-            default:
             case Surface.ROTATION_0:
                 return 0;
             case Surface.ROTATION_90:
@@ -300,6 +310,8 @@ public class ScreenUtil {
                 return 180;
             case Surface.ROTATION_270:
                 return 270;
+            default:
+                return -1;
         }
     }
 

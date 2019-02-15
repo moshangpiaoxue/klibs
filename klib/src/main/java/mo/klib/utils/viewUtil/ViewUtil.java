@@ -10,6 +10,7 @@ import android.os.SystemClock;
 import android.support.annotation.ColorInt;
 import android.support.annotation.IntRange;
 import android.view.LayoutInflater;
+import android.view.TouchDelegate;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -103,13 +104,6 @@ public class ViewUtil {
         return LayoutInflater.from(context).inflate(layoutId, group, false);
     }
 
-    /**
-     * 获取控件的高度
-     */
-    public static int getViewMeasuredHeight(View view) {
-        calculateViewMeasure(view);
-        return view.getMeasuredHeight();
-    }
 
     /**
      * 测量控件的尺寸
@@ -121,6 +115,22 @@ public class ViewUtil {
     }
 
     /**
+     * 获取控件的高度
+     */
+    public static int getViewMeasuredHeight(View view) {
+        calculateViewMeasure(view);
+        return view.getMeasuredHeight();
+    }
+
+    /**
+     * 获取控件的宽度
+     */
+    public static int getViewMeasuredWidth(View view) {
+        calculateViewMeasure(view);
+        return view.getMeasuredWidth();
+    }
+
+    /**
      * 设置某个View的margin
      *
      * @param view   需要设置的view
@@ -128,7 +138,7 @@ public class ViewUtil {
      * @param right  右边距
      * @param top    上边距
      * @param bottom 下边距
-     * @return
+     * @return ViewGroup.LayoutParams
      */
     public static ViewGroup.LayoutParams setViewMargin(View view, int left, int right, int top, int bottom) {
         if (view == null) {
@@ -155,14 +165,6 @@ public class ViewUtil {
     }
 
     /**
-     * 获取控件的宽度
-     */
-    public static int getViewMeasuredWidth(View view) {
-        calculateViewMeasure(view);
-        return view.getMeasuredWidth();
-    }
-
-    /**
      * 设置view的背景透明度
      *
      * @param view
@@ -173,7 +175,6 @@ public class ViewUtil {
             //mutate()的作用是通知系统，我的这个改变是独有的不共享，如果没有这个方法，在5.0以上的系统，view所用到的背景图片或者颜色值，在其他控件使用时会一起跟着变
             view.getBackground().mutate().setAlpha(aph);
         }
-
     }
 
     /**
@@ -215,42 +216,33 @@ public class ViewUtil {
     }
 
     /**
-     * view是否被遮挡
+     * 获取指定的 View 再屏幕中的位置
+     * <p>该位置为 View 左上角像素相对于屏幕左上角的位置
      *
-     * @param view
-     * @return
+     * @param view View
+     * @return 包含 x 和 y 坐标的数组, [0] 为 x 坐标, [1] 为 y 坐标
      */
-    public static boolean isViewCovered(final View view) {
-        View currentView = view;
-        Rect currentViewRect = new Rect();
-        boolean partVisible = currentView.getGlobalVisibleRect(currentViewRect);
-        boolean totalHeightVisible = (currentViewRect.bottom - currentViewRect.top) >= view.getMeasuredHeight();
-        boolean totalWidthVisible = (currentViewRect.right - currentViewRect.left) >= view.getMeasuredWidth();
-        boolean totalViewVisible = partVisible && totalHeightVisible && totalWidthVisible;
-        // if any part of the view is clipped by any of its parents,return true
-        if (!totalViewVisible){
-            return true;}
+    public static int[] getLocationOnScreen(View view) {
+        int[] location = new int[2];
+        view.getLocationOnScreen(location);
+        return location;
+    }
 
-        while (currentView.getParent() instanceof ViewGroup) {
-            ViewGroup currentParent = (ViewGroup) currentView.getParent();
-            // if the parent of view is not visible,return true
-            if (currentParent.getVisibility() != View.VISIBLE){
-                return true;}
-
-            int start = getIndexForViewInParent(currentView, currentParent);
-            for (int i = start + 1; i < currentParent.getChildCount(); i++) {
-                Rect viewRect = new Rect();
-                view.getGlobalVisibleRect(viewRect);
-                View otherView = currentParent.getChildAt(i);
-                Rect otherViewRect = new Rect();
-                otherView.getGlobalVisibleRect(otherViewRect);
-                // if view intersects its older brother(covered),return true
-                if (Rect.intersects(viewRect, otherViewRect)){
-                    return true;}
-            }
-            currentView = currentParent;
-        }
-        return false;
+    /**
+     * 获取指定的 View 再屏幕中的位置, 分别为: 左/上/右/下
+     *
+     * @param view View
+     * @return 包含该 View 左上右下在屏幕中的位置
+     */
+    public static int[] getLocationsOnScreen(View view) {
+        int[] location = new int[2];
+        view.getLocationOnScreen(location);
+        int[] locations = new int[4];
+        locations[0] = location[0];
+        locations[1] = location[1];
+        locations[2] = location[0] + view.getWidth();
+        locations[3] = location[1] + view.getHeight();
+        return locations;
     }
 
     /**
@@ -269,6 +261,49 @@ public class ViewUtil {
         }
         return index;
     }
+
+    /**
+     * view是否被遮挡
+     *
+     * @param view
+     * @return
+     */
+    public static boolean isViewCovered(final View view) {
+        View currentView = view;
+        Rect currentViewRect = new Rect();
+        boolean partVisible = currentView.getGlobalVisibleRect(currentViewRect);
+        boolean totalHeightVisible = (currentViewRect.bottom - currentViewRect.top) >= view.getMeasuredHeight();
+        boolean totalWidthVisible = (currentViewRect.right - currentViewRect.left) >= view.getMeasuredWidth();
+        boolean totalViewVisible = partVisible && totalHeightVisible && totalWidthVisible;
+        // if any part of the view is clipped by any of its parents,return true
+        if (!totalViewVisible) {
+            return true;
+        }
+
+        while (currentView.getParent() instanceof ViewGroup) {
+            ViewGroup currentParent = (ViewGroup) currentView.getParent();
+            // if the parent of view is not visible,return true
+            if (currentParent.getVisibility() != View.VISIBLE) {
+                return true;
+            }
+
+            int start = getIndexForViewInParent(currentView, currentParent);
+            for (int i = start + 1; i < currentParent.getChildCount(); i++) {
+                Rect viewRect = new Rect();
+                view.getGlobalVisibleRect(viewRect);
+                View otherView = currentParent.getChildAt(i);
+                Rect otherViewRect = new Rect();
+                otherView.getGlobalVisibleRect(otherViewRect);
+                // if view intersects its older brother(covered),return true
+                if (Rect.intersects(viewRect, otherViewRect)) {
+                    return true;
+                }
+            }
+            currentView = currentParent;
+        }
+        return false;
+    }
+
 
     /**
      * 设置根布局参数
@@ -362,6 +397,11 @@ public class ViewUtil {
         void onClickListen(View view, final long timeBetween, final int times);
     }
 
+    /**
+     * 设置view显示
+     *
+     * @param view
+     */
     public static void setViewShow(View view) {
         TranslateAnimation showAnim = TranslateAnimationUtil.showAnim;
         showAnim.setDuration(500);
@@ -369,10 +409,78 @@ public class ViewUtil {
         view.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * 设置view隐藏
+     *
+     * @param view
+     */
     public static void setViewHide(View view) {
         TranslateAnimation hideAnim = TranslateAnimationUtil.hideAnim;
         hideAnim.setDuration(500);
         view.startAnimation(hideAnim);
         view.setVisibility(View.GONE);
+    }
+
+    /**
+     * 为指定的 View 及其所有子 View 都设置 selected 状态
+     *
+     * @param view     指定 View
+     * @param selected 是否为 selected
+     */
+    public static void setSelectedWithChildView(View view, boolean selected) {
+        if (view == null) {
+            return;
+        }
+        view.setSelected(selected);
+        if (view instanceof ViewGroup) {
+            ViewGroup viewGroup = (ViewGroup) view;
+            for (int i = 0; i < viewGroup.getChildCount(); i++) {
+                setSelectedWithChildView(viewGroup.getChildAt(i), selected);
+            }
+        }
+    }
+
+    /**
+     * 扩大 View 的触摸和点击响应范围, 最大不超过其父View范围
+     *
+     * @param view   View
+     * @param top    顶部扩大的像素值
+     * @param bottom 底部扩大的像素值
+     * @param left   左边扩大的像素值
+     * @param right  右边扩大的像素值
+     */
+    public static void expandViewTouchDelegate(final View view, final int top,
+                                               final int bottom, final int left, final int right) {
+        view.post(new Runnable() {
+            @Override
+            public void run() {
+                if (View.class.isInstance(view.getParent())) {
+                    Rect bounds = new Rect();
+                    view.setEnabled(true);
+                    view.getHitRect(bounds);
+                    bounds.top -= top;
+                    bounds.bottom += bottom;
+                    bounds.left -= left;
+                    bounds.right += right;
+                    ((View) view.getParent()).setTouchDelegate(new TouchDelegate(bounds, view));
+                }
+            }
+        });
+    }
+
+    /**
+     * 还原 View 的触摸和点击响应范围, 最小不小于 View 自身范围
+     *
+     * @param view View
+     */
+    public static void restoreViewTouchDelegate(final View view) {
+        view.post(new Runnable() {
+            @Override
+            public void run() {
+                if (View.class.isInstance(view.getParent())) {
+                    ((View) view.getParent()).setTouchDelegate(new TouchDelegate(new Rect(), view));
+                }
+            }
+        });
     }
 }

@@ -13,8 +13,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import mo.klib.k;
-import mo.klib.utils.dataUtil.DateUtil;
 import mo.klib.utils.dataUtil.StringUtil;
+import mo.klib.utils.dataUtil.date.DateUtils;
 import mo.klib.utils.fileUtil.FileDirUtil;
 import mo.klib.utils.logUtils.LogUtil;
 
@@ -32,7 +32,7 @@ public class BitmapSaveUtils {
      * @throws IOException
      */
     public static File saveBitmapToJPG(Bitmap bitmap) throws IOException {
-        return saveBitmapToJPG(bitmap, DateUtil.getNowMS() + ".jpg");
+        return saveBitmapToJPG(bitmap, DateUtils.getNowMS() + ".jpg");
     }
 
     public static File saveBitmapToJPG(Bitmap bitmap, String name) throws IOException {

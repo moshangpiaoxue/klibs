@@ -87,7 +87,6 @@ public class BitmapUtil {
         return src == null || src.getWidth() == 0 || src.getHeight() == 0;
     }
 
-
     /**
      * 获取bitmap大小
      *
@@ -320,7 +319,18 @@ public class BitmapUtil {
     }
 
     /**
-     * 获取 bitmap
+     * 读取资源文件中图片
+     *
+     * @param resId 资源 Id
+     * @return Bitmap 对象
+     */
+    public static Bitmap getBitmap(@DrawableRes int resId) {
+        return BitmapFactory.decodeResource(k.app().getResources(), resId);
+//        return ResUtil.getBitmap(resId);
+    }
+
+    /**
+     * File 转 Bitmap
      *
      * @param file 文件
      * @return bitmap
@@ -330,7 +340,7 @@ public class BitmapUtil {
     }
 
     /**
-     * 通过Uri 获取bitmap
+     * Uri 转 Bitmap
      *
      * @param imageUri
      * @return
@@ -346,7 +356,7 @@ public class BitmapUtil {
     }
 
     /**
-     * 获取 bitmap
+     * InputStream 转 Bitmap
      *
      * @param is 输入流
      * @return bitmap
@@ -356,7 +366,7 @@ public class BitmapUtil {
     }
 
     /**
-     * 通过图像url进行得到bitmap
+     * url 转 Bitmap
      *
      * @param url
      * @return
@@ -385,7 +395,7 @@ public class BitmapUtil {
     }
 
     /**
-     * 获取 bitmap
+     * filePath 转 Bitmap
      *
      * @param filePath 文件路径
      * @return bitmap
@@ -403,18 +413,7 @@ public class BitmapUtil {
 
 
     /**
-     * 通过图像的ID返回bitmap
-     *
-     * @param resId 图像的ID
-     * @return
-     */
-    public static Bitmap getBitmap(@DrawableRes int resId) {
-        return ResUtil.getBitmap(resId);
-    }
-
-    /**
-     * 获取 bitmap
-     *
+     *FileDescriptor 转 Bitmap
      * @param fd 文件描述
      * @return bitmap
      */
@@ -443,14 +442,7 @@ public class BitmapUtil {
 
 
     /**
-     * 获取一个drawable对象返回一个bitmap流
-     *
-     * @param drawable
-     * @return bitmap流
-     */
-    /**
-     * 将Drawable转为Bitmap对象
-     *
+     *Drawable 转 Bitmap
      * @param drawable
      * @return
      */
@@ -519,7 +511,7 @@ public class BitmapUtil {
      * @param bitmap 转为drawable 的bitmap
      * @return 返回drawable
      */
-    public static Drawable bitmap2Drawable(Bitmap bitmap) {
+    public static Drawable toDrawable(Bitmap bitmap) {
         return bitmap == null ? null : new BitmapDrawable(k.app().getResources(), bitmap);
     }
 
@@ -572,6 +564,8 @@ public class BitmapUtil {
     }
 
     /**
+     * 获取圆形图像
+     *
      * @param src         源图片
      * @param borderSize  边框尺寸
      * @param borderColor 边框颜色
@@ -911,6 +905,23 @@ public class BitmapUtil {
     }
 
     /**
+     * 盖印颜色蒙层
+     *
+     * @param src   源 Bitmap 对象
+     * @param color 盖印颜色
+     * @return 盖印后的图片
+     */
+    public static Bitmap getBitmapColorMask(Bitmap src, int color) {
+        if (isEmptyBitmap(src)) {
+            return null;
+        }
+        Bitmap ret = src.copy(src.getConfig(), true);
+        Canvas canvas = new Canvas(ret);
+        canvas.drawColor(color);
+        return ret;
+    }
+
+    /**
      * 获取拼接图像
      *
      * @param firstBitmap
@@ -993,7 +1004,9 @@ public class BitmapUtil {
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
         // 绘制渲染倒影的矩形
         canvas.drawRect(0, srcHeight + spacing, srcWidth, ret.getHeight(), paint);
-        if (!reflectionBitmap.isRecycled()) {reflectionBitmap.recycle();}
+        if (!reflectionBitmap.isRecycled()) {
+            reflectionBitmap.recycle();
+        }
         if (recycle && !src.isRecycled()) {
             src.recycle();
         }
@@ -1344,7 +1357,9 @@ public class BitmapUtil {
                                            @FloatRange(from = 0, to = 1, fromInclusive = false) final float scale,
                                            @FloatRange(from = 0, to = 25, fromInclusive = false) final float radius,
                                            final boolean recycle) {
-        if (isEmptyBitmap(src)) return null;
+        if (isEmptyBitmap(src)) {
+            return null;
+        }
         int width = src.getWidth();
         int height = src.getHeight();
         Matrix matrix = new Matrix();
@@ -1385,7 +1400,9 @@ public class BitmapUtil {
                                                   from = 0, to = 25, fromInclusive = false
                                           ) final float radius,
                                           final boolean recycle) {
-        if (isEmptyBitmap(src)){ return null;}
+        if (isEmptyBitmap(src)) {
+            return null;
+        }
         RenderScript rs = null;
         Bitmap ret = recycle ? src : src.copy(src.getConfig(), true);
         try {
