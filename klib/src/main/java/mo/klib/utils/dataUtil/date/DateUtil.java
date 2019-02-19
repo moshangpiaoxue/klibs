@@ -483,7 +483,7 @@ public class DateUtil {
      * @param format    返回日期格式
      * @return days天前后的日期
      */
-    public String getDateString(int days,String format){
+    public static String getDateString(int days,String format){
         Calendar calendar=Calendar.getInstance();
         calendar.add(Calendar.DATE,days);
         return DateFormatUtil.getSDF(format).format( calendar.getTime());
