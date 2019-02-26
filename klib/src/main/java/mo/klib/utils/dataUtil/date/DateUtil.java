@@ -478,7 +478,7 @@ public class DateUtil {
     }
 
     /**
-     * 获取距现在若干天前后的日期
+     * 获取前n天或后n天的日期
      * @param days  天数  几天前/后 负数是前，正数是后
      * @param format    返回日期格式
      * @return days天前后的日期

@@ -5,6 +5,8 @@ import android.content.Context;
 
 import java.lang.reflect.Method;
 
+import mo.klib.modle.annotation.ViewInjector;
+import mo.klib.modle.annotation.ViewInjectorImpl;
 import mo.klib.utils.appUtils.activityUtil.ActivitysUtil;
 import mo.klib.utils.task.KTaskController;
 import mo.klib.utils.task.KTaskControllerImpl;
@@ -14,7 +16,7 @@ import mo.klib.utils.task.KTaskControllerImpl;
  * @ author：mo
  * @ data：2017/11/29：13:39
  * @ 功能：根工具类
- *
+ * <p>
  * 备忘：右滑删除集成或写demo
  */
 public final class k {
@@ -49,6 +51,17 @@ public final class k {
     }
 
     /**
+     * 注解绑定
+     *    k.view().inject(this);
+     */
+    public static ViewInjector view() {
+        if (Ext.viewInjector == null) {
+            ViewInjectorImpl.INSTANCE.regist();
+        }
+        return Ext.viewInjector;
+    }
+
+    /**
      * 任务控制器
      *
      * @return
@@ -61,6 +74,7 @@ public final class k {
         private static boolean debug = true;
         private static Application app;
         private static KTaskController KTaskController;
+        private static ViewInjector viewInjector;
 
         private Ext() {
         }
@@ -81,6 +95,10 @@ public final class k {
             if (Ext.KTaskController == null) {
                 Ext.KTaskController = KTaskController;
             }
+        }
+
+        public static void setViewInjector(ViewInjector viewInjector) {
+            Ext.viewInjector = viewInjector;
         }
     }
 

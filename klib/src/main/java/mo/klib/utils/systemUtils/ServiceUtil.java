@@ -2,9 +2,11 @@ package mo.klib.utils.systemUtils;
 
 import android.app.ActivityManager;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import mo.klib.k;
@@ -35,7 +37,18 @@ public class ServiceUtil {
         }
         return false;
     }
-
+    public static boolean isRuning(String serviceName) {
+        ActivityManager myManager = (ActivityManager) k.app().getSystemService(Context.ACTIVITY_SERVICE);
+        //获取当前所有服务
+        ArrayList<ActivityManager.RunningServiceInfo> runningService =
+                (ArrayList<ActivityManager.RunningServiceInfo>) myManager.getRunningServices(Integer.MAX_VALUE);
+        for (int i = 0; i < runningService.size(); i++) {
+            if (runningService.get(i).service.getClassName().equals(serviceName)) {
+                return true;
+            }
+        }
+        return false;
+    }
     /**
      * 启动指定的服务
      *

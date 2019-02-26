@@ -5,6 +5,7 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.view.View;
 
@@ -101,12 +102,16 @@ public class NextActivityUtil {
     /**
      * 获取Activity所带Object数据
      * List<Icons> list= (List<Icons>) NextActivityUtil.getDate(this);
-     *
+     * 注意：bean类必须序列化，Serializable或Parcelable，拿数据的时候log会打印报错，
+     * 是因为我拿的时候不知道你是用哪种方式序列化的只能先用Serializable拿一下，然后判空，
      * @param activity 载体
      * @return
      */
     public static Object getDateBean(Activity activity) {
-        return activity.getIntent() == null ? null : activity.getIntent().getSerializableExtra("extra");
+//        return activity.getIntent() == null ? null : activity.getIntent().getSerializableExtra("extra");
+        Intent intent = activity.getIntent();
+        return intent==null?null:(intent.getSerializableExtra("extra")==null?intent.getParcelableExtra("extra"):intent.getSerializableExtra("extra"));
+
     }
 
     /**
@@ -210,7 +215,12 @@ public class NextActivityUtil {
     public static void toNextActivity(Activity fromAct, Class<?> toAct, Object obj, Boolean isFinish) {
         Intent intent = new Intent(fromAct, toAct);
         Bundle bundle = new Bundle();
-        bundle.putSerializable("extra", (Serializable) obj);
+        if (obj instanceof Parcelable) {
+            bundle.putParcelable("extra", (Parcelable) obj);
+        }
+        if (obj instanceof Serializable) {
+            bundle.putSerializable("extra", (Serializable) obj);
+        }
         intent.putExtras(bundle);
         toNextActivity(fromAct, intent, isFinish);
     }

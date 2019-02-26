@@ -56,7 +56,7 @@ public class CompressIQuality {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         src.compress(Bitmap.CompressFormat.JPEG, quality, baos);
         byte[] bytes = baos.toByteArray();
-        if (recycle && !src.isRecycled()) src.recycle();
+        if (recycle && !src.isRecycled()) {src.recycle();}
         return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
     }
 
