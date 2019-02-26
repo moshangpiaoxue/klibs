@@ -34,6 +34,8 @@ import mo.klib.utils.tipsUtil.ToastUtil;
  * @ 功能：view注入实现类
  */
 public enum ViewInjectorImpl implements ViewInjector {
+
+
     /**
      * 枚举单例
      */

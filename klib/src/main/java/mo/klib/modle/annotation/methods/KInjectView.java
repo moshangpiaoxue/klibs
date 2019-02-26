@@ -22,7 +22,6 @@ public @interface KInjectView {
     //表示@KInjectView() 注解时，括号里面的编写的为int类型的值
     @IdRes
     int value();
-
     //父view id
     int parentId() default 0;
 }
