@@ -5,14 +5,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/tv_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="click"
+            android:gravity="center"
+            android:textSize="@dimen/dp_60"/>
+        <ImageView
+            android:id="@+id/iv_1"
+            android:layout_width="@dimen/dp_200"
+            android:layout_height="@dimen/dp_200"
+            android:src="@mipmap/aa"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <mo.klib.view.recyclerView.KRecycleView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/krv__"></mo.klib.view.recyclerView.KRecycleView>
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
