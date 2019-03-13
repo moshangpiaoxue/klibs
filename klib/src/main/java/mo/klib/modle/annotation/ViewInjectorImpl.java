@@ -260,7 +260,7 @@ public enum ViewInjectorImpl implements ViewInjector {
                         //无参构造
                         method.invoke(obj);
                     } catch (Exception e) {
-                        e.printStackTrace();
+//                        e.printStackTrace();
                         try {
                             //带参构造
                             method.invoke(obj, view);

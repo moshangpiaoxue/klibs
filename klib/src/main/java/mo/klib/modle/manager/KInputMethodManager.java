@@ -5,10 +5,16 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Rect;
 import android.os.Build;
+import android.text.InputType;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 import mo.klib.k;
 import mo.klib.utils.logUtils.LogUtil;
@@ -203,4 +209,42 @@ public enum KInputMethodManager {
         }
     }
 
+    /**
+     * 禁掉系统软键盘
+     */
+    public void hideSoftInputMethod(Activity activity, EditText editText) {
+        activity.getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        int currentVersion = android.os.Build.VERSION.SDK_INT;
+        String methodName = null;
+        if (currentVersion >= 16) {
+            // 4.2
+            methodName = "setShowSoftInputOnFocus";
+        } else if (currentVersion >= 14) {
+            // 4.0
+
+            methodName = "setSoftInputShownOnFocus";
+        }
+        if (methodName == null) {
+            editText.setInputType(InputType.TYPE_NULL);
+        } else {
+            Class<EditText> cls = EditText.class;
+            Method setShowSoftInputOnFocus;
+            try {
+                setShowSoftInputOnFocus = cls.getMethod(methodName,
+                        boolean.class);
+                setShowSoftInputOnFocus.setAccessible(true);
+                setShowSoftInputOnFocus.invoke(editText, false);
+            } catch (NoSuchMethodException e) {
+                editText.setInputType(InputType.TYPE_NULL);
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }
