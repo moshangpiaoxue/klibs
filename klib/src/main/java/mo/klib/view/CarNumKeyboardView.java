@@ -13,6 +13,7 @@ import android.widget.RelativeLayout;
 import java.util.List;
 import mo.klib.R;
 import mo.klib.k;
+import mo.klib.modle.listener.textListener.KOnTextChangedListener;
 import mo.klib.modle.manager.KInputMethodManager;
 
 /**
@@ -57,6 +58,16 @@ public class CarNumKeyboardView extends RelativeLayout {
         keyboardView.setEnabled(true);
         keyboardView.setPreviewEnabled(false);
         keyboardView.setOnKeyboardActionListener(listener);
+        editText.addTextChangedListener(new KOnTextChangedListener(){
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                super.beforeTextChanged(s, start, count, after);
+                if (start==0){
+                    isnun = false;
+                    keyboardView.setKeyboard(province_keyboard);
+                }
+            }
+        });
     }
 
     private KeyboardView.OnKeyboardActionListener listener = new KeyboardView.OnKeyboardActionListener() {
