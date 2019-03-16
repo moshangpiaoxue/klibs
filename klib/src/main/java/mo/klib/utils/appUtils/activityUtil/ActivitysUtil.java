@@ -11,6 +11,7 @@ import java.lang.ref.WeakReference;
 import java.util.Stack;
 
 import mo.klib.k;
+import mo.klib.modle.listener.KActivityLifecycleCallbacks;
 
 
 /**
@@ -23,7 +24,7 @@ public class ActivitysUtil {
     private static WeakReference<Activity> sTopActivityWeakRef;
 
     public static Application.ActivityLifecycleCallbacks getCallBack() {
-        Application.ActivityLifecycleCallbacks mCallbacks = new Application.ActivityLifecycleCallbacks() {
+        Application.ActivityLifecycleCallbacks mCallbacks = new KActivityLifecycleCallbacks() {
             @Override
             public void onActivityCreated(Activity activity, Bundle bundle) {
                 addActivity(activity);
@@ -38,21 +39,6 @@ public class ActivitysUtil {
             @Override
             public void onActivityResumed(Activity activity) {
                 setTopActivityWeakRef(activity);
-            }
-
-            @Override
-            public void onActivityPaused(Activity activity) {
-
-            }
-
-            @Override
-            public void onActivityStopped(Activity activity) {
-
-            }
-
-            @Override
-            public void onActivitySaveInstanceState(Activity activity, Bundle bundle) {
-
             }
 
             @Override
