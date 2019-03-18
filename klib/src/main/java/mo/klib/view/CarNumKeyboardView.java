@@ -10,7 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+
 import java.util.List;
+
 import mo.klib.R;
 import mo.klib.k;
 import mo.klib.modle.listener.textListener.KOnTextChangedListener;
@@ -47,27 +49,46 @@ public class CarNumKeyboardView extends RelativeLayout {
         LayoutInflater.from(context).inflate(R.layout.car_num_keyboard_view, this, true);
         province_keyboard = new Keyboard(k.app(), R.xml.province_abbreviation);
         number_keyboar = new Keyboard(k.app(), R.xml.number_or_letters);
-
-    }
-
-    public void setEditText(Activity activity, EditText editText) {
-        this.activity = activity;
-        this.editText = editText;
         keyboardView = (KeyboardView) findViewById(R.id.keyboard_view);
         keyboardView.setKeyboard(province_keyboard);
         keyboardView.setEnabled(true);
         keyboardView.setPreviewEnabled(false);
+
+    }
+
+    public void setEditText(Activity activity, EditText editText) {
+        setEditText(activity, editText, false);
+    }
+
+    public void setEditText(Activity activity, EditText editText, boolean isShow) {
+        this.activity = activity;
+        this.editText = editText;
         keyboardView.setOnKeyboardActionListener(listener);
-        editText.addTextChangedListener(new KOnTextChangedListener(){
+        //监听控件清空输入内容后，重置显示省份
+        editText.addTextChangedListener(new KOnTextChangedListener() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 super.beforeTextChanged(s, start, count, after);
-                if (start==0){
+                if (start == 0) {
                     isnun = false;
                     keyboardView.setKeyboard(province_keyboard);
                 }
             }
         });
+        //点击弹出
+        editText.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showKeyboard();
+            }
+        });
+        //禁用系统输入法
+        KInputMethodManager.INSTANCE.hideSoftInputMethod(activity, editText);
+        if (isShow) {
+            showKeyboard();
+        } else {
+            hideKeyboard();
+        }
     }
 
     private KeyboardView.OnKeyboardActionListener listener = new KeyboardView.OnKeyboardActionListener() {
@@ -162,7 +183,7 @@ public class CarNumKeyboardView extends RelativeLayout {
         if (visibility == View.GONE || visibility == View.INVISIBLE) {
             keyboardView.setVisibility(View.VISIBLE);
         }
-        KInputMethodManager.INSTANCE.hideSoftInputMethod(activity, editText);
+
     }
 
     public void hideKeyboard() {
