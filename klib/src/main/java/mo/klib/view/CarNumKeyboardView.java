@@ -12,11 +12,14 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import mo.klib.R;
 import mo.klib.k;
 import mo.klib.modle.listener.textListener.KOnTextChangedListener;
 import mo.klib.modle.manager.KInputMethodManager;
+import mo.klib.utils.logUtils.LogUtil;
 
 /**
  * @ author：mo
@@ -60,7 +63,7 @@ public class CarNumKeyboardView extends RelativeLayout {
         setEditText(activity, editText, false);
     }
 
-    public void setEditText(Activity activity, EditText editText, boolean isShow) {
+    public void setEditText(Activity activity, final EditText editText, boolean isShow) {
         this.activity = activity;
         this.editText = editText;
         keyboardView.setOnKeyboardActionListener(listener);
@@ -72,6 +75,24 @@ public class CarNumKeyboardView extends RelativeLayout {
                 if (start == 0) {
                     isnun = false;
                     keyboardView.setKeyboard(province_keyboard);
+                }
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Pattern p = Pattern.compile("[\u4e00-\u9fa5]");
+                // 输入的内容变化的监听
+                LogUtil.i("输入过程中执行该方法 文字变化");
+                int length = s.length();
+                if (length > 2 || length == 2) {
+                    String substring = s.toString().substring(length - 1);
+                    Matcher m = p.matcher(substring);
+                    if (m.matches()) {
+                        //是汉字
+                        String substring2 = s.toString().substring(0, length - 1);
+                        editText.setText(substring2);
+                        editText.setSelection(substring2.length());
+                    }
                 }
             }
         });
