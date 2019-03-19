@@ -21,15 +21,16 @@ public enum FlashlightUtils {
      * 枚举单例
      */
     INSTANCE;
-
+/**
+*
+*/
     private boolean flashlightAvailable;
     private Camera camera;
     private CameraManager cameraManager;
     private String cameraId;
 
     {
-        flashlightAvailable = k.app().getApplicationContext().getPackageManager()
-                .hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
+        flashlightAvailable = k.app().getApplicationContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             cameraManager = (CameraManager) k.app().getApplicationContext().getSystemService(Context.CAMERA_SERVICE);
@@ -42,6 +43,24 @@ public enum FlashlightUtils {
             }
         }
     }
+
+    /**
+     * 是否有闪光灯
+     */
+    public boolean isFlashlightAvailable() {
+        return flashlightAvailable;
+    }
+
+    public boolean actionFlashLight() {
+        if (status) {
+            status = !close();
+        } else {
+            status = open();
+        }
+        return status;
+    }
+
+    private boolean status = false;
 
     /**
      * 开启闪光灯
