@@ -20,9 +20,12 @@ import mo.klib.utils.viewUtil.ViewUtil;
 public class ToastUtil {
 
     public static void showToast(final String msg) {
+        showToast(msg, Toast.LENGTH_SHORT);
+    }
+    public static void showToast(final String msg,int time) {
         //如果是主线程，直接弹出toast
-        if (TextUtils.equals("main",Thread.currentThread().getName())) {
-            Toast.makeText(k.app(), msg, Toast.LENGTH_SHORT).show();
+        if ("main".equals(Thread.currentThread().getName())) {
+            Toast.makeText(k.app(), msg, time).show();
         }
     }
 
