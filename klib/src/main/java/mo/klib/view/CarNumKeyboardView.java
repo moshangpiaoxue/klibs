@@ -172,10 +172,12 @@ public class CarNumKeyboardView extends RelativeLayout {
                 }
             } else {
                 editable.insert(start, Character.toString((char) primaryCode));
-                // 判断第一个字符是否是中文,是，则自动切换到数字软键盘
+//                 判断第一个字符是否是中文,是，则自动切换到数字软键盘
 //                if (editText.getText().toString().matches(reg)) {
-//                    changeKeyboard(isnun = true);
-//                }
+                //从第二个字符开始默认切换到数字键盘
+                if (editText.getText().toString().length()>0) {
+                    changeKeyboard(isnun = true);
+                }
             }
         }
     };
