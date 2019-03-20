@@ -96,7 +96,7 @@
 		     android:horizontalGap="2%p" android:keyWidth="8%p"
 		     />
 		<Key  android:codes="-5"
-			 android:keyEdgeFlags="right" android:keyIcon="@mipmap/bg_keyboard_car_del"
+			 android:keyEdgeFlags="right" android:keyIcon="@mipmap/aa"
 			 android:horizontalGap="3%p" android:keyWidth="13%p"
 			 android:isRepeatable="true" />
 	</Row>
