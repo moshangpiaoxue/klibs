@@ -35,8 +35,10 @@ public class CarNumKeyboardView extends RelativeLayout {
     private Keyboard province_keyboard;
     // 数字键盘
     private Keyboard number_keyboar;
-    // 是否数据键盘
-    public boolean isnun = true;
+    /**
+     * 是否是文字键盘
+     */
+    public boolean isWord = true;
     // 是否大写
     public boolean isupper = false;
     /**
@@ -73,14 +75,6 @@ public class CarNumKeyboardView extends RelativeLayout {
         editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(10)});
         //监听控件清空输入内容后，重置显示省份
         editText.addTextChangedListener(new KOnTextChangedListener() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                super.beforeTextChanged(s, start, count, after);
-//                if (start == 0) {
-//                    isnun = false;
-//                    keyboardView.setKeyboard(province_keyboard);
-//                }
-            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -98,6 +92,14 @@ public class CarNumKeyboardView extends RelativeLayout {
 //                        editText.setSelection(substring2.length());
 //                    }
 //                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                super.afterTextChanged(s);
+                if (s.length() == 0) {
+                    changeKeyboard(isWord = true);
+                }
             }
         });
         //点击弹出
@@ -165,18 +167,19 @@ public class CarNumKeyboardView extends RelativeLayout {
                 keyboardView.setKeyboard(province_keyboard);
                 // 数字键盘切换
             } else if (primaryCode == Keyboard.KEYCODE_MODE_CHANGE) {
-                if (!isnun) {
-                    changeKeyboard(isnun = false);
+                LogUtil.i("当前==" + (isWord ? "数字键盘" : "省份键盘"));
+                if (isWord) {
+                    changeKeyboard(isWord = false);
                 } else {
-                    changeKeyboard(isnun = true);
+                    changeKeyboard(isWord = true);
                 }
             } else {
                 editable.insert(start, Character.toString((char) primaryCode));
 //                 判断第一个字符是否是中文,是，则自动切换到数字软键盘
 //                if (editText.getText().toString().matches(reg)) {
                 //从第二个字符开始默认切换到数字键盘
-                if (editText.getText().toString().length()>0) {
-                    changeKeyboard(isnun = true);
+                if (editText.getText().toString().length() > 0) {
+                    changeKeyboard(isWord = false);
                 }
             }
         }
@@ -200,12 +203,12 @@ public class CarNumKeyboardView extends RelativeLayout {
     /**
      * 指定切换软键盘 isnumber false表示要切换为省份简称软键盘 true表示要切换为数字软键盘
      */
-    public void changeKeyboard(boolean isnumber) {
-        LogUtil.i(isnumber ? "数字键盘" : "省份键盘");
-        if (isnumber) {
-            keyboardView.setKeyboard(number_keyboar);
-        } else {
+    public void changeKeyboard(boolean isw) {
+        LogUtil.i(isw ? "数字键盘" : "省份键盘");
+        if (isw) {
             keyboardView.setKeyboard(province_keyboard);
+        } else {
+            keyboardView.setKeyboard(number_keyboar);
         }
     }
 

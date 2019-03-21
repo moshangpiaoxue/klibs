@@ -67,6 +67,7 @@ public enum KLocationManager {
             final AlertDialog.Builder dialog = new AlertDialog.Builder(mActivity);
             dialog.setTitle("定位功能未开启");
             dialog.setMessage("请先打开GPS定位功能!");
+            dialog.setCancelable(false);
             dialog.setPositiveButton("设置", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
