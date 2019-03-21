@@ -10,15 +10,12 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-
-import java.util.List;
 
 import mo.klib.R;
 import mo.klib.k;
-import mo.klib.modle.listener.textListener.KOnTextChangedListener;
 import mo.klib.modle.manager.KInputMethodManager;
-import mo.klib.utils.logUtils.LogUtil;
 
 /**
  * @ author：mo
@@ -29,23 +26,27 @@ import mo.klib.utils.logUtils.LogUtil;
  * keyboard_view1.showKeyboard();
  */
 public class CarNumKeyboardView extends RelativeLayout {
-    private Activity activity;
+    /**
+     * 整体view 包括title条
+     */
+    private LinearLayout kkeyboard_;
+    /**
+     * 键盘view
+     */
     private KeyboardView keyboardView;
-    // 字母键盘
+    /**
+     * 字母键盘
+     */
     private Keyboard province_keyboard;
-    // 数字键盘
+    /**
+     * 数字键盘
+     */
     private Keyboard number_keyboar;
     /**
-     * 是否是文字键盘
+     * 输入控件
      */
-    public boolean isWord = true;
-    // 是否大写
-    public boolean isupper = false;
-    /**
-     * 判定是否是中文的正则表达式 [\\u4e00-\\u9fa5]判断一个中文 [\\u4e00-\\u9fa5]+多个中文
-     */
-    private String reg = "[\\u4e00-\\u9fa5]";
     private EditText editText;
+
 
     public CarNumKeyboardView(Context context) {
         super(context, null);
@@ -57,8 +58,9 @@ public class CarNumKeyboardView extends RelativeLayout {
         LayoutInflater.from(context).inflate(R.layout.car_num_keyboard_view, this, true);
         province_keyboard = new Keyboard(k.app(), R.xml.province_abbreviation);
         number_keyboar = new Keyboard(k.app(), R.xml.number_or_letters);
+        kkeyboard_ = findViewById(R.id.kkeyboard_);
         keyboardView = (KeyboardView) findViewById(R.id.keyboard_view);
-        keyboardView.setKeyboard(province_keyboard);
+        changeKeyboard(true);
         keyboardView.setEnabled(true);
         keyboardView.setPreviewEnabled(false);
 
@@ -68,57 +70,77 @@ public class CarNumKeyboardView extends RelativeLayout {
         setEditText(activity, editText, false);
     }
 
-    public void setEditText(Activity activity, final EditText editText, boolean isShow) {
-        this.activity = activity;
+    public void setEditText(Activity activity, final EditText editText, final boolean isShow) {
         this.editText = editText;
         keyboardView.setOnKeyboardActionListener(listener);
         editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(10)});
-        //监听控件清空输入内容后，重置显示省份
-        editText.addTextChangedListener(new KOnTextChangedListener() {
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                Pattern p = Pattern.compile("[\u4e00-\u9fa5]");
-//                // 输入的内容变化的监听
-//                LogUtil.i("输入过程中执行该方法 文字变化");
-//                int length = s.length();
-//                if (length > 2 || length == 2) {
-//                    String substring = s.toString().substring(length - 1);
-//                    Matcher m = p.matcher(substring);
-//                    if (m.matches()) {
-//                        //是汉字
-//                        String substring2 = s.toString().substring(0, length - 1);
-//                        editText.setText(substring2);
-//                        editText.setSelection(substring2.length());
-//                    }
-//                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                super.afterTextChanged(s);
-                if (s.length() == 0) {
-                    changeKeyboard(isWord = true);
-                }
-            }
-        });
         //点击弹出
         editText.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                showKeyboard();
+                setKeyboardShow(true);
             }
         });
         //禁用系统输入法
         KInputMethodManager.INSTANCE.hideSoftInputMethod(activity, editText);
-        if (isShow) {
-            showKeyboard();
-        } else {
-            hideKeyboard();
-        }
+        setKeyboardShow(isShow);
     }
 
+    /**
+     * 设置键盘是否显示
+     *
+     * @param isShow true==显示  false==隐藏
+     */
+    public void setKeyboardShow(boolean isShow) {
+        kkeyboard_.setVisibility(isShow ? VISIBLE : View.GONE);
+    }
+
+    /**
+     * 指定切换软键盘
+     *
+     * @param isWord true==切到省份键盘  false==切到数字键盘
+     */
+    public void changeKeyboard(boolean isWord) {
+        keyboardView.setKeyboard(isWord ? province_keyboard : number_keyboar);
+    }
+
+    /**
+     * 监听
+     */
     private KeyboardView.OnKeyboardActionListener listener = new KeyboardView.OnKeyboardActionListener() {
+        @Override
+        public void onKey(int primaryCode, int[] keyCodes) {
+            Editable editable = editText.getText();
+            int start = editText.getSelectionStart();
+            // 完成
+            if (primaryCode == Keyboard.KEYCODE_CANCEL) {
+                setKeyboardShow(false);
+                // 回退
+            } else if (primaryCode == Keyboard.KEYCODE_DELETE) {
+                if (editable != null && editable.length() > 0) {
+                    if (start > 0) {
+                        editable.delete(start - 1, start);
+                        if (start == 1) {
+                            changeKeyboard(true);
+                        }
+                    }
+                }
+                // 省份键盘切换到数字键盘
+            } else if (primaryCode == Keyboard.KEYCODE_SHIFT) {
+                changeKeyboard(true);
+                // 数字键盘切换到省份键盘
+            } else if (primaryCode == Keyboard.KEYCODE_MODE_CHANGE) {
+                changeKeyboard(false);
+            } else {
+                editable.insert(start, Character.toString((char) primaryCode));
+//                 判断第一个字符是否是中文,是，则自动切换到数字软键盘
+//                if (editText.getText().toString().matches(reg)) {
+                //从第二个字符开始默认切换到数字键盘
+                if (editText.getText().toString().length() > 0) {
+                    changeKeyboard(false);
+                }
+            }
+        }
         @Override
         public void swipeUp() {
         }
@@ -146,104 +168,7 @@ public class CarNumKeyboardView extends RelativeLayout {
         @Override
         public void onPress(int primaryCode) {
         }
-
-        @Override
-        public void onKey(int primaryCode, int[] keyCodes) {
-            Editable editable = editText.getText();
-            int start = editText.getSelectionStart();
-            // 完成
-            if (primaryCode == Keyboard.KEYCODE_CANCEL) {
-                hideKeyboard();
-                // 回退
-            } else if (primaryCode == Keyboard.KEYCODE_DELETE) {
-                if (editable != null && editable.length() > 0) {
-                    if (start > 0) {
-                        editable.delete(start - 1, start);
-                    }
-                }
-                // 大小写切换
-            } else if (primaryCode == Keyboard.KEYCODE_SHIFT) {
-                changeKey();
-                keyboardView.setKeyboard(province_keyboard);
-                // 数字键盘切换
-            } else if (primaryCode == Keyboard.KEYCODE_MODE_CHANGE) {
-                LogUtil.i("当前==" + (isWord ? "数字键盘" : "省份键盘"));
-                if (isWord) {
-                    changeKeyboard(isWord = false);
-                } else {
-                    changeKeyboard(isWord = true);
-                }
-            } else {
-                editable.insert(start, Character.toString((char) primaryCode));
-//                 判断第一个字符是否是中文,是，则自动切换到数字软键盘
-//                if (editText.getText().toString().matches(reg)) {
-                //从第二个字符开始默认切换到数字键盘
-                if (editText.getText().toString().length() > 0) {
-                    changeKeyboard(isWord = false);
-                }
-            }
-        }
     };
-
-    public void showKeyboard() {
-        int visibility = keyboardView.getVisibility();
-        if (visibility == View.GONE || visibility == View.INVISIBLE) {
-            keyboardView.setVisibility(View.VISIBLE);
-        }
-
-    }
-
-    public void hideKeyboard() {
-        int visibility = keyboardView.getVisibility();
-        if (visibility == View.VISIBLE) {
-            keyboardView.setVisibility(View.GONE);
-        }
-    }
-
-    /**
-     * 指定切换软键盘 isnumber false表示要切换为省份简称软键盘 true表示要切换为数字软键盘
-     */
-    public void changeKeyboard(boolean isw) {
-        LogUtil.i(isw ? "数字键盘" : "省份键盘");
-        if (isw) {
-            keyboardView.setKeyboard(province_keyboard);
-        } else {
-            keyboardView.setKeyboard(number_keyboar);
-        }
-    }
-
-    /**
-     * 键盘大小写切换
-     */
-    private void changeKey() {
-        List<Keyboard.Key> keylist = province_keyboard.getKeys();
-        if (isupper) {//大写切换小写
-            isupper = false;
-            for (Keyboard.Key key : keylist) {
-                if (key.label != null && isword(key.label.toString())) {
-                    key.label = key.label.toString().toLowerCase();
-                    key.codes[0] = key.codes[0] + 32;
-                }
-            }
-        } else {//小写切换大写
-            isupper = true;
-            for (Keyboard.Key key : keylist) {
-                if (key.label != null && isword(key.label.toString())) {
-                    key.label = key.label.toString().toUpperCase();
-                    key.codes[0] = key.codes[0] - 32;
-                }
-            }
-        }
-    }
-
-
-    private boolean isword(String str) {
-        String wordstr = "abcdefghijklmnopqrstuvwxyz";
-        if (wordstr.indexOf(str.toLowerCase()) > -1) {
-            return true;
-        }
-        return false;
-    }
 
 
 }
