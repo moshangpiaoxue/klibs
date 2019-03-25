@@ -202,7 +202,7 @@
         <Key
             android:codes="-5"
             android:horizontalGap="8%p"
-            android:isRepeatable="true"
+            android:isRepeatable="false"
             android:keyWidth="13%p"
             android:keyEdgeFlags="right"
             android:keyIcon="@mipmap/keyboard_car_cha" />

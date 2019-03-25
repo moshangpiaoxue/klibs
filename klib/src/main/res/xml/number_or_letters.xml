@@ -211,7 +211,7 @@
         <Key
             android:codes="-5"
             android:horizontalGap="3%p"
-            android:isRepeatable="true"
+            android:isRepeatable="false"
             android:keyWidth="13%p"
             android:keyEdgeFlags="right"
             android:keyIcon="@mipmap/keyboard_car_cha" />
