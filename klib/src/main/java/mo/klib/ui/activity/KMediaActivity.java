@@ -153,7 +153,7 @@ public class KMediaActivity extends KReceiverActivity {
         if (CameraUtil.isExistCamera()) {
 //            imageUri = CameraUtil.actionPhoneTake(mActivity);
             phoneStatus = KConstans.MEDIA_TAKE_PIC;
-            requestPermission(ConstansePermissionGroup.PERMISSIONS_STORAGE);
+            requestPermission(ConstansePermissionGroup.PERMISSIONS_CAMERA);
 
         } else {
             ToastUtil.showToast("没有找到拍照设备！");

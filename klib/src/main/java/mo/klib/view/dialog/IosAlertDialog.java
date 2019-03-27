@@ -1,4 +1,4 @@
-package mo.klib.utils.viewUtil.dialog;
+package mo.klib.view.dialog;
 
 import android.app.Dialog;
 import android.content.Context;

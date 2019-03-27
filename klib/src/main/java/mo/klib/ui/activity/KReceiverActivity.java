@@ -14,7 +14,7 @@ import mo.klib.modle.listener.receiverListener.KOnNetChangeListener;
 import mo.klib.modle.listener.receiverListener.KOnGpsChangeListener;
 import mo.klib.modle.manager.KLocationManager;
 import mo.klib.utils.tipsUtil.ToastUtil;
-import mo.klib.utils.viewUtil.dialog.IosAlertDialog;
+import mo.klib.view.dialog.IosAlertDialog;
 
 
 /**

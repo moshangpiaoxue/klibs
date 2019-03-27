@@ -102,7 +102,7 @@ public enum PermissionUtil {
         //默认有权限没有通过
         if (mRequestCode == requestCode) {
             //如果有权限没有被允许
-            if (verifyPermissions(grantResults)) {
+            if (!verifyPermissions(grantResults)) {
                 if (showSystemSetting) {
                     //跳转到系统设置权限页面，或者直接关闭页面，不让他继续访问
                     showSystemPermissionsSettingDialog(activity);
