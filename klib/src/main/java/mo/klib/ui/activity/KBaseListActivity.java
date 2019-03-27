@@ -39,7 +39,7 @@ public abstract class KBaseListActivity<T> extends KBaseLayoutActivity {
     }
 
     @Override
-    protected void initView(ViewHolder mViewHolder, View rootView) {
+    protected void initViews(View mainView) {
         statusBar = findView(R.id.view_status_bar);
         ll_base_list_addlayout = findView(R.id.ll_base_list_addlayout);
         kPullLayout = findView(R.id.k_pull_layout);
@@ -64,13 +64,17 @@ public abstract class KBaseListActivity<T> extends KBaseLayoutActivity {
 
         kRecycleview.setAdapter(adapter);
         dealView(mViewHolder, ll_base_list_addlayout, kPullLayout, kRecycleview, adapter);
+        kPullLayout.autoRefresh();
     }
 
-    protected void getMore(int page) {
+    @Override
+    protected void getData() {
+
     }
 
-    protected void getList(int page) {
-    }
+    protected abstract void getMore(int page) ;
+
+    protected abstract void getList(int page) ;
 
 
     protected abstract KRecycleViewAdapter<T> getAdapter();
