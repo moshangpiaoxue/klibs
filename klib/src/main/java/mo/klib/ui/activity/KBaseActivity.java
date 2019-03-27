@@ -247,4 +247,9 @@ public abstract class KBaseActivity extends KMediaActivity {
         return this;
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        closeInput();
+    }
 }

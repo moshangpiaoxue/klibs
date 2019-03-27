@@ -32,8 +32,9 @@ public abstract class KBaseListActivity<T> extends KBaseLayoutActivity {
     private KHeaderAndFooterWrapper<T> adapter;
     protected List<T> mData = new ArrayList<>();
 
+
     @Override
-    protected int getLayoutId() {
+    protected int getMainLayoutId() {
         return R.layout.activity_base_list_layout;
     }
 
@@ -110,7 +111,6 @@ public abstract class KBaseListActivity<T> extends KBaseLayoutActivity {
 
     /**
      * 刷新数据
-     *
      */
     public void refeshAdapter() {
         if (mData.size() != 0) {
