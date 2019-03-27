@@ -12,6 +12,7 @@ import mo.klib.modle.constants.ConstansePermissionGroup;
 import mo.klib.modle.constants.KConstans;
 import mo.klib.utils.dataUtil.KUriUtil;
 import mo.klib.utils.image.BitmapUtil;
+import mo.klib.utils.image.CompressScaled;
 import mo.klib.utils.systemUtils.CameraUtil;
 import mo.klib.utils.systemUtils.storageUtil.SDCardUtil;
 import mo.klib.utils.tipsUtil.ToastUtil;
@@ -67,7 +68,8 @@ public class KMediaActivity extends KReceiverActivity {
                 if (phoneStatus == KConstans.MEDIA_CHOOSE_PIC) {
                     if (resultCode == RESULT_OK) {
                         String imagePath = CameraUtil.handlerImageChooseResult(data);
-                        setMediaResult(phoneStatus, BitmapFactory.decodeFile(imagePath), imagePath, data);
+                        setMediaResult(phoneStatus, CompressScaled.getScaledBitmap(BitmapFactory.decodeFile(imagePath)), imagePath, data);
+//                        setMediaResult(phoneStatus, BitmapFactory.decodeFile(imagePath), imagePath, data);
                     }
                 }
                 break;

@@ -29,10 +29,6 @@ public abstract class KBaseActivity extends KMediaActivity {
      */
     protected int currentTabIndex;
     /**
-     * 布局id
-     */
-    protected int layoutId;
-    /**
      * 根view
      */
     protected View rootView;
@@ -66,7 +62,7 @@ public abstract class KBaseActivity extends KMediaActivity {
         if (isShowFullScreen) {
             ScreenUtil.setFullScreen(mActivity);
         }
-        layoutId = getLayoutId();
+        int layoutId = getLayoutId();
         mViewHolder = layoutId == 0 ? null : new ViewHolder(getLayoutInflater(), null, layoutId);
         rootView = layoutId == 0 ? null : mViewHolder.getRootView();
         if (rootView != null) {

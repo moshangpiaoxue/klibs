@@ -23,7 +23,7 @@ import mo.klib.view.recyclerView.KRecycleView;
  * @ 功能：
  */
 
-public abstract class KBaseListActivity<T> extends KBaseActivity {
+public abstract class KBaseListActivity<T> extends KBaseLayoutActivity {
     public View statusBar;
     public LinearLayout ll_base_list_addlayout;
     public KRecycleView kRecycleview;
@@ -115,7 +115,7 @@ public abstract class KBaseListActivity<T> extends KBaseActivity {
     public void refeshAdapter() {
         if (mData.size() != 0) {
             adapter.refresh(mData);
-
+            loadSuccess();
         }
         kPullLayout.finishRefresh();
     }
@@ -130,6 +130,7 @@ public abstract class KBaseListActivity<T> extends KBaseActivity {
             adapter.loadMore(list);
         } else {
             page -= 1;
+            showToast("没有更多数据");
         }
         kPullLayout.finishLoadMore();
     }

@@ -113,6 +113,7 @@ public abstract class KBaseLayoutActivity extends KBaseActivity {
             fl_base_main.addView(mainView);
         }
         initViews(mainView);
+        getData();
     }
 
     protected void onTitleRightClick(View v) {
