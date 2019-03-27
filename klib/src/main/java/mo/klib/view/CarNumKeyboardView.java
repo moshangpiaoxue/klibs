@@ -88,11 +88,14 @@ public class CarNumKeyboardView extends RelativeLayout {
 
     /**
      * 设置键盘是否显示
-     *
+     * 当显示并且输入框没有数据的时候默认显示省份键盘
      * @param isShow true==显示  false==隐藏
      */
     public void setKeyboardShow(boolean isShow) {
         kkeyboard_.setVisibility(isShow ? VISIBLE : View.GONE);
+        if (isShow&&editText!=null&&editText.getText().length()==0){
+            changeKeyboard(true);
+        }
     }
 
     /**

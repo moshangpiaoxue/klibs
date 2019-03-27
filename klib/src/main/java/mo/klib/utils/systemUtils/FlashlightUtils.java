@@ -12,7 +12,7 @@ import mo.klib.k;
 /**
  * @ author：mo
  * @ data：2019/3/19:13:25
- * @ 功能：闪光灯工具类（不用必须调close方法）
+ * @ 功能：闪光灯工具类（不用必须调close方法）、在Camera被持有的时候，也就是开启相机预览或者扫描二维码的时候，不能生效
  * FlashlightUtils.INSTANCE.open();
  * FlashlightUtils.INSTANCE.close();
  */
@@ -21,9 +21,9 @@ public enum FlashlightUtils {
      * 枚举单例
      */
     INSTANCE;
-/**
-*
-*/
+    /**
+     *
+     */
     private boolean flashlightAvailable;
     private Camera camera;
     private CameraManager cameraManager;
