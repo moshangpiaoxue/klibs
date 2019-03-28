@@ -1,4 +1,4 @@
-package mo.klib.modle.broadcastReceivers;
+package mo.klib.modle.broadcastreceivers;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

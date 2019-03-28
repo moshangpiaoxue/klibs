@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mo.klib.k;
-import mo.klib.modle.broadcastReceivers.GPSBroadcastReceiver;
 
 
 /**

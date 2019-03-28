@@ -133,7 +133,7 @@ public abstract class KBaseListActivity<T> extends KBaseLayoutActivity {
      * @param list
      */
     public void loardMoreAdapter(List<T> list) {
-        if (list.size() != 0) {
+        if (list!=null&&list.size() != 0) {
             mWrapper.loadMore(list);
         } else {
             page -= 1;
