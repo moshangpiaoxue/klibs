@@ -45,9 +45,15 @@ public abstract class KBaseListFragment<T> extends KBaseLayoutFragment {
         });
         mAdapter = getAdapter();
         if (mAdapter != null) {
-            mWrapper = new KHeaderAndFooterWrapper<T>(mAdapter, mActivity);
+            mWrapper = new KHeaderAndFooterWrapper<T>(mAdapter);
             mKRecycleView.setAdapter(mWrapper);
         }
+        layoutError.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getData(mPage = 1);
+            }
+        });
         initListView();
     }
 

@@ -24,12 +24,13 @@ import mo.klib.view.recyclerView.KRecycleView;
  */
 
 public abstract class KBaseListActivity<T> extends KBaseLayoutActivity {
-    public View statusBar;
-    public LinearLayout ll_base_list_addlayout;
-    public KRecycleView kRecycleview;
-    private KPullToRefreshLayout kPullLayout;
-    private int page = 1;
-    private KHeaderAndFooterWrapper<T> adapter;
+    protected View statusBar;
+    protected LinearLayout ll_base_list_addlayout;
+    protected KRecycleView kRecycleview;
+    protected KPullToRefreshLayout kPullLayout;
+    protected int page = 1;
+    protected KHeaderAndFooterWrapper<T> mWrapper;
+    protected KRecycleViewAdapter<T> mAdapter;
     protected List<T> mData = new ArrayList<>();
 
 
@@ -48,56 +49,52 @@ public abstract class KBaseListActivity<T> extends KBaseLayoutActivity {
         kPullLayout.setRefreshListener(new BaseRefreshListener() {
             @Override
             public void refresh() {
-                page = 1;
-                getList(page);
+                getList(page = 1);
             }
 
             @Override
             public void loadMore() {
-                page++;
-                getMore(page);
+                getMore(page++);
             }
         });
-//空数据布局
-        View emptyView = ViewUtil.getView(mActivity, R.layout.base_empty, kRecycleview);
-        adapter = new KHeaderAndFooterWrapper<>(mActivity, getAdapter(), emptyView, kRecycleview);
+        mAdapter=getAdapter();
+        if (mAdapter!=null){
+            mWrapper = new KHeaderAndFooterWrapper<>(mAdapter);
+            kRecycleview.setAdapter(mWrapper);
+        }
 
-        kRecycleview.setAdapter(adapter);
-        dealView(mViewHolder, ll_base_list_addlayout, kPullLayout, kRecycleview, adapter);
+        layoutError.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getList(page = 1);
+            }
+        });
+        initListView();
+
         kPullLayout.autoRefresh();
+        loading();
     }
-
+    protected abstract void initListView();
     @Override
     protected void getData() {
-
     }
 
-    protected abstract void getMore(int page) ;
+    protected abstract void getMore(int page);
 
-    protected abstract void getList(int page) ;
+    protected abstract void getList(int page);
 
 
     protected abstract KRecycleViewAdapter<T> getAdapter();
 
-    /**
-     * 设置当前布局是否可以下拉或上拉
-     *
-     * @param mViewHolder
-     * @param addlayout
-     * @param kPullLayout
-     * @param kRecycleview
-     * @param adapter
-     */
-    protected abstract void dealView(ViewHolder mViewHolder, LinearLayout addlayout, KPullToRefreshLayout kPullLayout, KRecycleView kRecycleview, KHeaderAndFooterWrapper<T> adapter);
 
     /**
      * 开启滑动到底部自动加载更多
      */
     public void actionOnScrollingListener() {
-        adapter.getInnerAdapter().setOnScrollingListener(new KOnScrollingListener() {
+        mWrapper.getInnerAdapter().setOnScrollingListener(new KOnScrollingListener() {
             @Override
             public void onScrollingListener(int shoePosition, int count) {
-                if (adapter.getInnerAdapter().getmItemPosition() == adapter.getItemCount() - 1) {
+                if (mWrapper.getInnerAdapter().getmItemPosition() == mWrapper.getItemCount() - 1) {
                     page++;
                     getMore(page);
 
@@ -110,17 +107,23 @@ public abstract class KBaseListActivity<T> extends KBaseLayoutActivity {
      * 关闭滑动监听
      */
     public void closeScollingListener() {
-        adapter.getInnerAdapter().setOnScrollingListener(null);
+        mWrapper.getInnerAdapter().setOnScrollingListener(null);
     }
 
     /**
      * 刷新数据
      */
-    public void refeshAdapter() {
-        if (mData.size() != 0) {
-            adapter.refresh(mData);
-            loadSuccess();
+    public void refeshAdapter(List<T> list) {
+        mData.clear();
+        if (list != null && list.size() != 0) {
+            mData = list;
+            mWrapper.removeEmptyView();
+            mWrapper.refresh(mData);
+        } else {
+            loadErrorNoData();
+            mWrapper.addEmptyView(ViewUtil.getView(mActivity, R.layout.base_empty, kRecycleview));
         }
+        loadSuccess();
         kPullLayout.finishRefresh();
     }
 
@@ -131,7 +134,7 @@ public abstract class KBaseListActivity<T> extends KBaseLayoutActivity {
      */
     public void loardMoreAdapter(List<T> list) {
         if (list.size() != 0) {
-            adapter.loadMore(list);
+            mWrapper.loadMore(list);
         } else {
             page -= 1;
             showToast("没有更多数据");

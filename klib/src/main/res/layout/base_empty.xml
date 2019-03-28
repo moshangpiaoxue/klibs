@@ -8,18 +8,16 @@
 
     <ImageView
         android:id="@+id/iv_base_empty"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:src="@mipmap/ic_warn"
-        android:scaleType="centerInside"
-        />
+        android:layout_width="@dimen/dp_120"
+        android:layout_height="@dimen/dp_120"
+        android:src="@mipmap/load_err" />
 
     <TextView
         android:id="@+id/tv_base_empty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:text="暂无数据"
-        />
+        android:layout_marginTop="15dp"
+        android:text="sorry，没有您想要的数据"
+        android:textSize="15sp" />
 
 </LinearLayout>

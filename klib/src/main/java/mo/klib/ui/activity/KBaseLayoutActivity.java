@@ -10,9 +10,11 @@ import android.widget.TextView;
 import mo.klib.R;
 import mo.klib.modle.viewHolder.ViewHolder;
 import mo.klib.utils.bengUtil.NextOtherActivityUtil;
+import mo.klib.utils.dataUtil.StringUtil;
+import mo.klib.utils.logUtils.LogUtil;
+import mo.klib.utils.tipsUtil.ProgressDialogUtil;
 import mo.klib.utils.viewUtil.ViewUtil;
 import mo.klib.view.KTitleView;
-
 
 /**
  * @ author：mo
@@ -67,11 +69,12 @@ public abstract class KBaseLayoutActivity extends KBaseActivity {
     @Override
     protected void initView(ViewHolder mViewHolder, View rootView) {
         title = mViewHolder.getView(R.id.ktv_base_title);
-        title.setListener(new KTitleView.KTitleBarClickListener() {
+        title.setListener(new KTitleView.KTitleBarClickListenerImpl() {
             @Override
             public void leftClick(View v) {
                 super.leftClick(v);
-                finishActivity(mActivity);
+                onBackPressed();
+//                finishActivity(mActivity);
             }
 
             @Override
@@ -114,6 +117,22 @@ public abstract class KBaseLayoutActivity extends KBaseActivity {
         }
         initViews(mainView);
         getData();
+    }
+
+    /**
+     * 系统返回键
+     */
+    @Override
+    public void onBackPressed() {
+
+        if (isCanBack) {
+            LogUtil.i("BaseActivity onBackPressed");
+            if (ProgressDialogUtil.progressLoading != null && ProgressDialogUtil.progressLoading.isShowing()) {
+                ProgressDialogUtil.cancelProgress();
+            } else {
+                super.onBackPressed();
+            }
+        }
     }
 
     protected void onTitleRightClick(View v) {
@@ -172,6 +191,21 @@ public abstract class KBaseLayoutActivity extends KBaseActivity {
         layoutEmpty.setVisibility(View.VISIBLE);
         layoutError.setVisibility(View.GONE);
         layoutErrorNet.setVisibility(View.GONE);
+        //没有数据布局出现
+        if (layoutEmpty.getVisibility() != View.VISIBLE) {
+            viewEmptyIv.setImageResource(getNoDataImageRes() == 0 ? R.mipmap.load_err : getNoDataImageRes());
+            viewEmptyTv.setText(StringUtil.isEmpty(getNoDataString()) ? "sorry，没有您想要的数据" : getNoDataString());
+
+            layoutEmpty.setVisibility(View.VISIBLE);
+        }
+    }
+
+    protected String getNoDataString() {
+        return "";
+    }
+
+    protected int getNoDataImageRes() {
+        return 0;
     }
 
     /**

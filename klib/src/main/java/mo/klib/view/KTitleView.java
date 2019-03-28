@@ -120,7 +120,7 @@ public class KTitleView extends FrameLayout {
     /**
      * 抽象监听方法
      */
-    public static abstract class KTitleBarClickListener implements TitleBarClickListener {
+    public static abstract class KTitleBarClickListenerImpl implements TitleBarClickListener {
         @Override
         public void leftClick(View v) {
 
