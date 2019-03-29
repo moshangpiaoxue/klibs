@@ -35,7 +35,7 @@ public abstract class KBaseListFragment<T> extends KBaseLayoutFragment {
             @Override
             public void refresh() {
                 mPage = 1;
-                getData(mPage);
+                getLise(mPage);
             }
 
             @Override
@@ -48,12 +48,7 @@ public abstract class KBaseListFragment<T> extends KBaseLayoutFragment {
             mWrapper = new KHeaderAndFooterWrapper<T>(mAdapter);
             mKRecycleView.setAdapter(mWrapper);
         }
-        layoutError.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getData(mPage = 1);
-            }
-        });
+        loading();
         initListView();
     }
 

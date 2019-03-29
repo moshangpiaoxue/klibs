@@ -77,7 +77,7 @@ public abstract class KBaseLayoutFragment extends KBaseFragment {
         layoutError.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getData(mPage);
+                getLise(mPage);
             }
         });
         layoutErrorNet = mViewHolder.getView(R.id.ll_base_error_net);
@@ -105,7 +105,7 @@ public abstract class KBaseLayoutFragment extends KBaseFragment {
 
     protected abstract int getMainLayoutId();
 
-    protected abstract void getData(int mPage);
+    protected abstract void getLise(int mPage);
 
     /**
      * 加载中
