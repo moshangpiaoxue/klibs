@@ -13,6 +13,7 @@ import mo.klib.modle.listener.receiverListener.KOnLockScreenListener;
 import mo.klib.modle.listener.receiverListener.KOnNetChangeListener;
 import mo.klib.modle.listener.receiverListener.KOnGpsChangeListener;
 import mo.klib.modle.manager.KLocationManager;
+import mo.klib.utils.logUtils.LogUtil;
 import mo.klib.utils.tipsUtil.ToastUtil;
 import mo.klib.view.dialog.IosAlertDialog;
 
@@ -102,6 +103,7 @@ public class KReceiverActivity extends KRxJavaActivity implements KOnNetChangeLi
     @Override
     public void onGpsStatusChange(Boolean isOpen) {
         isOpenGps = isOpen;
+        LogUtil.i("定位功能未开启状态=="+isOpen);
         if (!isOpen) {
             GpsDialog = new IosAlertDialog(mActivity).builder()
                     .setCancelable(false)

@@ -55,5 +55,7 @@
                 <action android:name="myservice2" />
             </intent-filter>
         </service>
+
+        <receiver android:name=".modle.broadcastreceivers.GPSBroadcastReceiver$GPSBroadcastReceiver1"/>
     </application>
 </manifest>
