@@ -23,6 +23,8 @@
     <mo.klib.view.PullToRefresh.KPullToRefreshLayout
         android:id="@+id/k_pull_layout"
         android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:background="#f6f6f6"
         android:layout_height="match_parent">
 
         <mo.klib.view.recyclerView.KRecycleView
