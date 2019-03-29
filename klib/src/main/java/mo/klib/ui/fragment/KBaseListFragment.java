@@ -48,6 +48,7 @@ public abstract class KBaseListFragment<T> extends KBaseLayoutFragment {
             mWrapper = new KHeaderAndFooterWrapper<T>(mAdapter);
             mKRecycleView.setAdapter(mWrapper);
         }
+        mPullToRefreshLayout.autoRefresh();
         loading();
         initListView();
     }
