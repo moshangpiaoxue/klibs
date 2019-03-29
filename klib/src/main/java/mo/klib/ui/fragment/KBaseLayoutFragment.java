@@ -153,7 +153,6 @@ public abstract class KBaseLayoutFragment extends KBaseFragment {
     protected void loadErrorNoData() {
         layoutLoading.setVisibility(View.GONE);
         fl_base_main.setVisibility(View.GONE);
-        layoutEmpty.setVisibility(View.VISIBLE);
         layoutError.setVisibility(View.GONE);
         layoutErrorNet.setVisibility(View.GONE);
         //没有数据布局出现
