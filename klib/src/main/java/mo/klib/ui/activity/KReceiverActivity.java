@@ -8,10 +8,10 @@ import mo.klib.modle.broadcastreceivers.GPSBroadcastReceiver;
 import mo.klib.modle.broadcastreceivers.HomeBroadcastReceiver;
 import mo.klib.modle.broadcastreceivers.LockScreenBroadcastReceiver;
 import mo.klib.modle.broadcastreceivers.NetChangeBroadcastReceiver;
+import mo.klib.modle.listener.receiverListener.KOnGpsChangeListener;
 import mo.klib.modle.listener.receiverListener.KOnHomeListener;
 import mo.klib.modle.listener.receiverListener.KOnLockScreenListener;
 import mo.klib.modle.listener.receiverListener.KOnNetChangeListener;
-import mo.klib.modle.listener.receiverListener.KOnGpsChangeListener;
 import mo.klib.modle.manager.KLocationManager;
 import mo.klib.utils.logUtils.LogUtil;
 import mo.klib.utils.tipsUtil.ToastUtil;
@@ -39,6 +39,7 @@ public class KReceiverActivity extends KRxJavaActivity implements KOnNetChangeLi
      */
     protected Boolean isOpenGps;
     private IosAlertDialog GpsDialog;
+
     /**
      * 锁屏监听
      */
@@ -64,10 +65,17 @@ public class KReceiverActivity extends KRxJavaActivity implements KOnNetChangeLi
      * 开GPS监听
      */
     protected void actionGpsListener() {
-        if (gpsBroadcastReceiver == null) {
-            gpsBroadcastReceiver = new GPSBroadcastReceiver(this);
-        }
+        gpsBroadcastReceiver = new GPSBroadcastReceiver(this);
         onGpsStatusChange(KLocationManager.INSTANCE.isOpen());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (gpsBroadcastReceiver == null) {
+            onGpsStatusChange(KLocationManager.INSTANCE.isOpen());
+        }
+
     }
 
     @Override
@@ -97,13 +105,14 @@ public class KReceiverActivity extends KRxJavaActivity implements KOnNetChangeLi
             ToastUtil.showToast("网络异常，请检查网络连接");
         }
     }
+
     /**
      * GPS开关
      */
     @Override
     public void onGpsStatusChange(Boolean isOpen) {
         isOpenGps = isOpen;
-        LogUtil.i("定位功能未开启状态=="+isOpen);
+        LogUtil.i("定位功能未开启状态==" + isOpen);
         if (!isOpen) {
             GpsDialog = new IosAlertDialog(mActivity).builder()
                     .setCancelable(false)
@@ -126,6 +135,7 @@ public class KReceiverActivity extends KRxJavaActivity implements KOnNetChangeLi
 
         }
     }
+
     /**
      * 点击home键
      *
