@@ -35,7 +35,7 @@ public abstract class KBaseListFragment<T> extends KBaseLayoutFragment {
             @Override
             public void refresh() {
                 mPage = 1;
-                getLise(mPage);
+                getList(mPage);
             }
 
             @Override

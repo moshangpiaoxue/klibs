@@ -78,7 +78,7 @@ public abstract class KBaseLayoutFragment extends KBaseFragment {
         layoutError.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getLise(mPage);
+                getList(mPage);
             }
         });
         layoutErrorNet = mViewHolder.getView(R.id.ll_base_error_net);
@@ -106,7 +106,7 @@ public abstract class KBaseLayoutFragment extends KBaseFragment {
 
     protected abstract int getMainLayoutId();
 
-    protected abstract void getLise(int mPage);
+    protected abstract void getList(int mPage);
 
     /**
      * 加载中
@@ -165,11 +165,11 @@ public abstract class KBaseLayoutFragment extends KBaseFragment {
         }
     }
 
-    private String getNoDataString() {
+    protected String getNoDataString() {
         return "";
     }
 
-    private int getNoDataImageRes() {
+    protected int getNoDataImageRes() {
         return 0;
     }
 
