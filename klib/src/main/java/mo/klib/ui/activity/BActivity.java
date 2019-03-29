@@ -50,7 +50,7 @@ public class BActivity extends AppCompatActivity {
     /**
      * 携带数据
      */
-    protected Bundle mBundle;
+    protected Intent mIntent;
 
     /**
      * 在当前界面写好跳入方法，可以在多人开发的时候，减少工作量
@@ -58,11 +58,6 @@ public class BActivity extends AppCompatActivity {
     public static void nextActivity(Activity fromAct, Intent mIntent, final Boolean isFinish) {
         NextActivityUtil.toNextActivity(fromAct, mIntent, isFinish);
     }
-
-    /**
-     * 系统回退键设置
-     */
-
 
 
     /**
@@ -73,7 +68,7 @@ public class BActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mContext = this;
         mActivity = this;
-        mBundle = getIntent().getExtras();
+        mIntent = getIntent();
     }
 
     /**
@@ -221,6 +216,8 @@ public class BActivity extends AppCompatActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+        setIntent(intent);
+        mIntent=intent;
     }
 
     /**
