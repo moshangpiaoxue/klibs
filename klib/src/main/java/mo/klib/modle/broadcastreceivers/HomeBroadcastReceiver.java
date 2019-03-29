@@ -43,7 +43,7 @@ public class HomeBroadcastReceiver {
         }
     }
 
-    class Receiver extends BroadcastReceiver {
+   public class Receiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();

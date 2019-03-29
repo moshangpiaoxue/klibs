@@ -55,7 +55,13 @@
                 <action android:name="myservice2" />
             </intent-filter>
         </service>
-
-        <receiver android:name=".modle.broadcastreceivers.GPSBroadcastReceiver$GPSBroadcastReceiver1"/>
+        <!--GPS开启/关闭监听广播-->
+        <receiver android:name=".modle.broadcastreceivers.GPSBroadcastReceiver$Receiver" />
+        <!--home键监听广播-->
+        <receiver android:name=".modle.broadcastreceivers.HomeBroadcastReceiver$Receiver"/>
+        <!--锁屏监听广播-->
+        <receiver android:name=".modle.broadcastreceivers.LockScreenBroadcastReceiver$Receiver"/>
+        <!--网络变化广播监听-->
+        <receiver android:name=".modle.broadcastreceivers.NetChangeBroadcastReceiver$Receiver"/>
     </application>
 </manifest>

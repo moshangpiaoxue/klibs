@@ -18,7 +18,7 @@ import mo.klib.utils.logUtils.LogUtil;
  * @ 功能：
  */
 public class GPSBroadcastReceiver {
-    private GPSBroadcastReceiver1 receiver;
+    private Receiver receiver;
     private KOnGpsChangeListener mInterface;
 
     private String GPS_ACTION = LocationManager.PROVIDERS_CHANGED_ACTION;
@@ -31,7 +31,7 @@ public class GPSBroadcastReceiver {
     private void onCreate() {
         IntentFilter filter = new IntentFilter();
         filter.addAction(GPS_ACTION);
-        receiver = new GPSBroadcastReceiver1();
+        receiver = new Receiver();
         k.app().registerReceiver(receiver, filter);
     }
 
@@ -44,7 +44,7 @@ public class GPSBroadcastReceiver {
         }
     }
 
-    public class GPSBroadcastReceiver1 extends BroadcastReceiver {
+    public class Receiver extends BroadcastReceiver {
 
         @Override
         public void onReceive(Context context, Intent intent) {

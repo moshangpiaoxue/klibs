@@ -38,7 +38,7 @@ public class LockScreenBroadcastReceiver {
         }
     }
 
-    class Receiver extends BroadcastReceiver {
+   public class Receiver extends BroadcastReceiver {
         private String action = null;
 
         @Override
