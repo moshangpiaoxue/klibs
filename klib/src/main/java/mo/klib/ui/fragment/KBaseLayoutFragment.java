@@ -11,6 +11,7 @@ import android.widget.TextView;
 import mo.klib.R;
 import mo.klib.modle.viewHolder.ViewHolder;
 import mo.klib.utils.bengUtil.NextOtherActivityUtil;
+import mo.klib.utils.dataUtil.StringUtil;
 import mo.klib.utils.viewUtil.ViewUtil;
 import mo.klib.view.KTitleView;
 
@@ -147,7 +148,7 @@ public abstract class KBaseLayoutFragment extends KBaseFragment {
     }
 
     /**
-     * 加载错误-没网
+     * 加载错误-没数据
      */
     protected void loadErrorNoData() {
         layoutLoading.setVisibility(View.GONE);
@@ -155,6 +156,21 @@ public abstract class KBaseLayoutFragment extends KBaseFragment {
         layoutEmpty.setVisibility(View.VISIBLE);
         layoutError.setVisibility(View.GONE);
         layoutErrorNet.setVisibility(View.GONE);
+        //没有数据布局出现
+        if (layoutEmpty.getVisibility() != View.VISIBLE) {
+            viewEmptyIv.setImageResource(getNoDataImageRes() == 0 ? R.mipmap.load_err : getNoDataImageRes());
+            viewEmptyTv.setText(StringUtil.isEmpty(getNoDataString()) ? "sorry，没有您想要的数据" : getNoDataString());
+
+            layoutEmpty.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private String getNoDataString() {
+        return "";
+    }
+
+    private int getNoDataImageRes() {
+        return 0;
     }
 
     /**
