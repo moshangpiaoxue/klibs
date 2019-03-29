@@ -54,8 +54,8 @@ public abstract class KBaseListActivity<T> extends KBaseLayoutActivity {
                 getMore(mPage++);
             }
         });
-        mAdapter=getAdapter();
-        if (mAdapter!=null){
+        mAdapter = getAdapter();
+        if (mAdapter != null) {
             mWrapper = new KHeaderAndFooterWrapper<>(mAdapter);
             kRecycleview.setAdapter(mWrapper);
         }
@@ -71,7 +71,9 @@ public abstract class KBaseListActivity<T> extends KBaseLayoutActivity {
         kPullLayout.autoRefresh();
         loading();
     }
+
     protected abstract void initListView();
+
     @Override
     protected void getData() {
     }
@@ -115,6 +117,7 @@ public abstract class KBaseListActivity<T> extends KBaseLayoutActivity {
             mData = list;
             mWrapper.removeEmptyView();
             mWrapper.refresh(mData);
+            mPage++;
         } else {
             loadErrorNoData();
             mWrapper.addEmptyView(ViewUtil.getView(mActivity, R.layout.base_empty, kRecycleview));
@@ -129,7 +132,7 @@ public abstract class KBaseListActivity<T> extends KBaseLayoutActivity {
      * @param list
      */
     public void loardMoreAdapter(List<T> list) {
-        if (list!=null&&list.size() != 0) {
+        if (list != null && list.size() != 0) {
             mWrapper.loadMore(list);
         } else {
             mPage -= 1;
