@@ -7,6 +7,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -27,6 +28,7 @@ public class KTitleView extends FrameLayout {
     private LinearLayout left;
     private TextView midle;
     private TextView right;
+    private ImageView iv_title_right;
 
     public void setListener(TitleBarClickListener listener) {
         this.listener = listener;
@@ -43,6 +45,7 @@ public class KTitleView extends FrameLayout {
         left = (LinearLayout) findViewById(R.id.ll_title_left);
         midle = (TextView) findViewById(R.id.tv_title_midle);
         right = (TextView) findViewById(R.id.tv_title_right);
+        iv_title_right = findViewById(R.id.iv_title_right);
         //左侧监听
         left.setOnClickListener(new KNoDoubleClickListener() {
             @Override
@@ -104,6 +107,22 @@ public class KTitleView extends FrameLayout {
             right.setText(text);
             right.setVisibility(VISIBLE);
         }
+    }
+
+    public void setRightSrc(int srcId) {
+        iv_title_right.setImageResource(srcId);
+        iv_title_right.setVisibility(VISIBLE);
+        right.setVisibility(GONE);
+        //右侧监听
+        iv_title_right.setOnClickListener(new KNoDoubleClickListener() {
+            @Override
+            protected void onNoDoubleClick(View v) {
+                if (listener != null) {
+                    listener.rightClick(v);
+                }
+
+            }
+        });
     }
 
     /**
