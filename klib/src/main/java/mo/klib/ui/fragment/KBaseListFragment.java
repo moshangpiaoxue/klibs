@@ -1,6 +1,7 @@
 package mo.klib.ui.fragment;
 
 import android.view.View;
+import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,19 +20,21 @@ import mo.klib.view.recyclerView.KRecycleView;
  * @ 功能：基础列表碎片
  */
 public abstract class KBaseListFragment<T> extends KBaseLayoutFragment {
-    protected PullToRefreshLayout mPullToRefreshLayout;
-    protected KRecycleView mKRecycleView;
+    protected LinearLayout ll_base_list_addlayout;
+    protected PullToRefreshLayout kPullLayout;
+    protected KRecycleView kRecycleview;
     protected List<T> mData = new ArrayList<T>();
     protected KHeaderAndFooterWrapper<T> mWrapper;
     protected KRecycleViewAdapter<T> mAdapter;
 
     @Override
     protected void initLayoutViews(View mainView) {
-        mPullToRefreshLayout = mainView.findViewById(R.id.ptrl_base_list);
-        mKRecycleView = mainView.findViewById(R.id.krv_base_list);
-        mPullToRefreshLayout.setCanRefresh(true);
-        mPullToRefreshLayout.setCanLoadMore(false);
-        mPullToRefreshLayout.setRefreshListener(new BaseRefreshListener() {
+        ll_base_list_addlayout = mainView.findViewById(R.id.ll_base_list_addlayout);
+        kPullLayout = mainView.findViewById(R.id.k_pull_layout);
+        kRecycleview = mainView.findViewById(R.id.k_recycleview);
+        kPullLayout.setCanRefresh(false);
+        kPullLayout.setCanLoadMore(false);
+        kPullLayout.setRefreshListener(new BaseRefreshListener() {
             @Override
             public void refresh() {
                 mPage = 1;
@@ -46,9 +49,9 @@ public abstract class KBaseListFragment<T> extends KBaseLayoutFragment {
         mAdapter = getAdapter();
         if (mAdapter != null) {
             mWrapper = new KHeaderAndFooterWrapper<T>(mAdapter);
-            mKRecycleView.setAdapter(mWrapper);
+            kRecycleview.setAdapter(mWrapper);
         }
-        mPullToRefreshLayout.autoRefresh();
+        kPullLayout.autoRefresh();
         loading();
         initListView();
     }
@@ -65,7 +68,7 @@ public abstract class KBaseListFragment<T> extends KBaseLayoutFragment {
             mWrapper.notifyDataSetChanged();
             mPage++;
         }
-        mPullToRefreshLayout.finishRefresh();
+        kPullLayout.finishRefresh();
     }
 
     public void loadMore(List<T> list) {
@@ -77,12 +80,12 @@ public abstract class KBaseListFragment<T> extends KBaseLayoutFragment {
             mWrapper.notifyDataSetChanged();
             mPage++;
         }
-        mPullToRefreshLayout.finishLoadMore();
+        kPullLayout.finishLoadMore();
     }
 
     private void noMoreData() {
         showToast("没有更多数据");
-        mPullToRefreshLayout.setCanLoadMore(false);
+        kPullLayout.setCanLoadMore(false);
     }
 
     protected abstract KRecycleViewAdapter<T> getAdapter();
@@ -91,7 +94,7 @@ public abstract class KBaseListFragment<T> extends KBaseLayoutFragment {
 
     @Override
     protected int getMainLayoutId() {
-        return R.layout.base_list;
+        return R.layout.base_list_layout;
     }
 
 

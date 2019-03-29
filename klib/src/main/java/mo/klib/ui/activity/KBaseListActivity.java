@@ -10,7 +10,6 @@ import mo.klib.R;
 import mo.klib.modle.adapter.KHeaderAndFooterWrapper;
 import mo.klib.modle.adapter.KRecycleViewAdapter;
 import mo.klib.modle.listener.scrollingListener.KOnScrollingListener;
-import mo.klib.modle.viewHolder.ViewHolder;
 import mo.klib.utils.viewUtil.ViewUtil;
 import mo.klib.view.PullToRefresh.BaseRefreshListener;
 import mo.klib.view.PullToRefresh.KPullToRefreshLayout;
@@ -24,11 +23,10 @@ import mo.klib.view.recyclerView.KRecycleView;
  */
 
 public abstract class KBaseListActivity<T> extends KBaseLayoutActivity {
-    protected View statusBar;
     protected LinearLayout ll_base_list_addlayout;
     protected KRecycleView kRecycleview;
     protected KPullToRefreshLayout kPullLayout;
-    protected int page = 1;
+    protected int mPage = 1;
     protected KHeaderAndFooterWrapper<T> mWrapper;
     protected KRecycleViewAdapter<T> mAdapter;
     protected List<T> mData = new ArrayList<>();
@@ -36,12 +34,11 @@ public abstract class KBaseListActivity<T> extends KBaseLayoutActivity {
 
     @Override
     protected int getMainLayoutId() {
-        return R.layout.activity_base_list_layout;
+        return R.layout.base_list_layout;
     }
 
     @Override
     protected void initViews(View mainView) {
-        statusBar = findView(R.id.view_status_bar);
         ll_base_list_addlayout = findView(R.id.ll_base_list_addlayout);
         kPullLayout = findView(R.id.k_pull_layout);
         kRecycleview = findView(R.id.k_recycleview);
@@ -49,12 +46,12 @@ public abstract class KBaseListActivity<T> extends KBaseLayoutActivity {
         kPullLayout.setRefreshListener(new BaseRefreshListener() {
             @Override
             public void refresh() {
-                getList(page = 1);
+                getList(mPage = 1);
             }
 
             @Override
             public void loadMore() {
-                getMore(page++);
+                getMore(mPage++);
             }
         });
         mAdapter=getAdapter();
@@ -66,7 +63,7 @@ public abstract class KBaseListActivity<T> extends KBaseLayoutActivity {
         layoutError.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getList(page = 1);
+                getList(mPage = 1);
             }
         });
         initListView();
@@ -95,8 +92,7 @@ public abstract class KBaseListActivity<T> extends KBaseLayoutActivity {
             @Override
             public void onScrollingListener(int shoePosition, int count) {
                 if (mWrapper.getInnerAdapter().getmItemPosition() == mWrapper.getItemCount() - 1) {
-                    page++;
-                    getMore(page);
+                    getMore(mPage++);
 
                 }
             }
@@ -136,7 +132,7 @@ public abstract class KBaseListActivity<T> extends KBaseLayoutActivity {
         if (list!=null&&list.size() != 0) {
             mWrapper.loadMore(list);
         } else {
-            page -= 1;
+            mPage -= 1;
             showToast("没有更多数据");
         }
         kPullLayout.finishLoadMore();

@@ -185,7 +185,7 @@ public abstract class KBaseLayoutFragment extends KBaseFragment {
 
     @Override
     protected int getLayoutId() {
-        return R.layout.base_;
+        return R.layout.base_layout;
     }
 
 

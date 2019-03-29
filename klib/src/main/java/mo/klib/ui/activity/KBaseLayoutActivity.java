@@ -63,7 +63,7 @@ public abstract class KBaseLayoutActivity extends KBaseActivity {
 
     @Override
     protected int getLayoutId() {
-        return R.layout.base_;
+        return R.layout.base_layout;
     }
 
     @Override
