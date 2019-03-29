@@ -188,7 +188,6 @@ public abstract class KBaseLayoutActivity extends KBaseActivity {
         isCanBack = true;
         layoutLoading.setVisibility(View.GONE);
         fl_base_main.setVisibility(View.GONE);
-        layoutEmpty.setVisibility(View.VISIBLE);
         layoutError.setVisibility(View.GONE);
         layoutErrorNet.setVisibility(View.GONE);
         //没有数据布局出现
