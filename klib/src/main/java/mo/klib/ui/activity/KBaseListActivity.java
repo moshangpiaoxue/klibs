@@ -26,7 +26,7 @@ import mo.klib.view.recyclerView.KRecycleView;
  */
 
 public abstract class KBaseListActivity<T> extends KBaseLayoutActivity {
-    protected LinearLayout ll_base_list_addlayout;
+    protected LinearLayout listAddlTopt;
     protected KRecycleView kRecycleview;
     protected KPullToRefreshLayout kPullLayout;
     protected int mPage = 1;
@@ -50,7 +50,7 @@ public abstract class KBaseListActivity<T> extends KBaseLayoutActivity {
         tv_base_empty = emptyView.findViewById(R.id.tv_base_empty);
         iv_base_empty.setImageResource(getNoDataImageRes() == 0 ? R.mipmap.load_err : getNoDataImageRes());
         tv_base_empty.setText(StringUtil.isEmpty(getNoDataString()) ? "sorry，没有您想要的数据" : getNoDataString());
-        ll_base_list_addlayout = findView(R.id.ll_base_list_addlayout);
+        listAddlTopt = findView(R.id.ll_base_list_addlayout);
         kPullLayout = findView(R.id.k_pull_layout);
         kRecycleview = findView(R.id.k_recycleview);
 
