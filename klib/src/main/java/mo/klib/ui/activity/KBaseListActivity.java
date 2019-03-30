@@ -45,7 +45,7 @@ public abstract class KBaseListActivity<T> extends KBaseLayoutActivity {
     @Override
     protected void initViews(View mainView) {
 
-        emptyView = ViewUtil.getView(mActivity, R.layout.base_empty, kRecycleview);
+        emptyView = ViewUtil.getView(mActivity, R.layout.base_empty, fl_base_main);
         iv_base_empty = emptyView.findViewById(R.id.iv_base_empty);
         tv_base_empty = emptyView.findViewById(R.id.tv_base_empty);
         iv_base_empty.setImageResource(getNoDataImageRes() == 0 ? R.mipmap.load_err : getNoDataImageRes());
