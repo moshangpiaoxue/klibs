@@ -1,7 +1,9 @@
 package mo.klib.ui.activity;
 
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +12,7 @@ import mo.klib.R;
 import mo.klib.modle.adapter.KHeaderAndFooterWrapper;
 import mo.klib.modle.adapter.KRecycleViewAdapter;
 import mo.klib.modle.listener.scrollingListener.KOnScrollingListener;
+import mo.klib.utils.dataUtil.StringUtil;
 import mo.klib.utils.viewUtil.ViewUtil;
 import mo.klib.view.PullToRefresh.BaseRefreshListener;
 import mo.klib.view.PullToRefresh.KPullToRefreshLayout;
@@ -30,7 +33,9 @@ public abstract class KBaseListActivity<T> extends KBaseLayoutActivity {
     protected KHeaderAndFooterWrapper<T> mWrapper;
     protected KRecycleViewAdapter<T> mAdapter;
     protected List<T> mData = new ArrayList<>();
-
+    private View emptyView;
+    private ImageView iv_base_empty;
+    private TextView tv_base_empty;
 
     @Override
     protected int getMainLayoutId() {
@@ -39,6 +44,12 @@ public abstract class KBaseListActivity<T> extends KBaseLayoutActivity {
 
     @Override
     protected void initViews(View mainView) {
+
+        emptyView = ViewUtil.getView(mActivity, R.layout.base_empty, kRecycleview);
+        iv_base_empty = emptyView.findViewById(R.id.iv_base_empty);
+        tv_base_empty = emptyView.findViewById(R.id.tv_base_empty);
+        iv_base_empty.setImageResource(getNoDataImageRes() == 0 ? R.mipmap.load_err : getNoDataImageRes());
+        tv_base_empty.setText(StringUtil.isEmpty(getNoDataString()) ? "sorry，没有您想要的数据" : getNoDataString());
         ll_base_list_addlayout = findView(R.id.ll_base_list_addlayout);
         kPullLayout = findView(R.id.k_pull_layout);
         kRecycleview = findView(R.id.k_recycleview);
@@ -120,7 +131,7 @@ public abstract class KBaseListActivity<T> extends KBaseLayoutActivity {
             mPage++;
         } else {
             loadErrorNoData();
-            mWrapper.addEmptyView(ViewUtil.getView(mActivity, R.layout.base_empty, kRecycleview));
+            mWrapper.addEmptyView(emptyView);
         }
         loadSuccess();
         kPullLayout.finishRefresh();
