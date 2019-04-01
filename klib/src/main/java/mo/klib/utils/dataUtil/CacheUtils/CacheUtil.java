@@ -14,7 +14,7 @@ public class CacheUtil {
     /**
      * 获取缓存大小
      */
-    public String getCacheSize() {
+    public static String getCacheSize() {
 
         String cacheSize = null;
         try {
@@ -29,7 +29,7 @@ public class CacheUtil {
     /**
      * 清除缓存
      */
-    public void cleanCache() {
+    public  static void cleanCache() {
         DataCleanManager.deleteFolderFile(FileUtil.getExternalCacheDir(), false);
     }
 
