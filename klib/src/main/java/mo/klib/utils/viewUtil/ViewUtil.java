@@ -6,6 +6,7 @@ import android.content.Context;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.support.annotation.ColorInt;
 import android.support.annotation.IntRange;
@@ -28,6 +29,7 @@ import mo.klib.utils.animationUtils.TranslateAnimationUtil;
 import mo.klib.utils.dataUtil.StringUtil;
 import mo.klib.utils.dataUtil.dealUtil.ColorUtils;
 import mo.klib.utils.logUtils.LogUtil;
+import mo.klib.utils.task.HandlerUtil;
 
 
 /**
@@ -479,6 +481,36 @@ public class ViewUtil {
             public void run() {
                 if (View.class.isInstance(view.getParent())) {
                     ((View) view.getParent()).setTouchDelegate(new TouchDelegate(new Rect(), view));
+                }
+            }
+        });
+    }
+
+    /**
+     * 隐藏menu的长按效果
+     *
+     * @param activity
+     * @param id
+     */
+    public static void hideMenuToast(final Activity activity, final int id) {
+        /* 处理item长按弹出Toast Title信息*/
+//        new Handler().post(() -> {
+//            final View v = activity.findViewById(id);
+//            if (v != null) {
+//                v.setOnLongClickListener(v1 -> false);
+//            }
+//        });
+        HandlerUtil.postRunnable(new Runnable() {
+            @Override
+            public void run() {
+                final View v = activity.findViewById(id);
+                if (v!=null){
+                    v.setOnLongClickListener(new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View v) {
+                            return false;
+                        }
+                    });
                 }
             }
         });
