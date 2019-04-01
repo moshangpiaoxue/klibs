@@ -34,6 +34,7 @@ import mo.klib.utils.appUtils.activityUtil.ActivitysUtil;
 
 public class FileUtil {
     private static final String TAG = "FileUtil";
+
     /**
      * 检查指定文件或文件夹是否可用
      * <p>判断的标准:</p>
@@ -48,9 +49,11 @@ public class FileUtil {
         boolean isStorageFile = file.getAbsolutePath().contains(Environment.getExternalStorageDirectory().getAbsolutePath());
         return !isStorageFile || isSdAvailable() && checkPermissionAndRequest();
     }
+
     private static boolean isSdAvailable() {
         return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
     }
+
     /**
      * 检查文件是否可用, 如果可用将自动创建父文件夹
      * <p>检查的标准:</p>
@@ -69,6 +72,7 @@ public class FileUtil {
         }
         return !file.isDirectory();
     }
+
     /**
      * 检查文件夹是否可用, 如果可用将自动创建该文件夹及其父文件夹
      * <p>检查的标准:</p>
@@ -80,13 +84,15 @@ public class FileUtil {
      * @return true 检查通过, false 为不通过
      */
     public static boolean checkDirAndMakeDirs(File file) {
-        if (!checkFile(file))
-        { return false;}
+        if (!checkFile(file)) {
+            return false;
+        }
         if (file.exists()) {
             return file.isDirectory();
         }
         return file.mkdirs();
     }
+
     /**
      * 检查文件权限 (即外部存储的读写权限)
      * <p>如果没有权限, 将自动发起权限申请</p>
@@ -106,6 +112,7 @@ public class FileUtil {
         }
         return check;
     }
+
     /**
      * 检查文件权限 (即外部存储的读写权限)
      * <p>如果没有权限, 将自动发起权限申请</p>
@@ -181,8 +188,8 @@ public class FileUtil {
     /**
      * @return 内存卡缓存目录
      */
-    public static String getExternalCacheDir(Context context) {
-        return String.valueOf(context.getExternalCacheDir());
+    public static String getExternalCacheDir() {
+        return String.valueOf(k.app().getExternalCacheDir());
     }
 
     /**

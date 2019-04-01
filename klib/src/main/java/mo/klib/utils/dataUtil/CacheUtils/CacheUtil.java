@@ -1,7 +1,5 @@
 package mo.klib.utils.dataUtil.CacheUtils;
 
-import android.content.Context;
-
 import java.io.File;
 
 import mo.klib.utils.fileUtil.FileUtil;
@@ -16,11 +14,11 @@ public class CacheUtil {
     /**
      * 获取缓存大小
      */
-    public String getCacheSize(Context context) {
+    public String getCacheSize() {
 
         String cacheSize = null;
         try {
-            File cacheDir = new File(FileUtil.getExternalCacheDir(context));
+            File cacheDir = new File(FileUtil.getExternalCacheDir());
             cacheSize = DataCleanManager.getCacheSize(cacheDir);
         } catch (Exception e) {
             e.printStackTrace();
@@ -31,8 +29,8 @@ public class CacheUtil {
     /**
      * 清除缓存
      */
-    public void cleanCache(Context context) {
-        DataCleanManager.deleteFolderFile(FileUtil.getExternalCacheDir(context), false);
+    public void cleanCache() {
+        DataCleanManager.deleteFolderFile(FileUtil.getExternalCacheDir(), false);
     }
 
 }
