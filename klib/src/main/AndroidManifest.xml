@@ -62,6 +62,10 @@
         <!--锁屏监听广播-->
         <receiver android:name=".modle.broadcastreceivers.LockScreenBroadcastReceiver$Receiver"/>
         <!--网络变化广播监听-->
-        <receiver android:name=".modle.broadcastreceivers.NetChangeBroadcastReceiver$Receiver"/>
+        <receiver android:name=".modle.broadcastreceivers.NetChangeBroadcastReceiver$Receiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
     </application>
 </manifest>

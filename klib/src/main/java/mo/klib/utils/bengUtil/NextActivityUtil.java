@@ -20,84 +20,6 @@ import mo.klib.k;
  * date: 2017/8/2 0002 18:38
  */
 public class NextActivityUtil {
-    /**
-     * 设置Fragment所带字符串数据
-     *
-     * @param fragment 载体
-     * @param string   所带数据
-     */
-    public static void setData(Fragment fragment, String string) {
-        Bundle bundle = new Bundle();
-        bundle.putString("extra", string);
-        fragment.setArguments(bundle);
-    }
-
-    /**
-     * 获取Fragment所带字符串数据
-     *
-     * @param fragment 载体
-     * @return
-     */
-    public static String getDataString(Fragment fragment) {
-        if (fragment.getArguments() == null) {
-            return "";
-        } else {
-            Bundle bundle = fragment.getArguments();
-            return bundle.getString("extra");
-        }
-
-    }
-
-    /**
-     * 设置Fragment所带int数据
-     *
-     * @param fragment 载体
-     * @param string   所带数据
-     */
-    public static void setDataInt(Fragment fragment, int string) {
-        Bundle bundle = new Bundle();
-        bundle.putInt("extra", string);
-        fragment.setArguments(bundle);
-    }
-
-    /**
-     * 获取Fragment所带int数据
-     *
-     * @param fragment 载体
-     * @return
-     */
-    public static int getDataInt(Fragment fragment) {
-        if (fragment.getArguments() == null) {
-            return -1;
-        } else {
-            Bundle bundle = fragment.getArguments();
-            return bundle.getInt("extra");
-        }
-
-    }
-
-    /**
-     * 设置Fragment所带Boolean数据
-     *
-     * @param fragment 载体
-     * @param boolea   所带数据
-     */
-    public static void setData(Fragment fragment, Boolean boolea) {
-        Bundle bundle = new Bundle();
-        bundle.putBoolean("extra", boolea);
-        fragment.setArguments(bundle);
-    }
-
-    /**
-     * 获取Fragment所带booleat数据
-     *
-     * @param fragment 载体
-     * @return
-     */
-    public static Boolean getDataBoolean(Fragment fragment) {
-        return fragment.getArguments() != null && (fragment.getArguments().getBoolean("extra"));
-
-    }
 
     /**
      * 获取Activity所带Object数据
@@ -189,7 +111,15 @@ public class NextActivityUtil {
         Intent intent = new Intent(fromAct, toAct);
         toNextActivity(fromAct, intent, isFinish);
     }
-
+    /**
+     *跳界面不带数据(默认不杀死当前界面)
+     * @param fromAct   当前界面
+     * @param toAct 要去的界面
+     */
+    public static void toNextActivity(Activity fromAct, Class<?> toAct) {
+        Intent intent = new Intent(fromAct, toAct);
+        toNextActivity(fromAct, intent, false);
+    }
     /**
      * 跳界面带字符串
      *
@@ -248,7 +178,12 @@ public class NextActivityUtil {
     public static void toNextActivitySetResault(Activity fromAct, Class<?> toAct, Object obj, int flag, Boolean isFinish) {
         Intent intent = new Intent(fromAct, toAct);
         Bundle bundle = new Bundle();
-        bundle.putSerializable("extra", (Serializable) obj);
+        if (obj instanceof Parcelable) {
+            bundle.putParcelable("extra", (Parcelable) obj);
+        }
+        if (obj instanceof Serializable) {
+            bundle.putSerializable("extra", (Serializable) obj);
+        }
         intent.putExtras(bundle);
         fromAct.setResult(flag, intent);
         if (isFinish) {
@@ -308,7 +243,12 @@ public class NextActivityUtil {
     public static void toNextActivity(Activity fromAct, Class<?> toAct, Object obj, int flag, Boolean isFinish) {
         Intent intent = new Intent(fromAct, toAct);
         Bundle bundle = new Bundle();
-        bundle.putSerializable("extra", (Serializable) obj);
+        if (obj instanceof Parcelable) {
+            bundle.putParcelable("extra", (Parcelable) obj);
+        }
+        if (obj instanceof Serializable) {
+            bundle.putSerializable("extra", (Serializable) obj);
+        }
         intent.putExtras(bundle);
         intent.putExtra("flag", flag);
         toNextActivity(fromAct, intent, isFinish);

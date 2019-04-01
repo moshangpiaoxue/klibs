@@ -13,7 +13,8 @@ import android.view.ViewGroup;
  */
 public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     private Fragment[] mFragments;
-
+    private Fragment mCurrentFragment;
+    private int mCurrentFragmentPosition;
     public ViewPagerAdapter(FragmentManager fm, Fragment[] fragments) {
         super(fm);
         this.mFragments = fragments;
@@ -41,8 +42,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
         super.setPrimaryItem(container, position, object);
     }
 
-    private Fragment mCurrentFragment;
-    private int mCurrentFragmentPosition;
+
 
     /**
      * 当前显示的碎片
