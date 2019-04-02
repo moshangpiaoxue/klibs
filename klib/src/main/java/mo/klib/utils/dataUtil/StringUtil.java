@@ -1050,7 +1050,37 @@ public class StringUtil {
         }
         return stringBuilder.toString();
     }
+    /**
+     * 隐藏手机号中间几位
+     *
+     * @param str
+     * @param postion 从第几位开始隐藏
+     * @param num     一共隐藏几位
+     * @return 130****0000
+     */
+    public static String hideString(String str, int postion, int num) {
+        if (isEmpty(str)) {
+            return "";
+        }
+        if (postion < 1 || postion > str.length() || num < 0 || postion + num > str.length()) {
+            return str;
+        }
+        return str.substring(0, postion - 1) + getMark("*",num) + str.substring(postion - 1 + num, str.length());
+    }
 
+    /**
+     * 获取隐藏符号
+     * @param mark  符号
+     * @param num   几位
+     * @return   ****
+     */
+    public static String getMark(String mark,int num) {
+        String str = "";
+        for (int i = 0; i < num; i++) {
+            str += mark;
+        }
+        return str;
+    }
     private static int[] pyValue = new int[]{
             -20319, -20317, -20304, -20295, -20292, -20283, -20265, -20257, -20242,
             -20230, -20051, -20036, -20032,
