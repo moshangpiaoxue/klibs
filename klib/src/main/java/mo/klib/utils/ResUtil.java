@@ -14,6 +14,10 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.util.TypedValue;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
 import mo.klib.KApplication;
 import mo.klib.k;
 import mo.klib.utils.systemUtils.exceptionUtil.ExceptionUtil;
@@ -222,6 +226,31 @@ public class ResUtil {
     public static int getArrayId(String name) {
         return k.app().getResources().getIdentifier(name,
                 "array", k.app().getPackageName());
+    }
+
+    /**
+     * 获取Assets文件下的数据
+     *
+     * @param assName 文件名
+     * @return
+     */
+    public static String getgetAssetsString(String assName) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        String str = null;
+        try {
+            InputStream is = k.app().getResources().getAssets().open(assName);
+            byte[] bytes = new byte[1024];
+            int length = 0;
+            while ((length = is.read(bytes)) != -1) {
+                outputStream.write(bytes, 0, length);
+            }
+            is.close();
+            outputStream.close();
+            str = outputStream.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return str;
     }
 
     /**
