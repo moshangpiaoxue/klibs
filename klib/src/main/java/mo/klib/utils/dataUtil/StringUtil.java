@@ -193,6 +193,21 @@ public class StringUtil {
     public static String getString(int in, double dd) {
         return String.format("%." + in + "f", dd);
     }
+
+//    /**
+//     * double转String,保留小数点后几位
+//     *
+//     * @param num     double值
+//     * @param pattern 保留几位  使用0.00不足位补0，#.##仅保留有效位
+//     * @return
+//     */
+//    public static String getString(double num, String pattern) {
+//        if (num == 0) {
+//            return "0.00";
+//        } else {
+//            return new DecimalFormat(pattern).format(num);
+//        }
+//    }
     /**
      * 半角 转 全角
      */

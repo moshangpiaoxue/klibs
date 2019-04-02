@@ -65,6 +65,24 @@ public class TimeUtils {
         return getDurationFromSecond(seconds, "小时", "分", "秒");
     }
     /**
+     * 根据分钟获取"XX小时XX分钟"格式时间
+     *
+     * @param time
+     * @return
+     */
+    public static String getTimeForMin(double time) {
+        //向上取整
+        int aaa = (int) Math.ceil(time);
+        int bbb = aaa / 60;
+        int ccc = aaa % 60;
+        if (bbb > 0) {
+            return bbb + "小时" + ccc + "分钟";
+        } else {
+            return ccc + "分钟";
+        }
+
+    }
+    /**
      * 获取时长   秒数 --》》 时分秒
      *
      * @param seconds       秒数
