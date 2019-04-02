@@ -560,19 +560,6 @@ public class StringUtil {
         return buff.toString();
     }
 
-    /**
-     * 隐藏手机中间4位号码
-     * 130****0000
-     *
-     * @param mobile_phone 手机号码
-     * @return 130****0000
-     */
-    public static String hideMobilePhone4(String mobile_phone) {
-        if (!RegexConstants.isRegex(mobile_phone, RegexConstants.IS_TELE_NUMBER)) {
-            return "手机号码不正确";
-        }
-        return mobile_phone.substring(0, 3) + "****" + mobile_phone.substring(7, 11);
-    }
 
     /**
      * 格式化银行卡 加*
@@ -582,7 +569,7 @@ public class StringUtil {
      * @return 3749 **** **** 330
      */
     public static String formatCard(String cardNo) {
-        if (cardNo.length() < 8) {
+        if (!checkBankCard(cardNo)) {
             return "银行卡号有误";
         }
         String card = "";
@@ -590,7 +577,22 @@ public class StringUtil {
         card += cardNo.substring(cardNo.length() - 4);
         return card;
     }
-
+    //将字符串替换为*
+    public static String replaceSubString(String str, int n) {
+        String sub = "";
+        try {
+            sub = str.substring(str.length() - n, str.length());
+            StringBuffer sb = new StringBuffer();
+            for (int i = 0; i < str.length() - n; i++) {
+                sb = sb.append("*");
+            }
+            sub = sb.toString() + sub;
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return sub;
+    }
     /**
      * 银行卡后四位
      *
@@ -598,12 +600,50 @@ public class StringUtil {
      * @return
      */
     public static String formatCardEnd4(String cardNo) {
-        if (cardNo.length() < 8) {
+        if (!checkBankCard(cardNo)) {
             return "银行卡号有误";
         }
         String card = "";
         card += cardNo.substring(cardNo.length() - 4);
         return card;
+    }
+    /**
+     * 校验银行卡卡号
+     */
+    public static boolean checkBankCard(String bankCard) {
+        if (bankCard.length() < 15 || bankCard.length() > 19) {
+            return false;
+        }
+        char bit = getBankCardCheckCode(bankCard.substring(0, bankCard.length() - 1));
+        if (bit == 'N') {
+            return false;
+        }
+        return bankCard.charAt(bankCard.length() - 1) == bit;
+    }
+
+    /**
+     * 从不含校验位的银行卡卡号采用 Luhm 校验算法获得校验位
+     *
+     * @param nonCheckCodeBankCard
+     * @return
+     */
+    public static char getBankCardCheckCode(String nonCheckCodeBankCard) {
+        if (nonCheckCodeBankCard == null || nonCheckCodeBankCard.trim().length() == 0
+                || !nonCheckCodeBankCard.matches("\\d+")) {
+            //如果传的不是数据返回N
+            return 'N';
+        }
+        char[] chs = nonCheckCodeBankCard.trim().toCharArray();
+        int luhmSum = 0;
+        for (int i = chs.length - 1, j = 0; i >= 0; i--, j++) {
+            int k = chs[i] - '0';
+            if (j % 2 == 0) {
+                k *= 2;
+                k = k / 10 + k % 10;
+            }
+            luhmSum += k;
+        }
+        return (luhmSum % 10 == 0) ? '0' : (char) ((10 - luhmSum % 10) + '0');
     }
 
     /**

@@ -23,10 +23,13 @@ public class TextViewUtil {
     }
 
     /**
-     * 设置首行缩进
+     * 设置下划线
      */
     public static void setUnderline(TextView textView, String str) {
-        textView.setText(str);
+        if (!StringUtil.isEmpty(str)){
+            textView.setText(str);
+        }
+
         //下划线
         textView.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
         //抗锯齿

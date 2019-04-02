@@ -29,6 +29,11 @@ public final class RegexConstants {
      */
     public static final String IS_TELE_NUMBER = "^(\\+?86)\\d{11}$";
     /**
+     * 手机号正则
+     * "[1]"代表第1位为数字1，"[358]"代表第二位可以为3、5、8中的一个，"\\d{9}"代表后面是可以是0～9的数字，有9位。
+     */
+    public static String RegexTel = "^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\\d{8}$";
+    /**
      * 移动手机号码的正则表达式。
      */
     public static final String REGEX_PHONE_NUMBER_MOBILE = "1(3[4-9]|4[7]|5[012789]|8[278])\\d{8}";
