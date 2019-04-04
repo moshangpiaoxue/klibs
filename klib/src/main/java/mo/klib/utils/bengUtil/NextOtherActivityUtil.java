@@ -147,6 +147,7 @@ public class NextOtherActivityUtil {
         intent.setAction("android.intent.action.VIEW");
         Uri uri = Uri.parse(url);
         intent.setData(uri);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         k.app().startActivity(intent);
 
 //        Uri uri = Uri.parse(url);
