@@ -58,14 +58,22 @@
         <!--GPS开启/关闭监听广播-->
         <receiver android:name=".modle.broadcastreceivers.GPSBroadcastReceiver$Receiver" />
         <!--home键监听广播-->
-        <receiver android:name=".modle.broadcastreceivers.HomeBroadcastReceiver$Receiver"/>
+        <receiver android:name=".modle.broadcastreceivers.HomeBroadcastReceiver$Receiver" />
         <!--锁屏监听广播-->
-        <receiver android:name=".modle.broadcastreceivers.LockScreenBroadcastReceiver$Receiver"/>
+        <receiver android:name=".modle.broadcastreceivers.LockScreenBroadcastReceiver$Receiver" />
         <!--网络变化广播监听-->
         <receiver android:name=".modle.broadcastreceivers.NetChangeBroadcastReceiver$Receiver">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
+        <!--通知栏广播-->
+        <receiver android:name=".modle.broadcastreceivers.NotificationBroadcastReceiver">
+            <intent-filter>
+                <action android:name="notification_cancelled" />
+                <action android:name="notification_clicked" />
+            </intent-filter>
+        </receiver>
+
     </application>
 </manifest>

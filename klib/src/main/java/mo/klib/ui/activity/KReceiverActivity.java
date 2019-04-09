@@ -112,7 +112,7 @@ public class KReceiverActivity extends KRxJavaActivity implements KOnNetChangeLi
     @Override
     public void onGpsStatusChange(Boolean isOpen) {
         isOpenGps = isOpen;
-        LogUtil.i("定位功能未开启状态==" + isOpen);
+        LogUtil.i("定位功能开启状态==" + isOpen);
         if (!isOpen) {
             GpsDialog = new IosAlertDialog(mActivity).builder()
                     .setCancelable(false)

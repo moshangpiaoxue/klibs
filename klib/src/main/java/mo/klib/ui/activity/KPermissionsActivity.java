@@ -15,6 +15,7 @@ import mo.klib.utils.logUtils.LogUtil;
  * @ 功能：权限管理activity基类
  */
 public class KPermissionsActivity extends KSlidingCloseActivity {
+    private String[] permissions;
     /**
      * 权限申请结果识别码
      */
@@ -35,6 +36,14 @@ public class KPermissionsActivity extends KSlidingCloseActivity {
         requestPermission(permissions, true);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (permissions != null && permissions.length != 0) {
+            requestPermission(permissions);
+        }
+    }
+
     /**
      * 请求权限
      *
@@ -46,6 +55,7 @@ public class KPermissionsActivity extends KSlidingCloseActivity {
     }
 
     protected void requestPermission(String[] permissions, boolean showSystemSetting) {
+        this.permissions = permissions;
         PermissionUtil.INSTANCE.requestPermission(mActivity, permissions, REQUEST_CODE_PERMISSION,
                 showSystemSetting, new PermissionUtil.KPermissionsListener() {
                     @Override
