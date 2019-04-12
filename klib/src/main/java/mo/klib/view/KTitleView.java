@@ -26,6 +26,7 @@ public class KTitleView extends FrameLayout {
     private TitleBarClickListener listener;
     private RelativeLayout title;
     private LinearLayout left;
+    private ImageView iv_title_left;
     private TextView midle;
     private TextView right;
     private ImageView iv_title_right;
@@ -43,6 +44,7 @@ public class KTitleView extends FrameLayout {
         LayoutInflater.from(context).inflate(R.layout.title, this, true);
         title = (RelativeLayout) findViewById(R.id.rl_title);
         left = (LinearLayout) findViewById(R.id.ll_title_left);
+        iv_title_left = findViewById(R.id.iv_title_left);
         midle = (TextView) findViewById(R.id.tv_title_midle);
         right = (TextView) findViewById(R.id.tv_title_right);
         iv_title_right = findViewById(R.id.iv_title_right);
@@ -78,16 +80,40 @@ public class KTitleView extends FrameLayout {
         });
     }
 
+    /**
+     * 整体隐藏
+     */
     public void setHindView() {
         title.setVisibility(GONE);
     }
 
+    /**
+     * 整体显示
+     */
     public void setShowView() {
         title.setVisibility(VISIBLE);
     }
 
+    /**
+     * 拿到title整体
+     */
+    public RelativeLayout getTitleView() {
+        return title;
+
+    }
+
+    /**
+     * 左侧隐藏
+     */
     public void setLeftHind() {
         left.setVisibility(GONE);
+    }
+
+    /**
+     * 设置左侧图标
+     */
+    public void setLeftSrc(int leftSrc) {
+        iv_title_left.setImageResource(leftSrc);
     }
 
     /**
@@ -99,6 +125,9 @@ public class KTitleView extends FrameLayout {
         midle.setText(midleText);
     }
 
+    /**
+     * 设置右侧文字
+     */
     public void setRightText(String text) {
         if (StringUtil.isEmpty(text)) {
             right.setText("");
@@ -109,6 +138,9 @@ public class KTitleView extends FrameLayout {
         }
     }
 
+    /**
+     * 设置右侧图标
+     */
     public void setRightSrc(int srcId) {
         iv_title_right.setImageResource(srcId);
         iv_title_right.setVisibility(VISIBLE);

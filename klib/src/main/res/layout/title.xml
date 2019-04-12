@@ -16,6 +16,7 @@
         android:paddingLeft="@dimen/dp_36">
 
         <ImageView
+            android:id="@+id/iv_title_left"
             android:layout_width="@dimen/dp_34"
             android:layout_height="@dimen/dp_58"
             android:background="@mipmap/jiantou_fanhui_zuo" />
