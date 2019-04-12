@@ -124,7 +124,15 @@ public class KTitleView extends FrameLayout {
     public void setMidleText(String midleText) {
         midle.setText(midleText);
     }
-
+    /**
+     * 设置中间文字 String
+     *
+     * @param midleText
+     */
+    public void setMidleText(String midleText,int color) {
+        midle.setTextColor(color);
+        midle.setText(midleText);
+    }
     /**
      * 设置右侧文字
      */
