@@ -17,6 +17,7 @@ import mo.klib.utils.viewUtil.ViewUtil;
 import mo.klib.view.PullToRefresh.BaseRefreshListener;
 import mo.klib.view.PullToRefresh.KPullToRefreshLayout;
 import mo.klib.view.recyclerView.KRecycleView;
+import mo.klib.view.recyclerView.KRecycleViewUtils;
 
 
 /**
@@ -150,6 +151,10 @@ public abstract class KBaseListActivity<T> extends KBaseLayoutActivity {
             showToast("没有更多数据");
         }
         kPullLayout.finishLoadMore();
+    }
+
+    public int getScollYDistance() {
+        return KRecycleViewUtils.getScollYDistance(kRecycleview);
     }
 
 }
