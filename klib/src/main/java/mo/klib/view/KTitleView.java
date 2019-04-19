@@ -33,6 +33,7 @@ public class KTitleView extends FrameLayout {
     private TextView midle;
     private TextView right;
     private ImageView iv_title_right;
+    private boolean isShow = true;
 
     public void setListener(TitleBarClickListener listener) {
         this.listener = listener;
@@ -87,21 +88,27 @@ public class KTitleView extends FrameLayout {
      * 整体隐藏
      */
     public void setHindView() {
-        title.setVisibility(GONE);
-
+        if (isShow) {
+            title.setVisibility(GONE);
+            isShow = false;
+        }
     }
 
     /**
      * 整体显示
      */
     public void setShowView() {
-        title.setAnimation(AlphaAnimationUtil.getShowAlphaAnimation(2000,new KAnimatorListener(){
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                super.onAnimationEnd(animation);
-                title.setVisibility(VISIBLE);
-            }
-        }));
+        if (!isShow) {
+            title.setAnimation(AlphaAnimationUtil.getShowAlphaAnimation(2000, new KAnimatorListener() {
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    super.onAnimationEnd(animation);
+                    title.setVisibility(VISIBLE);
+                    isShow = true;
+                }
+            }));
+        }
+
 
     }
 
@@ -135,15 +142,17 @@ public class KTitleView extends FrameLayout {
     public void setMidleText(String midleText) {
         midle.setText(midleText);
     }
+
     /**
      * 设置中间文字 String
      *
      * @param midleText
      */
-    public void setMidleText(String midleText,int color) {
+    public void setMidleText(String midleText, int color) {
         midle.setTextColor(color);
         midle.setText(midleText);
     }
+
     /**
      * 设置右侧文字
      */
