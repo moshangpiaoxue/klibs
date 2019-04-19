@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.animation.Animation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -14,9 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import mo.klib.R;
-import mo.klib.modle.listener.KAnimatorListener;
 import mo.klib.modle.listener.clickListener.KNoDoubleClickListener;
-import mo.klib.utils.animationUtils.AlphaAnimationUtil;
 import mo.klib.utils.dataUtil.StringUtil;
 
 
@@ -99,17 +96,9 @@ public class KTitleView extends FrameLayout {
      */
     public void setShowView() {
         if (!isShow) {
-            title.setAnimation(AlphaAnimationUtil.getShowAlphaAnimation(2000, new KAnimatorListener() {
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    super.onAnimationEnd(animation);
-                    title.setVisibility(VISIBLE);
-                    isShow = true;
-                }
-            }));
+            title.setVisibility(VISIBLE);
+            isShow = true;
         }
-
-
     }
 
     /**
