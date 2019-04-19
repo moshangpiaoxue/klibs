@@ -87,13 +87,7 @@ public class KTitleView extends FrameLayout {
      * 整体隐藏
      */
     public void setHindView() {
-        title.setAnimation(AlphaAnimationUtil.getHiddenAlphaAnimation(2000,new KAnimatorListener(){
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                super.onAnimationEnd(animation);
-                title.setVisibility(GONE);
-            }
-        }));
+        title.setVisibility(GONE);
 
     }
 
