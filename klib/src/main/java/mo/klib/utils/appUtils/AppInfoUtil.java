@@ -748,7 +748,7 @@ public class AppInfoUtil {
                     String[] pkgList = process.pkgList;
                     for (String pkgName : pkgList) {
                         if (DEBUG) {
-                            LogUtil.d("======正在杀死包名：" + pkgName);
+                            LogUtil.i("======正在杀死包名：" + pkgName);
                         }
                         try {
                             am.killBackgroundProcesses(pkgName);
@@ -761,7 +761,7 @@ public class AppInfoUtil {
             }
         }
         if (DEBUG) {
-            LogUtil.d("清理了" + (getDeviceUsableMemory() - i) + "M内存");
+            LogUtil.i("清理了" + (getDeviceUsableMemory() - i) + "M内存");
         }
         return count;
     }

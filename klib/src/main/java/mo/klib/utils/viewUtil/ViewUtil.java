@@ -56,7 +56,7 @@ public class ViewUtil {
                 System.arraycopy(mHits, 1, mHits, 0, times - 1);
                 //给数组的最后一个元素赋值
                 mHits[times - 1] = SystemClock.uptimeMillis();
-                LogUtil.i(mHits);
+//                LogUtil.i(mHits);
                 //当第mHits[lengt-1]点击的时间戳减去mHits[0]的时间戳小于指定时间则该多击事件生效
                 if (mHits[times - 1] - mHits[0] <= timeBetween) {
                     LogUtil.i(timeBetween + "毫秒内点击" + times + "次");
