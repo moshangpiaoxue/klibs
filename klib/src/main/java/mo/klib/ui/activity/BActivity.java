@@ -98,10 +98,10 @@ public class BActivity extends AppCompatActivity {
     /**
      * 开始，可见
      */
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//    }
 
     /**
      * 恢复，可见
@@ -121,18 +121,18 @@ public class BActivity extends AppCompatActivity {
     /**
      * 暂停，可见
      */
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
+//    @Override
+//    protected void onPause() {
+//        super.onPause();
+//    }
 
     /**
      * 横竖屏切换
      */
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-    }
+//    @Override
+//    public void onConfigurationChanged(Configuration newConfig) {
+//        super.onConfigurationChanged(newConfig);
+//    }
 
     /**
      * 停止，不可见
@@ -164,20 +164,20 @@ public class BActivity extends AppCompatActivity {
     /**
      * 销毁，不可见
      */
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
+//    @Override
+//    protected void onDestroy() {
+//        super.onDestroy();
+//    }
 
     /**
      * @param requestCode 请求码，用于与startActivityForResult中的requestCode中值进行比较判断，是以便确认返回的数据是从哪个Activity返回的
      * @param resultCode  结果码，是由子Activity通过其setResult()方法返回。适用于多个activity都返回数据时，来标识到底是哪一个activity返回的值
      * @param data        携带数据，一个Intent对象，带有返回的数据。可以通过data.getXxxExtra( );方法来获取指定数据类型的数据
      */
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//    }
 
     ///**
     // * 返回结果
@@ -198,10 +198,10 @@ public class BActivity extends AppCompatActivity {
      * @param intent      携带数据, 一个Intent对象
      * @param requestCode 请求码 必须大于等于 0，对应onActivityResult里的requestCode
      */
-    @Override
-    public void startActivityForResult(@RequiresPermission Intent intent, int requestCode) {
-        super.startActivityForResult(intent, requestCode);
-    }
+//    @Override
+//    public void startActivityForResult(@RequiresPermission Intent intent, int requestCode) {
+//        super.startActivityForResult(intent, requestCode);
+//    }
 
     /**
      * 1、当launchMode为singleTask的时候，如果这个界面处于栈顶也就是他正在显示的时候，使用intent跳转到这个界面想要刷新数据的时候，会没有反应，这个时候就要用到这个方法去接收数据

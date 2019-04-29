@@ -72,7 +72,7 @@ public class LogUtilHelp {
         callerClazzName = callerClazzName.substring(callerClazzName.lastIndexOf(".") + 1);
         return "手机型号：" + Build.BRAND +
                 "\n║app名称：" + AppInfoUtil.getAppInfo().getName() +
-                "\n║当前版本：" + AppInfoUtil.getAppInfo().getVersionName() +
+//                "\n║当前版本：" + AppInfoUtil.getAppInfo().getVersionName() +
                 "\n║输出类名：" + callerClazzName +
                 "\n║方 法 名：" + caller.getMethodName() +
                 "\n║行    号：" + caller.getLineNumber();
