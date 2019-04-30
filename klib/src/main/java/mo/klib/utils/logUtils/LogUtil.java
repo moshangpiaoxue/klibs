@@ -111,9 +111,9 @@ public class LogUtil {
         StringBuilder logInfoStringBuilder = new StringBuilder();
         logInfoStringBuilder.append("         \n");
         logInfoStringBuilder.append("手机型号：" + Build.BRAND).append(SEPARATOR);
-        logInfoStringBuilder.append("app 名称：" + AppInfoUtil.getAppInfo().getName()).append(SEPARATOR);
-        logInfoStringBuilder.append("版  本 码：" + AppInfoUtil.getAppInfo().getVersionCode()).append(SEPARATOR);
-        logInfoStringBuilder.append("版  本 号：" + AppInfoUtil.getAppInfo().getVersionName()).append(SEPARATOR);
+//        logInfoStringBuilder.append("app 名称：" + AppInfoUtil.getAppInfo().getName()).append(SEPARATOR);
+//        logInfoStringBuilder.append("版  本 码：" + AppInfoUtil.getAppInfo().getVersionCode()).append(SEPARATOR);
+//        logInfoStringBuilder.append("版  本 号：" + AppInfoUtil.getAppInfo().getVersionName()).append(SEPARATOR);
         logInfoStringBuilder.append("线  程 id：" + Thread.currentThread().getId()).append(SEPARATOR);
         logInfoStringBuilder.append("线  程 名：" + Thread.currentThread().getName()).append(SEPARATOR);
         logInfoStringBuilder.append("文  件 名：" + stackTraceElement.getFileName()).append(SEPARATOR);
