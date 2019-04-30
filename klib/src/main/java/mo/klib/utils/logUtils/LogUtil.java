@@ -59,7 +59,7 @@ public class LogUtil {
 
     private static void printSub(int type, String sub) {
         Log.i(customTagPrefix, "╔═════════════════════════════飞哥告诉你，这是log！不谢 ^_^ \"══════════════════════════════════════════════════════════");
-        Log.i(customTagPrefix,"");
+        Log.i(customTagPrefix,"                        ");
         switch (type) {
             case V:
                 Log.v(customTagPrefix, sub);
@@ -82,7 +82,7 @@ public class LogUtil {
             default:
                 break;
         }
-        Log.i(customTagPrefix,"");
+        Log.i(customTagPrefix,"                                    ");
         Log.i(customTagPrefix, "╚═══════════════════════════════════════════════════════════════════════════════════════");
 
     }
@@ -120,7 +120,7 @@ public class LogUtil {
         logInfoStringBuilder.append("         \n");
         logInfoStringBuilder.append("手机型号：" + Build.BRAND).append(SEPARATOR);
         logInfoStringBuilder.append("app 名称：" + appInfo.getName()).append(SEPARATOR);
-//        logInfoStringBuilder.append("版  本 码：" + AppInfoUtil.).append(SEPARATOR);
+        logInfoStringBuilder.append("版  本 码：" + AppInfoUtil.getVersionCode()).append(SEPARATOR);
         logInfoStringBuilder.append("版  本 号：" + appInfo.getVersionName()).append(SEPARATOR);
         logInfoStringBuilder.append("线  程 id：" + Thread.currentThread().getId()).append(SEPARATOR);
         logInfoStringBuilder.append("线  程 名：" + Thread.currentThread().getName()).append(SEPARATOR);
