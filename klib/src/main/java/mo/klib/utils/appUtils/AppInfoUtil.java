@@ -2,8 +2,6 @@ package mo.klib.utils.appUtils;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
@@ -11,7 +9,6 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.content.pm.Signature;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
@@ -19,16 +16,13 @@ import android.support.annotation.RequiresPermission;
 import android.util.Log;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import mo.klib.k;
 import mo.klib.utils.appUtils.activityUtil.ActivitysUtil;
 import mo.klib.utils.bengUtil.IntentUtil;
-import mo.klib.utils.dataUtil.dealUtil.EncryptUtil;
 import mo.klib.utils.fileUtil.FileUtil;
 import mo.klib.utils.logUtils.LogUtil;
 import mo.klib.utils.systemUtils.CleanUtils;
@@ -571,6 +565,12 @@ public class AppInfoUtil {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
             return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } catch (NoSuchMethodError e) {
+            e.printStackTrace();
+            return null;
         }
     }
 
@@ -592,7 +592,11 @@ public class AppInfoUtil {
         appInfo.setPackageName(pi.packageName);
         appInfo.setPackagePath(ai.sourceDir);
         appInfo.setVersionName(pi.versionName);
-        appInfo.setVersionCode(pi.versionCode);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            appInfo.setVersionCode((int) pi.getLongVersionCode());
+        } else {
+            appInfo.setVersionCode(pi.versionCode);
+        }
         appInfo.setSystem((ApplicationInfo.FLAG_SYSTEM & ai.flags) != 0);
         return appInfo;
     }
@@ -708,8 +712,6 @@ public class AppInfoUtil {
         }
         return ret;
     }
-
-
 
 
     /**

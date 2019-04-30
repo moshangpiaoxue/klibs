@@ -4,10 +4,8 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresPermission;
 import android.support.v7.app.AppCompatActivity;
 
 import java.util.List;
@@ -217,7 +215,7 @@ public class BActivity extends AppCompatActivity {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         setIntent(intent);
-        mIntent=intent;
+        mIntent = intent;
     }
 
     /**
