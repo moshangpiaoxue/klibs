@@ -575,6 +575,27 @@ public class AppInfoUtil {
     }
 
     /**
+     * 获取版本码，9.0之后更新了方式不能一起拿了，会报so的错，狗日的
+     */
+    public static long getVersionCode() {
+        long versionCode = 0;
+        try {
+            PackageManager pm = k.app().getPackageManager();
+            PackageInfo packageInfo = pm.getPackageInfo(k.app().getPackageName(), 0);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                versionCode = packageInfo.getLongVersionCode();
+            } else {
+                versionCode = packageInfo.versionCode;
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodError e) {
+            e.printStackTrace();
+        }
+        return versionCode;
+    }
+
+    /**
      * 得到 AppInfo 的 Bean
      *
      * @param pm 包的管理
@@ -592,11 +613,7 @@ public class AppInfoUtil {
         appInfo.setPackageName(pi.packageName);
         appInfo.setPackagePath(ai.sourceDir);
         appInfo.setVersionName(pi.versionName);
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-//            appInfo.setVersionCode((int) pi.getLongVersionCode());
-//        } else {
-//            appInfo.setVersionCode(pi.versionCode);
-//        }
+
         appInfo.setSystem((ApplicationInfo.FLAG_SYSTEM & ai.flags) != 0);
         return appInfo;
     }

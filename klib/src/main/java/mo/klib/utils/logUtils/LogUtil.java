@@ -59,6 +59,7 @@ public class LogUtil {
 
     private static void printSub(int type, String sub) {
         Log.i(customTagPrefix, "╔═════════════════════════════飞哥告诉你，这是log！不谢 ^_^ \"══════════════════════════════════════════════════════════");
+        Log.i(customTagPrefix,"");
         switch (type) {
             case V:
                 Log.v(customTagPrefix, sub);
@@ -81,6 +82,7 @@ public class LogUtil {
             default:
                 break;
         }
+        Log.i(customTagPrefix,"");
         Log.i(customTagPrefix, "╚═══════════════════════════════════════════════════════════════════════════════════════");
 
     }
