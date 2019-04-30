@@ -475,7 +475,7 @@ public class AppInfoUtil {
         //版本号
         private String versionName;
         //版本码
-        private int versionCode;
+//        private int versionCode;
         //是否系统应用
         private boolean isSystem;
 
@@ -519,13 +519,13 @@ public class AppInfoUtil {
             this.packagePath = packagePath;
         }
 
-        public int getVersionCode() {
-            return versionCode;
-        }
-
-        public void setVersionCode(final int versionCode) {
-            this.versionCode = versionCode;
-        }
+//        public int getVersionCode() {
+//            return versionCode;
+//        }
+//
+//        public void setVersionCode(final int versionCode) {
+//            this.versionCode = versionCode;
+//        }
 
         public String getVersionName() {
             return versionName;
@@ -544,7 +544,7 @@ public class AppInfoUtil {
                     "\napp name: " + getName() +
                     "\napp path: " + getPackagePath() +
                     "\napp v name: " + getVersionName() +
-                    "\napp v code: " + getVersionCode() +
+//                    "\napp v code: " + getVersionCode() +
                     "\nis system: " + isSystem();
         }
     }
@@ -592,11 +592,11 @@ public class AppInfoUtil {
         appInfo.setPackageName(pi.packageName);
         appInfo.setPackagePath(ai.sourceDir);
         appInfo.setVersionName(pi.versionName);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            appInfo.setVersionCode((int) pi.getLongVersionCode());
-        } else {
-            appInfo.setVersionCode(pi.versionCode);
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+//            appInfo.setVersionCode((int) pi.getLongVersionCode());
+//        } else {
+//            appInfo.setVersionCode(pi.versionCode);
+//        }
         appInfo.setSystem((ApplicationInfo.FLAG_SYSTEM & ai.flags) != 0);
         return appInfo;
     }
