@@ -40,7 +40,7 @@ public class LogUtil {
             return;
         }
 
-        appInfo = AppInfoUtil.getAppInfo();
+
         int index = 0;
         int length = msg.length();
         int countOfSub = length / MAX_LENGTH;
@@ -94,6 +94,7 @@ public class LogUtil {
     }
 
     public static void i(String message) {
+        appInfo = AppInfoUtil.getAppInfo();
         printDefault(I, getLogInfo(Thread.currentThread().getStackTrace()[3]) + message);
     }
 
@@ -117,7 +118,7 @@ public class LogUtil {
         logInfoStringBuilder.append("         \n");
         logInfoStringBuilder.append("手机型号：" + Build.BRAND).append(SEPARATOR);
         logInfoStringBuilder.append("app 名称：" + appInfo.getName()).append(SEPARATOR);
-//        logInfoStringBuilder.append("版  本 码：" + appInfo.getVersionCode()).append(SEPARATOR);
+//        logInfoStringBuilder.append("版  本 码：" + AppInfoUtil.).append(SEPARATOR);
         logInfoStringBuilder.append("版  本 号：" + appInfo.getVersionName()).append(SEPARATOR);
         logInfoStringBuilder.append("线  程 id：" + Thread.currentThread().getId()).append(SEPARATOR);
         logInfoStringBuilder.append("线  程 名：" + Thread.currentThread().getName()).append(SEPARATOR);
