@@ -2,8 +2,11 @@ package mo.klib.utils.systemUtils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Configuration;
+import android.content.res.TypedArray;
 import android.graphics.PixelFormat;
 import android.view.Gravity;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -79,4 +82,23 @@ public class WindowUtil {
         mWindowLayoutParams.height = 98;
         callBack.back(mWindowManager, mWindowLayoutParams);
     }
+
+    /**
+     * 设置window宽高，（主要是为了解决当activity设置为dialog样式时，布局设置MATCH_PARENT失效的问题）
+     */
+    public static void setParams(Activity mActivity) {
+        WindowManager.LayoutParams params = mActivity.getWindow().getAttributes();
+        params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+        params.gravity = Gravity.CENTER;
+        if (mActivity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            TypedArray a = mActivity.obtainStyledAttributes(new int[]{android.R.attr.layout_width});
+            try {
+                params.width = a.getLayoutDimension(0, ViewGroup.LayoutParams.MATCH_PARENT);
+            } finally {
+                a.recycle();
+            }
+        }
+        mActivity.getWindow().setAttributes(params);
+    }
+
 }

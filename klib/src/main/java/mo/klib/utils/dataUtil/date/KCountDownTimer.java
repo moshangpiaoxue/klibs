@@ -1,4 +1,4 @@
-package mo.klib.modle.view;
+package mo.klib.utils.dataUtil.date;
 
 import android.os.CountDownTimer;
 
@@ -36,4 +36,8 @@ public abstract class KCountDownTimer extends CountDownTimer {
      */
     protected abstract void onTicks(long millisUntilFinished, int second);
 
+    @Override
+    public void onFinish() {
+
+    }
 }

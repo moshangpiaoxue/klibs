@@ -117,7 +117,7 @@ public class LogUtil {
      */
     private static String getLogInfo(StackTraceElement stackTraceElement) {
         StringBuilder logInfoStringBuilder = new StringBuilder();
-        logInfoStringBuilder.append("         \n");
+        logInfoStringBuilder.append("                 \n");
         logInfoStringBuilder.append("手机型号：" + Build.BRAND).append(SEPARATOR);
         logInfoStringBuilder.append("app 名称：" + appInfo.getName()).append(SEPARATOR);
         logInfoStringBuilder.append("版  本 码：" + AppInfoUtil.getVersionCode()).append(SEPARATOR);
