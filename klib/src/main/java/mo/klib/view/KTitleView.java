@@ -108,11 +108,11 @@ public class KTitleView extends FrameLayout {
         return title;
     }
 
-    public TextView getMidle() {
+    public TextView getMidleTextView() {
         return midle;
     }
 
-    public TextView getRightView() {
+    public TextView getRightTextView() {
         return right;
     }
 

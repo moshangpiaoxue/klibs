@@ -7,6 +7,8 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import mo.klib.modle.manager.KInputMethodManager;
@@ -251,5 +253,47 @@ public abstract class KBaseActivity extends KMediaActivity {
     protected void onPause() {
         super.onPause();
         closeInput();
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (getTitleRigthMenu() != 0) {
+            getMenuInflater().inflate(getTitleRigthMenu(), menu);
+            return true;
+        } else {
+            return super.onCreateOptionsMenu(menu);
+        }
+    }
+
+    /**
+     * 设置菜单栏右标
+     *
+     * @return menu文件id
+     */
+    protected int getTitleRigthMenu() {
+        return 0;
+    }
+
+    /**
+     * 设置菜单栏右标的点击事件
+     *
+     * @param item
+     * @return
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() != 0) {
+            onTitleRightMenuClick(item.getItemId());
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * 菜单栏右标点击监听
+     *
+     * @param itemId
+     */
+    protected void onTitleRightMenuClick(int itemId) {
     }
 }
