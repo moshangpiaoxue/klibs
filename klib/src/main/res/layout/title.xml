@@ -50,7 +50,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginRight="@dimen/dp_72"
+        android:layout_marginRight="16dp"
         android:visibility="invisible" />
     <!--//底部分割线-->
     <TextView
