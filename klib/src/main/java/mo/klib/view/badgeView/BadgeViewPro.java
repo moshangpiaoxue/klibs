@@ -63,8 +63,8 @@ public class BadgeViewPro extends android.support.v7.widget.AppCompatTextView {
         //get custom attribute
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.BadgeViewPro);
         bgColor = ta.getColor(R.styleable.BadgeViewPro_bgColor, Color.RED);
-        textColor = ta.getColor(R.styleable.BadgeViewPro_textColor, Color.WHITE);
-        textSize = ta.getDimensionPixelSize(R.styleable.BadgeViewPro_textSize, 10);
+        textColor = ta.getColor(R.styleable.BadgeViewPro_text_Color, Color.WHITE);
+        textSize = ta.getDimensionPixelSize(R.styleable.BadgeViewPro_text_Size, 10);
         shape_type = ta.getInteger(R.styleable.BadgeViewPro_shape_type, SHAPE_ROUND_RECTANGLE);
         ta.recycle();
         if (!(getLayoutParams() instanceof FrameLayout.LayoutParams)) {
