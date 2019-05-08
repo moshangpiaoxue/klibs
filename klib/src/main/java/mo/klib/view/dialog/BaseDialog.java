@@ -52,7 +52,7 @@ public abstract class BaseDialog {
                 return OnKeyListener(dialog, keyCode, event);
             }
         });
-        doWhat(dialog,view);
+        doWhat(dialog, view);
     }
 
     protected abstract int getLayoutId();
@@ -93,9 +93,16 @@ public abstract class BaseDialog {
     }
 
     protected abstract void doWhat(Dialog dialog, View view);
+
     public void show() {
-        if (!dialog.isShowing()){
+        if (!dialog.isShowing()) {
             dialog.show();
+        }
+    }
+
+    public void dismiss() {
+        if (dialog.isShowing()) {
+            dialog.dismiss();
         }
     }
 }
