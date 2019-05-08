@@ -94,12 +94,18 @@ public abstract class BaseDialog {
 
     protected abstract void doWhat(Dialog dialog, View view);
 
+    /**
+     * 开启
+     */
     public void show() {
         if (!dialog.isShowing()) {
             dialog.show();
         }
     }
 
+    /**
+     * 关闭
+     */
     public void dismiss() {
         if (dialog.isShowing()) {
             dialog.dismiss();
