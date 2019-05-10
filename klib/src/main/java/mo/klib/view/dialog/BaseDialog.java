@@ -21,7 +21,7 @@ import mo.klib.utils.viewUtil.ViewUtil;
  */
 public abstract class BaseDialog {
     protected Activity mActivity;
-    private Dialog dialog;
+    protected Dialog dialog;
     private Display display;
 
     public BaseDialog(Activity mActivity) {
@@ -109,6 +109,7 @@ public abstract class BaseDialog {
     public void dismiss() {
         if (dialog.isShowing()) {
             dialog.dismiss();
+            dialog.cancel();
         }
     }
 }
