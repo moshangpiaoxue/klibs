@@ -9,7 +9,7 @@ public class ClickUtil {
     /**
      * 间隔时间
      */
-    private static final int MIN_CLICK_DELAY_TIME = 1000;
+    private static  int MIN_CLICK_DELAY_TIME = 1000;
     /**
      * 上次点击时间
      */
