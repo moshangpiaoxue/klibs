@@ -110,7 +110,7 @@ public abstract class KBaseActivity extends KMediaActivity {
      * 吐司提示
      */
     public void showToast(String string) {
-        ToastUtil.showToast(string);
+        ToastUtil.showToast(mActivity,string);
     }
 
     /**
