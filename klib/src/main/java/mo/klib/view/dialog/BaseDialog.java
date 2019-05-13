@@ -60,7 +60,7 @@ public abstract class BaseDialog {
     /**
      * 设置黑暗度（Dialog自身的黑暗度）
      */
-    private float setDimAmount() {
+    protected float setDimAmount() {
         return 0.4f;
     }
 

@@ -3,7 +3,6 @@ package mo.klib.view.dialog;
 import android.app.Activity;
 import android.app.Dialog;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.TextView;
 
 import mo.klib.R;
@@ -19,7 +18,7 @@ public enum HttpDialogLoading {
      * 单例
      */
     INSTANCE;
-
+    private float dialogDim = 0.3f;
     private BaseDialog loadingDialog;
 
     public void show(Activity mActivity, final String tips) {
@@ -41,11 +40,20 @@ public enum HttpDialogLoading {
                         tv_dialog_loading.setText(tips);
                     }
                 }
+
+                @Override
+                protected float setDimAmount() {
+                    return dialogDim;
+                }
             };
         }
         if (!mActivity.isFinishing()) {
             loadingDialog.show();
         }
+    }
+
+    public void setDialogDim(float dialogDim) {
+        this.dialogDim = dialogDim;
     }
 
     public void dismiss() {
