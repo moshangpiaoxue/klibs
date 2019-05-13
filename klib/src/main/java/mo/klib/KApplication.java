@@ -8,6 +8,8 @@ import android.os.Looper;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 
+import com.squareup.leakcanary.LeakCanary;
+
 import cn.bingoogolapple.swipebacklayout.BGASwipeBackManager;
 
 
@@ -96,6 +98,10 @@ public class KApplication extends MultiDexApplication {
         mMainThread = Thread.currentThread();
         mMainThreadId = android.os.Process.myTid();
         mHandler = new Handler();
+        if (!LeakCanary.isInAnalyzerProcess(this)) {
+            LeakCanary.install(this);
+        }
+
     }
 
     /**
