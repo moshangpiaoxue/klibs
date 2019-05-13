@@ -98,10 +98,17 @@ public class KApplication extends MultiDexApplication {
         mMainThread = Thread.currentThread();
         mMainThreadId = android.os.Process.myTid();
         mHandler = new Handler();
-        if (!LeakCanary.isInAnalyzerProcess(this)) {
-            LeakCanary.install(this);
+        if (isLeakCanary()) {
+            if (!LeakCanary.isInAnalyzerProcess(this)) {
+                LeakCanary.install(this);
+            }
         }
 
+
+    }
+
+    protected boolean isLeakCanary() {
+        return true;
     }
 
     /**
