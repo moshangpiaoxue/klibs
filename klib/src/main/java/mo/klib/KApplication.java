@@ -168,7 +168,7 @@ public class KApplication extends MultiDexApplication {
      *
      * @param activity
      */
-    private void onBackApp(Activity activity) {
+    protected void onBackApp(Activity activity) {
         isActive = false;
     }
 
@@ -177,7 +177,7 @@ public class KApplication extends MultiDexApplication {
      *
      * @param activity
      */
-    private void onLeaveApp(Activity activity) {
+    protected void onLeaveApp(Activity activity) {
         isActive = true;
     }
 
