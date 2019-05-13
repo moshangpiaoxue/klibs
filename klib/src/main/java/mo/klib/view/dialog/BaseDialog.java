@@ -37,6 +37,9 @@ public abstract class BaseDialog {
         Window dialogWindow = dialog.getWindow();
         WindowManager.LayoutParams lp = dialogWindow.getAttributes();
         lp.width = (int) (display.getWidth() * setDialogScale());
+        lp.dimAmount = setDimAmount();
+        dialog.getWindow().setAttributes(lp);
+        dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
         dialog.setCancelable(setCancelable());
         dialog.setCanceledOnTouchOutside(setCanceledOnTouchOutsides());
         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
@@ -48,11 +51,17 @@ public abstract class BaseDialog {
         dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
             @Override
             public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-
                 return OnKeyListener(dialog, keyCode, event);
             }
         });
         doWhat(dialog, view);
+    }
+
+    /**
+     * 设置黑暗度（Dialog自身的黑暗度）
+     */
+    private float setDimAmount() {
+        return 0.4f;
     }
 
     protected abstract int getLayoutId();
