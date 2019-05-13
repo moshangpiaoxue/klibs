@@ -34,7 +34,4 @@ dependencies {
     api 'com.android.support:recyclerview-v7:27.1.1'
     // Activity右滑退出的效果
     api 'cn.bingoogolapple:bga-swipebacklayout:1.1.1@aar'
-    debugApi 'com.squareup.leakcanary:leakcanary-android:1.5'
-    releaseApi 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
-    testImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
 }

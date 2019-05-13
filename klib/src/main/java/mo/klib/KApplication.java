@@ -8,15 +8,12 @@ import android.os.Looper;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 
-import com.squareup.leakcanary.LeakCanary;
-
 import cn.bingoogolapple.swipebacklayout.BGASwipeBackManager;
-
 
 /**
  * author：mo
  * data：2017/11/4 0004
- * 功能：
+ * 功能：Application 基类
  */
 
 public class KApplication extends MultiDexApplication {
@@ -98,21 +95,13 @@ public class KApplication extends MultiDexApplication {
         mMainThread = Thread.currentThread();
         mMainThreadId = android.os.Process.myTid();
         mHandler = new Handler();
-        if (isLeakCanary()) {
-            if (!LeakCanary.isInAnalyzerProcess(this)) {
-                LeakCanary.install(this);
-            }
-        }
 
 
     }
 
-    protected boolean isLeakCanary() {
-        return true;
-    }
 
     /**
-     * // 开启右滑关闭页面功能
+     * 开启右滑关闭页面功能
      */
     public void actionSwipeBack() {
         BGASwipeBackManager.getInstance().init(this);
