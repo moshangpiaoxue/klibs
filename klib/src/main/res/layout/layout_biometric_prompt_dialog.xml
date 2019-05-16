@@ -18,7 +18,8 @@
             android:gravity="center"
             android:text="指纹验证"
             android:textColor="#333333"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:visibility="gone" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -33,7 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/dp_42"
-            android:text="请验证指纹"
+            android:text="验证您的指纹"
             android:textColor="#CDCED0"
             android:textSize="15sp"
             android:typeface="normal" />

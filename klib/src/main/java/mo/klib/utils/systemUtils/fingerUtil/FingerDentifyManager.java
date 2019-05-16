@@ -3,14 +3,12 @@ package mo.klib.utils.systemUtils.fingerUtil;
 import android.app.Activity;
 import android.app.KeyguardManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.Build;
 import android.os.CancellationSignal;
 import android.support.annotation.NonNull;
 
-import mo.klib.modle.listener.clickListener.KOnDialogClickListenerImpl;
-import mo.klib.modle.view.DialogModle;
+import mo.klib.view.dialog.IosAlertDialog;
 
 /**
  * @ author：mo
@@ -117,18 +115,21 @@ public class FingerDentifyManager {
      */
     public boolean isBiometricPromptEnable(boolean isShow) {
         if (isShow) {
-            if (isAboveApi23()) {
-                DialogModle.showDialog(mActivity, "", "您的系统版本过低或不支持指纹登录，请取消", false, new KOnDialogClickListenerImpl() {
-                    @Override
-                    public void onCancel(DialogInterface dialog, int which) {
-                        super.onCancel(dialog, which);
-                    }
-                });
+            if (!isAboveApi23()) {
+                new IosAlertDialog(mActivity).builder().setMsg("您的系统版本过低不支持指纹登录，请取消").setCancelable(false).setNegativeButton("取消", null).show();
+                return false;
+            } else if (!isHardwareDetected()) {
+                new IosAlertDialog(mActivity).builder().setMsg("您的设备不支持指纹登录，请取消").setCancelable(false).setNegativeButton("取消", null).show();
+                return false;
+            } else if (!hasEnrolledFingerprints()) {
+                new IosAlertDialog(mActivity).builder().setMsg("您还没有录入指纹, 请在手机设置界面录入至少一个指纹").setCancelable(false).setNegativeButton("取消", null).show();
+                return false;
+            } else if (!hasEnrolledFingerprints()) {
+                new IosAlertDialog(mActivity).builder().setMsg("您还没有设置锁屏密码, 请在手机设置界面设置").setCancelable(false).setNegativeButton("取消", null).show();
                 return false;
             } else {
                 return true;
             }
-
         } else {
             return isAboveApi23()
                     && isHardwareDetected()
