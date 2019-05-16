@@ -1,7 +1,9 @@
 package mo.klib.ui.fragment;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -52,16 +54,40 @@ import android.view.WindowManager;
  */
 
 public abstract class KDialogFragment extends DialogFragment {
+    protected Activity mActivity;
+    protected View mView;
+    protected Dialog mDialog;
+    protected Window mWindow;
+    protected DialogFragmentCallBack callBack;
+
     public interface DialogFragmentCallBack {
         void onSure(KDialogFragment dialog);
 
         void onCancel(KDialogFragment dialog);
+
+        void onDialogDismiss();
     }
 
-    private View mView;
-    private Dialog mDialog;
-    private Window mWindow;
 
+    //    @Override
+//    public void onActivityCreated(Bundle savedInstanceState) {
+//        super.onActivityCreated(savedInstanceState);
+//        setupWindow(getDialog().getWindow());
+//    }
+//    private void setupWindow(Window window) {
+//        if (window != null) {
+//            WindowManager.LayoutParams lp = window.getAttributes();
+//            lp.gravity = Gravity.CENTER;
+//            lp.dimAmount = 0;
+//            lp.flags |= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+//            window.setAttributes(lp);
+//            window.setBackgroundDrawableResource(R.color.bg_biometric_prompt_dialog);
+//            window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+//        }
+//    }
+    public void setDialogFragmentCallBack(DialogFragmentCallBack callback) {
+        this.callBack = callback;
+    }
 
     @Nullable
     @Override
@@ -76,6 +102,27 @@ public abstract class KDialogFragment extends DialogFragment {
 
         return mView;
     }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mActivity = (Activity) context;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mActivity = activity;
+    }
+//    @Override
+//    public Dialog onCreateDialog(Bundle savedInstanceState) {
+//        Dialog dialog = super.onCreateDialog(savedInstanceState);
+//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        if (dialog.getWindow() != null) {
+//            dialog.getWindow().setBackgroundDrawableResource(R.color.bg_biometric_prompt_dialog);
+//        }
+//        return dialog;
+//    }
 
 
     /**
@@ -103,6 +150,14 @@ public abstract class KDialogFragment extends DialogFragment {
             }
         });
         doWhat(mDialog, mWindow, mView);
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
+        if (callBack != null) {
+            callBack.onDialogDismiss();
+        }
     }
 
     /**

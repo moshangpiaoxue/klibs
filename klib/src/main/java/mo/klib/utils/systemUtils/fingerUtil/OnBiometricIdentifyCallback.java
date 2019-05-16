@@ -6,10 +6,6 @@ package mo.klib.utils.systemUtils.fingerUtil;
  * @ 功能：指纹识别结果回调
  */
 public interface OnBiometricIdentifyCallback {
-    /**
-     * 超过次数（在一定时间内，对指纹验证有次数限制，）
-     */
-    void onUsePassword();
 
     /**
      * 成功

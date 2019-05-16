@@ -43,7 +43,7 @@ public class FingerPromptApi28 implements FingerImpl {
         mBiometricPrompt = new BiometricPrompt
                 .Builder(activity)
                 .setTitle("指纹验证")
-                .setDescription("验证指纹以继续")
+                .setDescription("请验证指纹")
                 .setSubtitle("")
                 .setNegativeButton("取消",
                         activity.getMainExecutor(), new DialogInterface.OnClickListener() {

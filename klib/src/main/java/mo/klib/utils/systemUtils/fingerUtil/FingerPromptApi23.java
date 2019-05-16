@@ -10,6 +10,8 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
 
+import mo.klib.ui.fragment.KDialogFragment;
+
 /**
  * @ author：mo
  * @ data：2019/5/16：9:48
@@ -44,19 +46,25 @@ public class FingerPromptApi23 implements FingerImpl {
          * FingerDentifyDialog.OnBiometricPromptDialogActionCallback是自定义dialog的回调
          */
         mDialog = FingerDentifyDialog.newInstance();
-        mDialog.setOnBiometricPromptDialogActionCallback(new FingerDentifyDialog.OnBiometricPromptDialogActionCallback() {
+        mDialog.setDialogFragmentCallBack(new KDialogFragment.DialogFragmentCallBack() {
+            @Override
+            public void onSure(KDialogFragment dialog) {
+
+            }
+
+            @Override
+            public void onCancel(KDialogFragment dialog) {
+                //点击cancel键
+                if (mManagerIdentifyCallback != null) {
+                    mManagerIdentifyCallback.onCancel();
+                }
+            }
+
             @Override
             public void onDialogDismiss() {
                 //当dialog消失的时候，包括点击userPassword、点击cancel、和识别成功之后
                 if (mCancellationSignal != null && !mCancellationSignal.isCanceled()) {
                     mCancellationSignal.cancel();
-                }
-            }
-            @Override
-            public void onCancel() {
-                //点击cancel键
-                if (mManagerIdentifyCallback != null) {
-                    mManagerIdentifyCallback.onCancel();
                 }
             }
         });
@@ -89,8 +97,13 @@ public class FingerPromptApi23 implements FingerImpl {
         public void onAuthenticationError(int errorCode, CharSequence errString) {
             super.onAuthenticationError(errorCode, errString);
             Log.d(TAG, "onAuthenticationError() called with: errorCode = [" + errorCode + "], errString = [" + errString + "]");
-            mDialog.setState(FingerDentifyDialog.STATE_ERROR);
-            mManagerIdentifyCallback.onError(errorCode, errString.toString());
+            if (errorCode == 5) {
+                mManagerIdentifyCallback.onCancel();
+            } else {
+                mDialog.setState(FingerDentifyDialog.STATE_ERROR);
+                mManagerIdentifyCallback.onError(errorCode, errString.toString());
+            }
+
         }
 
         @Override

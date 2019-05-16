@@ -3,10 +3,14 @@ package mo.klib.utils.systemUtils.fingerUtil;
 import android.app.Activity;
 import android.app.KeyguardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.Build;
 import android.os.CancellationSignal;
 import android.support.annotation.NonNull;
+
+import mo.klib.modle.listener.clickListener.KOnDialogClickListenerImpl;
+import mo.klib.modle.view.DialogModle;
 
 /**
  * @ author：mo
@@ -111,11 +115,27 @@ public class FingerDentifyManager {
     /**
      * 是否可以开启指纹验证 （版本大于6.0+设备支持指纹+用户设置过指纹+用户设置了锁屏密码）
      */
-    public boolean isBiometricPromptEnable() {
-        return isAboveApi23()
-                && isHardwareDetected()
-                && hasEnrolledFingerprints()
-                && isKeyguardSecure();
+    public boolean isBiometricPromptEnable(boolean isShow) {
+        if (isShow) {
+            if (isAboveApi23()) {
+                DialogModle.showDialog(mActivity, "", "您的系统版本过低或不支持指纹登录，请取消", false, new KOnDialogClickListenerImpl() {
+                    @Override
+                    public void onCancel(DialogInterface dialog, int which) {
+                        super.onCancel(dialog, which);
+                    }
+                });
+                return false;
+            } else {
+                return true;
+            }
+
+        } else {
+            return isAboveApi23()
+                    && isHardwareDetected()
+                    && hasEnrolledFingerprints()
+                    && isKeyguardSecure();
+        }
+
     }
 
 }

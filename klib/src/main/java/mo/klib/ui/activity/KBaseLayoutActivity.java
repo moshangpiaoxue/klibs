@@ -128,7 +128,6 @@ public abstract class KBaseLayoutActivity extends KBaseActivity {
 
         if (isCanBack) {
             LogUtil.i("BaseActivity onBackPressed");
-            HttpDialogLoading.INSTANCE.dismiss();
             if (ProgressDialogUtil.progressLoading != null && ProgressDialogUtil.progressLoading.isShowing()
                     ) {
                 ProgressDialogUtil.cancelProgress();
