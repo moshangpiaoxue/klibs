@@ -15,6 +15,7 @@ import mo.klib.utils.logUtils.LogUtil;
 import mo.klib.utils.tipsUtil.ProgressDialogUtil;
 import mo.klib.utils.viewUtil.ViewUtil;
 import mo.klib.view.KTitleView;
+import mo.klib.view.dialog.HttpDialogLoading;
 
 /**
  * @ author：mo
@@ -127,7 +128,9 @@ public abstract class KBaseLayoutActivity extends KBaseActivity {
 
         if (isCanBack) {
             LogUtil.i("BaseActivity onBackPressed");
-            if (ProgressDialogUtil.progressLoading != null && ProgressDialogUtil.progressLoading.isShowing()) {
+            HttpDialogLoading.INSTANCE.dismiss();
+            if (ProgressDialogUtil.progressLoading != null && ProgressDialogUtil.progressLoading.isShowing()
+                    ) {
                 ProgressDialogUtil.cancelProgress();
             } else {
                 super.onBackPressed();

@@ -25,8 +25,10 @@ public abstract class KCountDownTimer extends CountDownTimer {
      */
     @Override
     public void onTick(long millisUntilFinished) {
-        onTicks(millisUntilFinished, (int) ((millisUntilFinished / 1000) - 1));
+//        onTicks(millisUntilFinished, (int) ((millisUntilFinished / 1000) - 1));
+        onTicks(millisUntilFinished, (int) Math.round((double) millisUntilFinished / 1000)-1);
     }
+
 
     /**
      * 倒计时开始 抽象方法
