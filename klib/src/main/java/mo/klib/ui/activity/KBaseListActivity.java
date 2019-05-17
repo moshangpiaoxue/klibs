@@ -131,6 +131,7 @@ public abstract class KBaseListActivity<T> extends KBaseLayoutActivity {
             mWrapper.refresh(mData);
             mPage++;
         } else {
+            mAdapter.refreshView(mData);
             loadErrorNoData();
             mWrapper.addEmptyView(emptyView);
         }
