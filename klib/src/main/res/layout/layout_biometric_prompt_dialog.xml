@@ -6,10 +6,10 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_marginLeft="@dimen/dp_250"
-        android:layout_marginRight="@dimen/dp_250"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:layout_marginLeft="@dimen/dp_250"
+        android:layout_marginRight="@dimen/dp_250"
         android:background="@drawable/dialog_finger_bg"
         android:orientation="vertical">
 
@@ -35,7 +35,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/pt_dp_30"
             android:layout_marginTop="@dimen/dp_42"
+            android:layout_marginRight="@dimen/pt_dp_30"
+            android:gravity="center"
             android:text="验证您的指纹"
             android:textColor="#CDCED0"
             android:textSize="15sp"

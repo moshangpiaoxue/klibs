@@ -97,20 +97,15 @@ public class FingerPromptApi23 implements FingerImpl {
         public void onAuthenticationError(int errorCode, CharSequence errString) {
             super.onAuthenticationError(errorCode, errString);
             Log.d(TAG, "onAuthenticationError() called with: errorCode = [" + errorCode + "], errString = [" + errString + "]");
-            if (errorCode == 5) {
-                mManagerIdentifyCallback.onCancel();
-            } else {
-                mDialog.setState(FingerDentifyDialog.STATE_ERROR);
-                mManagerIdentifyCallback.onError(errorCode, errString.toString());
-            }
-
+            mDialog.setState(FingerDentifyDialog.STATE_ERROR,errString.toString());
+            mManagerIdentifyCallback.onError(errorCode, errString.toString());
         }
 
         @Override
         public void onAuthenticationFailed() {
             super.onAuthenticationFailed();
             Log.d(TAG, "onAuthenticationFailed() called");
-            mDialog.setState(FingerDentifyDialog.STATE_FAILED);
+            mDialog.setState(FingerDentifyDialog.STATE_FAILED,"");
             mManagerIdentifyCallback.onFailed();
         }
 
@@ -118,7 +113,7 @@ public class FingerPromptApi23 implements FingerImpl {
         public void onAuthenticationHelp(int helpCode, CharSequence helpString) {
             super.onAuthenticationHelp(helpCode, helpString);
             Log.d(TAG, "onAuthenticationHelp() called with: helpCode = [" + helpCode + "], helpString = [" + helpString + "]");
-            mDialog.setState(FingerDentifyDialog.STATE_FAILED);
+            mDialog.setState(FingerDentifyDialog.STATE_FAILED,"");
             mManagerIdentifyCallback.onFailed();
 
         }
@@ -127,7 +122,7 @@ public class FingerPromptApi23 implements FingerImpl {
         public void onAuthenticationSucceeded(FingerprintManager.AuthenticationResult result) {
             super.onAuthenticationSucceeded(result);
             Log.i(TAG, "onAuthenticationSucceeded: ");
-            mDialog.setState(FingerDentifyDialog.STATE_SUCCEED);
+            mDialog.setState(FingerDentifyDialog.STATE_SUCCEED,"");
 
             mManagerIdentifyCallback.onSucceeded();
 

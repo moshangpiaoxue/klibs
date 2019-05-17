@@ -55,7 +55,7 @@ public class FingerDentifyDialog extends KDialogFragment {
     }
 
 
-    public void setState(int state) {
+    public void setState(int state,String info) {
         switch (state) {
             case STATE_NORMAL:
                 mStateTv.setTextColor(ResUtil.getColor(R.color.text_quaternary));
@@ -69,8 +69,14 @@ public class FingerDentifyDialog extends KDialogFragment {
                 break;
             case STATE_ERROR:
                 mStateTv.setTextColor(ResUtil.getColor(R.color.text_red));
-                mStateTv.setText("验证指纹失败,请稍后重试");
+                mStateTv.setText(info);
                 mCancelBtn.setVisibility(View.GONE);
+                mStateTv.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        dismiss();
+                    }
+                }, 500);
                 break;
             case STATE_SUCCEED:
                 mStateTv.setTextColor(ResUtil.getColor(R.color.text_green));

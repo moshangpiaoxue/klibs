@@ -16,7 +16,10 @@ import mo.klib.view.dialog.IosAlertDialog;
  * @ 功能：指纹识别管理器
  */
 public class FingerDentifyManager {
-
+    /**
+     * 失败超过一定次数后，一定时间内不能验证，（没用，以后优化）
+     */
+    public static boolean isMuthError = false;
     private FingerImpl mImpl;
     private Activity mActivity;
 
@@ -127,6 +130,9 @@ public class FingerDentifyManager {
             } else if (!hasEnrolledFingerprints()) {
                 new IosAlertDialog(mActivity).builder().setMsg("您还没有设置锁屏密码, 请在手机设置界面设置").setCancelable(false).setNegativeButton("取消", null).show();
                 return false;
+            } else if (isMuthError) {
+                new IosAlertDialog(mActivity).builder().setMsg("您的指纹验证多次错误，请稍后再试").setCancelable(false).setNegativeButton("取消", null).show();
+                return false;
             } else {
                 return true;
             }
@@ -134,7 +140,8 @@ public class FingerDentifyManager {
             return isAboveApi23()
                     && isHardwareDetected()
                     && hasEnrolledFingerprints()
-                    && isKeyguardSecure();
+                    && isKeyguardSecure()
+                    && !isMuthError;
         }
 
     }
