@@ -10,6 +10,7 @@ import android.security.keystore.KeyProperties;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
+import android.support.v4.hardware.fingerprint.FingerprintManagerCompat;
 import android.util.Base64;
 
 import java.security.KeyPair;
@@ -29,8 +30,8 @@ import java.security.spec.ECGenParameterSpec;
 public class FingerPromptApi28 implements FingerImpl {
 
     private static final String KEY_NAME = "FingerPromptApi28";
-
     private Activity mActivity;
+    private FingerprintManagerCompat compat;
     private BiometricPrompt mBiometricPrompt;
     private OnBiometricIdentifyCallback mManagerIdentifyCallback;
     private CancellationSignal mCancellationSignal;
@@ -56,6 +57,14 @@ public class FingerPromptApi28 implements FingerImpl {
                             }
                         })
                 .build();
+        compat = FingerprintManagerCompat.from(mActivity);
+
+    }
+
+    @RequiresApi(Build.VERSION_CODES.P)
+    @Override
+    public void authenticate(@Nullable CancellationSignal cancel, @NonNull OnBiometricIdentifyCallback callback) {
+        mManagerIdentifyCallback = callback;
         try {
             KeyPair keyPair = generateKeyPair(KEY_NAME, true);
             // Send public key part of key pair to the server, this public key will be used for authentication
@@ -72,13 +81,7 @@ public class FingerPromptApi28 implements FingerImpl {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-    }
 
-    @RequiresApi(Build.VERSION_CODES.P)
-    @Override
-    public void authenticate(@Nullable CancellationSignal cancel,
-                             @NonNull OnBiometricIdentifyCallback callback) {
-        mManagerIdentifyCallback = callback;
 
         mCancellationSignal = cancel;
         if (mCancellationSignal == null) {
@@ -174,4 +177,17 @@ public class FingerPromptApi28 implements FingerImpl {
         return null;
     }
 
+    public boolean hasEnrolledFingerprints() {
+        if (compat != null) {
+            return compat.hasEnrolledFingerprints();
+        }
+        return false;
+    }
+
+    public boolean isHardwareDetected() {
+        if (compat != null) {
+            return compat.isHardwareDetected();
+        }
+        return false;
+    }
 }

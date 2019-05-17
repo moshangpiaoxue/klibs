@@ -3,7 +3,6 @@ package mo.klib.utils.systemUtils.fingerUtil;
 import android.app.Activity;
 import android.app.KeyguardManager;
 import android.content.Context;
-import android.hardware.fingerprint.FingerprintManager;
 import android.os.Build;
 import android.os.CancellationSignal;
 import android.support.annotation.NonNull;
@@ -77,9 +76,7 @@ public class FingerDentifyManager {
      */
     public boolean hasEnrolledFingerprints() {
         if (isAboveApi28()) {
-            //TODO 这是Api23的判断方法，也许以后有针对Api28的判断方法
-            final FingerprintManager manager = mActivity.getSystemService(FingerprintManager.class);
-            return manager != null && manager.hasEnrolledFingerprints();
+            return ((FingerPromptApi28) mImpl).hasEnrolledFingerprints();
         } else if (isAboveApi23()) {
             return ((FingerPromptApi23) mImpl).hasEnrolledFingerprints();
         } else {
@@ -92,9 +89,7 @@ public class FingerDentifyManager {
      */
     public boolean isHardwareDetected() {
         if (isAboveApi28()) {
-            //TODO 这是Api23的判断方法，也许以后有针对Api28的判断方法
-            final FingerprintManager fm = mActivity.getSystemService(FingerprintManager.class);
-            return fm != null && fm.isHardwareDetected();
+            return ((FingerPromptApi28) mImpl).isHardwareDetected();
         } else if (isAboveApi23()) {
             return ((FingerPromptApi23) mImpl).isHardwareDetected();
         } else {
