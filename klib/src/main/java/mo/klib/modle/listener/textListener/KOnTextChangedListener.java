@@ -97,7 +97,7 @@ public class KOnTextChangedListener implements TextWatcher {
                     str1 += str[i];
                 }
                 mEditText.setText(str1);
-                mEditText.setSelection(start);
+//                mEditText.setSelection(start);
             }
         }
     }
