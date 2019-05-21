@@ -15,7 +15,6 @@ import mo.klib.utils.logUtils.LogUtil;
 import mo.klib.utils.tipsUtil.ProgressDialogUtil;
 import mo.klib.utils.viewUtil.ViewUtil;
 import mo.klib.view.KTitleView;
-import mo.klib.view.dialog.HttpDialogLoading;
 
 /**
  * @ author：mo
@@ -138,6 +137,9 @@ public abstract class KBaseLayoutActivity extends KBaseActivity {
     }
 
     protected void onTitleRightClick(View v) {
+        if (!isCanBack) {
+            return;
+        }
     }
 
     protected abstract void getData();
