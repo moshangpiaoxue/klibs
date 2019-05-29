@@ -1,5 +1,6 @@
 package mo.klib.utils.tipsUtil;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -14,8 +15,8 @@ public class ProgressDialogUtil {
 
     public static ProgressDialog progressLoading = null;
 
-    public static void showProgress(Context act, String tips) {
-        if (progressLoading == null) {
+    public static void showProgress(Activity act, String tips) {
+        if (progressLoading == null&&!act.isFinishing()) {
             progressLoading = ProgressDialog.show(act,
                     "", tips, true, false);
             progressLoading.setOnKeyListener(new DialogInterface.OnKeyListener() {

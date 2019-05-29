@@ -15,11 +15,10 @@ import mo.klib.modle.listener.textListener.KOnTextChangedListener;
 import mo.klib.utils.tipsUtil.ToastUtil;
 
 /**
- * @author：mo
- * @data：2017/11/17 0017
- * @功能：EditText工具类
+ * @ author：mo
+ * @ data：2017/1124：11:10
+ * @ 功能：EditText工具类
  */
-
 public class EditTextUtil {
     public interface InputListener {
         void onInputAfter(Boolean allComplete);
@@ -40,7 +39,7 @@ public class EditTextUtil {
      * @param isOpen    是否开启输入/编辑
      * @param focusNeeded   是否移动光标到最后
      */
-    public static void disableEditState(EditText editText, boolean isOpen, boolean focusNeeded) {
+    public static void setEditAble(EditText editText, boolean isOpen, boolean focusNeeded) {
         if (isOpen) {
             editText.setFocusableInTouchMode(true);
             editText.setFocusable(true);
@@ -62,7 +61,7 @@ public class EditTextUtil {
      * @param mEditText
      * @param isShow
      */
-    public static void changPwStatue(EditText mEditText, Boolean isShow) {
+    public static void setPwAble(EditText mEditText, Boolean isShow) {
         //第一种方法
         if (isShow) {
             //选择状态 显示明文--设置为可见的密码
@@ -116,7 +115,7 @@ public class EditTextUtil {
      * @param editText
      * @param count    位数 count=0表示不输入小数类型
      */
-    public static void setEdDecimal(EditText editText, int count) {
+    public static void setDecimal(EditText editText, int count) {
         if (count < 1) {
             //整数型
             editText.setInputType(InputType.TYPE_CLASS_NUMBER);

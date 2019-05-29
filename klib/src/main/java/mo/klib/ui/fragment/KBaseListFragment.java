@@ -51,9 +51,19 @@ public abstract class KBaseListFragment<T> extends KBaseLayoutFragment {
             mWrapper = new KHeaderAndFooterWrapper<T>(mAdapter);
             kRecycleview.setAdapter(mWrapper);
         }
-        kPullLayout.autoRefresh();
+
         loading();
         initListView();
+        if (isCanAutoRefresh()) {
+            kPullLayout.autoRefresh();
+        }
+    }
+
+    /**
+     * 是否自动刷新
+     */
+    private boolean isCanAutoRefresh() {
+        return true;
     }
 
     protected abstract void initListView();

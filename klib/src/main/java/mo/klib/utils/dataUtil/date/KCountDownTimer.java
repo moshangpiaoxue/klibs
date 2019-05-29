@@ -5,7 +5,7 @@ import android.os.CountDownTimer;
 /**
  * @ author：mo
  * @ data：2018/11/7
- * @ 功能：自定义倒计时
+ * @ 功能：自定义倒计时(CountDownTimer在获取系统时间的、时会有误差，当持续时间长的时候，可能会显示-1)
  */
 public abstract class KCountDownTimer extends CountDownTimer {
     /**
@@ -20,13 +20,15 @@ public abstract class KCountDownTimer extends CountDownTimer {
 
     /**
      * 倒计时开始
-     *
-     * @param millisUntilFinished
      */
     @Override
     public void onTick(long millisUntilFinished) {
-//        onTicks(millisUntilFinished, (int) ((millisUntilFinished / 1000) - 1));
-        onTicks(millisUntilFinished, (int) Math.round((double) millisUntilFinished / 1000)-1);
+        int second = (int) Math.round((double) millisUntilFinished / 1000) - 1;
+        if (second < 0) {
+            onFinish();
+        } else {
+            onTicks(millisUntilFinished, second);
+        }
     }
 
 
