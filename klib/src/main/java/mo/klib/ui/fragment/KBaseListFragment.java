@@ -62,7 +62,7 @@ public abstract class KBaseListFragment<T> extends KBaseLayoutFragment {
     /**
      * 是否自动刷新
      */
-    private boolean isCanAutoRefresh() {
+    protected boolean isCanAutoRefresh() {
         return true;
     }
 
