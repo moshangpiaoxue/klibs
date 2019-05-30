@@ -177,8 +177,8 @@ public class KApplication extends MultiDexApplication {
      */
     @Override
     protected void attachBaseContext(Context base) {
-        MultiDex.install(this);
         super.attachBaseContext(base);
+        MultiDex.install(this);
     }
 }
 
