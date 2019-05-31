@@ -25,9 +25,17 @@
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowFullscreen">true</item>
     </style>
+
     <declare-styleable name="PullToRefreshLayout">
-        <attr name="view_error" format="reference"/>
-        <attr name="view_empty" format="reference"/>
-        <attr name="view_loading" format="reference"/>
+        <attr name="view_error" format="reference" />
+        <attr name="view_empty" format="reference" />
+        <attr name="view_loading" format="reference" />
     </declare-styleable>
+    <!--dialog动画左滑进入，右滑退出-->
+    <style name="dialogAnimLeftInRightOut" mce_bogus="1" parent="android:Animation">
+        <!--进入动画-->
+        <item name="android:windowEnterAnimation">@anim/kpush_left_in</item>
+        <!--退出动画-->
+        <item name="android:windowExitAnimation">@anim/kpush_right_out</item>
+    </style>
 </resources>
