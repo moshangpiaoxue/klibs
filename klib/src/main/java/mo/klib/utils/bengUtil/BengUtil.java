@@ -15,19 +15,6 @@ import mo.klib.R;
  * @ 功能：
  */
 public class BengUtil {
-
-    /**
-     * 跳出界面（建造者）
-     *
-     * @param fromAct  起点activity
-     * @param toAct    终点activity
-     * @param isFinish 是否杀死起点activity
-     * @return Builder 建造者 可追加配置
-     */
-    public static Builder getBuilder(Activity fromAct, Class<?> toAct, Boolean isFinish) {
-        return new Builder(fromAct, toAct, isFinish);
-    }
-
     /**
      * 在跳入界面里拿带过来的数据
      * 注1：可拿一般的数据类型和实体类，实体类一定要使用Serializable或Parcelable，进行序列化处理
@@ -70,6 +57,19 @@ public class BengUtil {
         return intent.getExtras();
     }
 
+    /**
+     * 跳出界面（建造者）
+     *
+     * @param fromAct  起点activity
+     * @param toAct    终点activity
+     * @param isFinish 是否杀死起点activity
+     * @return Builder 建造者 可追加配置
+     */
+    public static Builder getBuilder(Activity fromAct, Class<?> toAct, Boolean isFinish) {
+        return new Builder(fromAct, toAct, isFinish);
+    }
+
+
     public static class Builder {
         /**
          * 当前活动
@@ -103,6 +103,18 @@ public class BengUtil {
          * 跳转带的数据
          */
         private Bundle bundle;
+        /**
+         * 跳下个界面的启动模式
+         */
+        private int flag = -1;
+        /**
+         * 是否需要返回数据（onActivityResult）
+         */
+        private boolean isForResult = false;
+        /**
+         * 默认返回的结果码
+         */
+        private int resultCode = 1;
 
         public Builder(Activity fromAct, Class<?> toAct, Boolean isFinish) {
             this.fromAct = fromAct;
@@ -112,6 +124,40 @@ public class BengUtil {
             bundle = new Bundle();
         }
 
+        /**
+         * 设置数据返回
+         *
+         * @param forResult  跳出后是否还通过onActivityResult(int requestCode, int resultCode, Intent data)接收返回数据
+         * @param resultCode 请求码，好像是不能小于0
+         *                   数据返回后，通过onActivityResult(int requestCode, int resultCode, Intent data)接收
+         *                   ，resultCode对应的是方法里的requestCode参数，这两个值相等，说明onActivityResult方法里的数据是我想要的
+         * @return this
+         */
+        public Builder setForResult(boolean forResult, int resultCode) {
+            this.isForResult = forResult;
+            this.resultCode = resultCode < 0 ? 1 : resultCode;
+            return this;
+        }
+
+
+        /**
+         * 设置被跳入activity的启动模式(启动模式这个说法可能不太准确，意会吧。。。)
+         *
+         * @param flag :
+         *             FLAG_ACTIVITY_NEW_TASK=如果已经存在了一个与新activity有着同样affinity的任务，则activity会载入那个任务之中。如果没有，则启用新任务。
+         *             FLAG_ACTIVITY_CLEAR_TOP=跳转到的activity若已在栈中存在，则将其上的activity都销掉。
+         *             FLAG_ACTIVITY_SINGLE_TOP=目标activity已在栈顶则跳转过去，不在栈顶则在栈顶新建activity。
+         *             FLAG_ACTIVITY_NO_HISTORY=跳转到的activity不压在栈中
+         * @return this
+         */
+        public Builder setFlag(int flag) {
+            this.flag = flag;
+            return this;
+        }
+
+        /**
+         * 设置携带的数据（默认key为 extra,思路是只能传一个，多个的话使用setBundle(Bundle bundle) 方法）
+         */
         public Builder setObject(Object obj) {
             if (obj instanceof Parcelable) {
                 bundle.putParcelable("extra", (Parcelable) obj);
@@ -156,8 +202,16 @@ public class BengUtil {
                 return;
             }
             intent.putExtras(bundle);
-            fromAct.startActivity(intent);
-            if (isFinish) {
+            if (flag != -1) {
+                intent.addFlags(flag);
+            }
+            if (isForResult) {
+                fromAct.startActivityForResult(intent, resultCode);
+            } else {
+                fromAct.startActivity(intent);
+            }
+
+            if (!isForResult && isFinish) {
                 fromAct.finish();
             }
             if (isAnimation) {
