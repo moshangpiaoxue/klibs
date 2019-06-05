@@ -315,9 +315,8 @@ public class TimeUtils {
     public static String getTime(long timeLong, boolean isFull, int minUnit) {
         StringBuilder diffDesc = new StringBuilder();
 
-        //换算秒，防止Int溢出
-        timeLong = (long) Math.round(timeLong / 1000);
-LogUtil.i(timeLong+"");
+        //换算秒，防止Int溢出,向上取整
+        timeLong = Math.round((double)( timeLong )/ 1000);
         Long year = timeLong / (60 * 60 * 24 * 30 * 12);
         timeLong = timeLong % (60 * 60 * 24 * 30 * 12);
 
