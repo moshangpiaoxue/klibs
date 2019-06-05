@@ -79,9 +79,15 @@ public abstract class KBaseListActivity<T> extends KBaseLayoutActivity {
             }
         });
         initListView();
+        if (isCanAutoRefresh()) {
+            kPullLayout.autoRefresh();
+        }
 
-        kPullLayout.autoRefresh();
         loading();
+    }
+
+    protected boolean isCanAutoRefresh() {
+        return true;
     }
 
     protected abstract void initListView();
