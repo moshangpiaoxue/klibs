@@ -13,6 +13,7 @@ import android.support.annotation.Nullable;
 import android.text.Layout.Alignment;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
 import android.text.style.AlignmentSpan;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.BulletSpan;
@@ -443,6 +444,9 @@ public class SpannableStringUtil {
         public void addToTextView(TextView textView) {
             setSpan();
             if (textView != null) {
+                if (clickSpan!=null){
+                    textView.setMovementMethod(LinkMovementMethod.getInstance());
+                }
                 textView.setText(mBuilder);
             }
         }

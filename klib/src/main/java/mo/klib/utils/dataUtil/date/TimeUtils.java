@@ -6,6 +6,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import mo.klib.utils.logUtils.LogUtil;
+
 /**
  * @ author：mo
  * @ data：2019/2/13:18:33
@@ -314,10 +316,11 @@ public class TimeUtils {
         StringBuilder diffDesc = new StringBuilder();
 
         //换算秒，防止Int溢出
-        timeLong = timeLong / 1000L;
-
+        timeLong = (long) Math.round(timeLong / 1000);
+LogUtil.i(timeLong+"");
         Long year = timeLong / (60 * 60 * 24 * 30 * 12);
         timeLong = timeLong % (60 * 60 * 24 * 30 * 12);
+
         if (year > 0 || minUnit >= 6) {
             diffDesc.append(year).append("年");
             if (!isFull) {
@@ -356,6 +359,7 @@ public class TimeUtils {
         }
 
         Long minitue = timeLong / 60;
+
         timeLong = timeLong % (60);
         if (minitue > 0 || diffDesc.length() != 0 || minUnit >= 2) {
             if (minitue < 10) diffDesc.append("0");
@@ -366,6 +370,7 @@ public class TimeUtils {
         }
 
         Long second = timeLong;
+
         if (second < 10) diffDesc.append("0");
         diffDesc.append(second).append("秒");
         if (!isFull) {

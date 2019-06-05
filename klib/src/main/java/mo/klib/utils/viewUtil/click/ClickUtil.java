@@ -14,7 +14,6 @@ public class ClickUtil {
      * 上次点击时间
      */
     private static long lastClickTime;
-
     /**
      * 默认时间内（1秒），是否是重复点击
      */
@@ -27,7 +26,6 @@ public class ClickUtil {
         lastClickTime = curClickTime;
         return flag;
     }
-
     /**
      * 规定时间内，是否是重复点击
      */
