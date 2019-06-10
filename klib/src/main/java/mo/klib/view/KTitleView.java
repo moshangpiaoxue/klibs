@@ -157,11 +157,11 @@ public class KTitleView extends FrameLayout {
      */
     public void setRightText(CharSequence text) {
 //        if (StringUtil.isEmpty(text)) {
-            right.setText("");
-            right.setVisibility(INVISIBLE);
+//            right.setText("");
+//            right.setVisibility(INVISIBLE);
 //        } else {
-//            right.setText(text);
-//            right.setVisibility(VISIBLE);
+            right.setText(text);
+            right.setVisibility(VISIBLE);
 //        }
     }
     public void setRightText(String text, int color) {
