@@ -34,10 +34,10 @@ import android.text.style.URLSpan;
 import android.text.style.UnderlineSpan;
 import android.widget.TextView;
 
-
 import mo.klib.k;
 
 import static android.graphics.BlurMaskFilter.Blur;
+import static android.text.style.DynamicDrawableSpan.ALIGN_BOTTOM;
 
 /**
  * @ description: SpannableString工具类
@@ -96,6 +96,7 @@ public class SpannableStringUtil {
         private boolean imageIsUri;
         private Uri uri;
         private boolean imageIsResourceId;
+        private int verticalAlignment = ALIGN_BOTTOM;
         @DrawableRes
         private int resourceId;
 
@@ -370,6 +371,18 @@ public class SpannableStringUtil {
         }
 
         /**
+         * 设置图片
+         *
+         * @param verticalAlignment 图片位置，就两种DynamicDrawableSpan.ALIGN_BOTTOM或DynamicDrawableSpan.ALIGN_BASELINE
+         *                          默认ALIGN_BASELINE
+         * @return {@link Builder}
+         */
+        public Builder setVerticalAlignment(int verticalAlignment) {
+            this.verticalAlignment = verticalAlignment;
+            return this;
+        }
+
+        /**
          * 设置点击事件
          * <p>需添加view.setMovementMethod(LinkMovementMethod.getInstance())</p>
          *
@@ -444,7 +457,7 @@ public class SpannableStringUtil {
         public void addToTextView(TextView textView) {
             setSpan();
             if (textView != null) {
-                if (clickSpan!=null){
+                if (clickSpan != null) {
                     textView.setMovementMethod(LinkMovementMethod.getInstance());
                 }
                 textView.setText(mBuilder);
@@ -525,20 +538,20 @@ public class SpannableStringUtil {
             if (imageIsBitmap || imageIsDrawable || imageIsUri || imageIsResourceId) {
 
                 if (imageIsBitmap) {
-                    mBuilder.setSpan(new ImageSpan(k.app(), bitmap), start, end, flag);
+                    mBuilder.setSpan(new ImageSpan(k.app(), bitmap,verticalAlignment), start, end, flag);
                     bitmap = null;
                     imageIsBitmap = false;
                 } else if (imageIsDrawable) {
-                    mBuilder.setSpan(new ImageSpan(drawable), start, end, flag);
+                    mBuilder.setSpan(new ImageSpan(drawable,verticalAlignment), start, end, flag);
                     drawable = null;
                     imageIsDrawable = false;
                 } else if (imageIsUri) {
-                    mBuilder.setSpan(new ImageSpan(k.app(), uri), start, end, flag);
+                    mBuilder.setSpan(new ImageSpan(k.app(), uri,verticalAlignment), start, end, flag);
                     uri = null;
 
                     imageIsUri = false;
                 } else {
-                    mBuilder.setSpan(new ImageSpan(k.app(), resourceId), start, end, flag);
+                    mBuilder.setSpan(new ImageSpan(k.app(), resourceId,verticalAlignment), start, end, flag);
                     resourceId = 0;
 
                     imageIsResourceId = false;
