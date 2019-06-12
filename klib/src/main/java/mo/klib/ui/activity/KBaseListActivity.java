@@ -13,6 +13,7 @@ import mo.klib.modle.adapter.KHeaderAndFooterWrapper;
 import mo.klib.modle.adapter.KRecycleViewAdapter;
 import mo.klib.modle.listener.scrollingListener.KOnScrollingListener;
 import mo.klib.utils.dataUtil.StringUtil;
+import mo.klib.utils.logUtils.LogUtil;
 import mo.klib.utils.viewUtil.ViewUtil;
 import mo.klib.view.PullToRefresh.BaseRefreshListener;
 import mo.klib.view.PullToRefresh.KPullToRefreshLayout;
@@ -71,19 +72,17 @@ public abstract class KBaseListActivity<T> extends KBaseLayoutActivity {
             mWrapper = new KHeaderAndFooterWrapper<>(mAdapter);
             kRecycleview.setAdapter(mWrapper);
         }
-
         layoutError.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getList(mPage = 1);
             }
         });
-        initListView();
         if (isCanAutoRefresh()) {
             kPullLayout.autoRefresh();
         }
-
         loading();
+        initListView();
     }
 
     protected boolean isCanAutoRefresh() {
@@ -141,6 +140,7 @@ public abstract class KBaseListActivity<T> extends KBaseLayoutActivity {
             loadErrorNoData();
             mWrapper.addEmptyView(emptyView);
         }
+
         loadSuccess();
         kPullLayout.finishRefresh();
     }
