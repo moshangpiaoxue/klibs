@@ -17,7 +17,9 @@ import mo.klib.utils.appUtils.PermissionUtil;
 import mo.klib.utils.dataUtil.StringUtil;
 import mo.klib.utils.logUtils.LogUtil;
 
+import static android.app.Notification.EXTRA_CHANNEL_ID;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+import static android.provider.Settings.EXTRA_APP_PACKAGE;
 
 
 /**
@@ -179,6 +181,40 @@ public class NextOtherActivityUtil {
             localIntent.setData(Uri.fromParts("package", k.app().getPackageName(), null));
             k.app().startActivity(localIntent);
 
+        }
+    }
+    public static void toSettingNotification2(Activity activity){
+        try {
+            // 根据isOpened结果，判断是否需要提醒用户跳转AppInfo页面，去打开App通知权限
+            Intent intent = new Intent();
+            intent.setAction(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
+            //这种方案适用于 API 26, 即8.0（含8.0）以上可以用
+            intent.putExtra(EXTRA_APP_PACKAGE, activity.getPackageName());
+            intent.putExtra(EXTRA_CHANNEL_ID, activity.getApplicationInfo().uid);
+
+            //这种方案适用于 API21——25，即 5.0——7.1 之间的版本可以使用
+            intent.putExtra("app_package", activity.getPackageName());
+            intent.putExtra("app_uid", activity.getApplicationInfo().uid);
+
+            // 小米6 -MIUI9.6-8.0.0系统，是个特例，通知设置界面只能控制"允许使用通知圆点"——然而这个玩意并没有卵用，我想对雷布斯说：I'm not ok!!!
+            //  if ("MI 6".equals(Build.MODEL)) {
+            //      intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+            //      Uri uri = Uri.fromParts("package", getPackageName(), null);
+            //      intent.setData(uri);
+            //      // intent.setAction("com.android.settings/.SubSettings");
+            //  }
+            activity.startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+            // 出现异常则跳转到应用设置界面：锤子坚果3——OC105 API25
+            Intent intent = new Intent();
+
+            //下面这种方案是直接跳转到当前应用的设置界面。
+            //https://blog.csdn.net/ysy950803/article/details/71910806
+            intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+            Uri uri = Uri.fromParts("package", activity.getPackageName(), null);
+            intent.setData(uri);
+            activity. startActivity(intent);
         }
     }
 }

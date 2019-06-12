@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 
 
 import java.lang.reflect.Field;
@@ -148,7 +149,6 @@ public class KNotificationManager {
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static boolean isNotificationEnabled() {
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             //8.0手机以上
             if (((NotificationManager) k.app().getSystemService(Context.NOTIFICATION_SERVICE)).getImportance() == NotificationManager.IMPORTANCE_NONE) {
@@ -179,5 +179,8 @@ public class KNotificationManager {
             e.printStackTrace();
         }
         return false;
+    }
+    public static boolean isNotificationEnabled2(){
+        return NotificationManagerCompat.from(k.app()).areNotificationsEnabled();
     }
 }

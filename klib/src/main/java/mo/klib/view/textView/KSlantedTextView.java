@@ -23,15 +23,37 @@ import mo.klib.utils.logUtils.LogUtil;
 /**
  * @ author：mo
  * @ data：2019/6/12:10:00
- * @ 功能：
+ * @ 功能：旋转TextView
+ * 注意：1、有时候设置外间距或者内间距，文字显示的位置为偏，设置slantedLength为控件宽高的一半小一点试下
+ * 2、控件宽高必须一样
  */
-public class KSlantedTextView  extends View {
-    private static final String TAG = "SlantedTextView";
+public class KSlantedTextView extends View {
+    private void demo(KSlantedTextView stv) {
+        //java
+        stv.setText("AAA")
+                .setTextColor(Color.WHITE)
+                .setSlantedBackgroundColor(Color.BLACK)
+                .setTextSize(18)
+                .setSlantedLength(50)
+                .setMode(KSlantedTextView.SlantedMode.MODE_LEFT);
+
+        //XML
+//        <mo.klib.view.textView.KSlantedTextView
+//        android:layout_width="80dp"
+//        android:layout_height="80dp"
+//        android:gravity="center"
+//        app:slantedBackgroundColor="@color/color_4499FD"
+//        app:slantedLength="40dp"
+//        app:slantedMode="left"
+//        app:slantedText="左上矩形"
+//        app:slantedTextColor="@color/color_000000"
+//        app:slantedTextSize="16sp" />
+    }
 
     /**
      * 倾斜模式
      */
-    interface SlantedMode {
+    public interface SlantedMode {
         /**
          * 左上角倾斜模式
          */
@@ -253,7 +275,7 @@ public class KSlantedTextView  extends View {
                 path = getModeRightBottomTrianglePath(path, w, h);
                 break;
             default:
-                LogUtil.i( "mode is error!");
+                LogUtil.i("mode is error!");
                 break;
         }
         path.close();

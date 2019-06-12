@@ -132,6 +132,7 @@ public abstract class KBaseLayoutActivity extends KBaseActivity {
                 ProgressDialogUtil.cancelProgress();
             } else {
                 super.onBackPressed();
+//                finishActivity(mActivity);
             }
         }
     }

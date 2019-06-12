@@ -13,7 +13,7 @@
         <attr name="slantedTextSize" format="dimension" />
         <!--倾斜文字内容-->
         <attr name="slantedText" format="string" />
-        <!--倾斜背景 边长距离-->
+        <!--倾斜背景 边长距离(高度)-->
         <attr name="slantedLength" format="dimension" />
         <!--倾斜模式-->
         <attr name="slantedMode" format="enum">
