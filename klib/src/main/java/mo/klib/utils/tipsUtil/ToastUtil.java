@@ -5,7 +5,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 
-import com.hjq.toast.ToastUtils;
+import com.mic.etoast2.Toast;
 
 import mo.klib.R;
 import mo.klib.k;
@@ -20,10 +20,11 @@ import mo.klib.utils.viewUtil.ViewUtil;
 public class ToastUtil {
 
     public static void showToast(final String msg) {
-        showToast(msg, android.widget.Toast.LENGTH_SHORT);
+        showToast(msg, 1000);
     }
     public static void showToast(final String msg,int time) {
-        ToastUtils.show(msg);
+        Toast.makeText(k.app(),msg,time).show();
+//        ToastUtils.show(msg);
 //        //如果是主线程，直接弹出toast
 //        if ("main".equals(Thread.currentThread().getName())) {
 //            Toast.makeText(k.app(), msg, time).show();
@@ -31,7 +32,8 @@ public class ToastUtil {
     }
 
     public static void showToast(final Activity ctx, final String msg) {
-        ToastUtils.show(msg);
+//        ToastUtils.show(msg);
+        Toast.makeText(ctx,msg,1000).show();
 //        if (ctx != null) {
 //            //如果是主线程，直接弹出toast
 //            if ("main".equals(Thread.currentThread().getName())) {

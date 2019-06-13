@@ -7,10 +7,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
-import android.view.Gravity;
-
-import com.hjq.toast.ToastUtils;
-import com.hjq.toast.style.ToastWhiteStyle;
 
 import cn.bingoogolapple.swipebacklayout.BGASwipeBackManager;
 
@@ -99,18 +95,18 @@ public class KApplication extends MultiDexApplication {
         mMainThread = Thread.currentThread();
         mMainThreadId = android.os.Process.myTid();
         mHandler = new Handler();
-        ToastUtils.init(this);
-        ToastUtils.initStyle(new ToastWhiteStyle(){
-            @Override
-            public int getGravity() {
-                return Gravity.BOTTOM;
-            }
-
-            @Override
-            public int getYOffset() {
-                return 20;
-            }
-        });
+//        ToastUtils.init(this);
+//        ToastUtils.initStyle(new ToastWhiteStyle(){
+//            @Override
+//            public int getGravity() {
+//                return Gravity.BOTTOM;
+//            }
+//
+//            @Override
+//            public int getYOffset() {
+//                return 20;
+//            }
+//        });
     }
 
 

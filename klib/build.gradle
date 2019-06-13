@@ -35,5 +35,6 @@ dependencies {
     // Activity右滑退出的效果
     api 'cn.bingoogolapple:bga-swipebacklayout:1.1.1@aar'
 
-    api 'com.hjq:toast:6.0'
+//    api 'com.hjq:toast:6.0'
+    api 'com.github.Blincheng:EToast2:v2.2.1'
 }
