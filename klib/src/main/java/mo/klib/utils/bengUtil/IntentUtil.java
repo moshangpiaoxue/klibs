@@ -120,6 +120,7 @@ public class IntentUtil {
      */
     public static Intent getSettingAppIntent(final String packageName) {
         Intent intent = new Intent("android.settings.APPLICATION_DETAILS_SETTINGS");
+        intent .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.setData(Uri.parse("package:" + packageName));
         return intent;
 //        return new Intent(Settings.ACTION_SETTINGS) .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

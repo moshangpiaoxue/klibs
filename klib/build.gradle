@@ -34,4 +34,6 @@ dependencies {
     api 'com.android.support:recyclerview-v7:27.1.1'
     // Activity右滑退出的效果
     api 'cn.bingoogolapple:bga-swipebacklayout:1.1.1@aar'
+
+    api 'com.hjq:toast:6.0'
 }

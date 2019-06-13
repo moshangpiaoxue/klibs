@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hjq.toast.ToastUtils;
+
 import mo.klib.R;
 import mo.klib.k;
 import mo.klib.utils.viewUtil.ViewUtil;
@@ -23,28 +25,30 @@ public class ToastUtil {
         showToast(msg, Toast.LENGTH_SHORT);
     }
     public static void showToast(final String msg,int time) {
-        //如果是主线程，直接弹出toast
-        if ("main".equals(Thread.currentThread().getName())) {
-            Toast.makeText(k.app(), msg, time).show();
-        }
+        ToastUtils.show("我是吐司");
+//        //如果是主线程，直接弹出toast
+//        if ("main".equals(Thread.currentThread().getName())) {
+//            Toast.makeText(k.app(), msg, time).show();
+//        }
     }
 
     public static void showToast(final Activity ctx, final String msg) {
-        if (ctx != null) {
-            //如果是主线程，直接弹出toast
-            if ("main".equals(Thread.currentThread().getName())) {
-                Toast.makeText(ctx, msg, Toast.LENGTH_SHORT).show();
-            } else {
-                //如果不是主线程，则调用context中 runOnUIThread方法弹出toast
-                ctx.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(ctx, msg, Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-            }
-        }
+        ToastUtils.show("我是吐司");
+//        if (ctx != null) {
+//            //如果是主线程，直接弹出toast
+//            if ("main".equals(Thread.currentThread().getName())) {
+//                Toast.makeText(ctx, msg, Toast.LENGTH_SHORT).show();
+//            } else {
+//                //如果不是主线程，则调用context中 runOnUIThread方法弹出toast
+//                ctx.runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        Toast.makeText(ctx, msg, Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+//
+//            }
+//        }
     }
 
     public static void showToastIos(String msg) {

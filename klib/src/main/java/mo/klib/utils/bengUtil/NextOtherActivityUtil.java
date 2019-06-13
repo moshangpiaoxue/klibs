@@ -183,6 +183,9 @@ public class NextOtherActivityUtil {
 
         }
     }
+    /**
+    * 这个方法会把吐司也关了
+    */
     public static void toSettingNotification2(Activity activity){
         try {
             // 根据isOpened结果，判断是否需要提醒用户跳转AppInfo页面，去打开App通知权限
