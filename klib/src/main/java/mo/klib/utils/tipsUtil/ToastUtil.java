@@ -1,11 +1,9 @@
 package mo.klib.utils.tipsUtil;
 
 import android.app.Activity;
-import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.hjq.toast.ToastUtils;
 
@@ -17,15 +15,15 @@ import mo.klib.utils.viewUtil.ViewUtil;
 /**
  * @ author：mo
  * @ data：2018/10/12
- * @ 功能：
+ * @ 功能：https://github.com/getActivity/ToastUtils
  */
 public class ToastUtil {
 
     public static void showToast(final String msg) {
-        showToast(msg, Toast.LENGTH_SHORT);
+        showToast(msg, android.widget.Toast.LENGTH_SHORT);
     }
     public static void showToast(final String msg,int time) {
-        ToastUtils.show("我是吐司");
+        ToastUtils.show(msg);
 //        //如果是主线程，直接弹出toast
 //        if ("main".equals(Thread.currentThread().getName())) {
 //            Toast.makeText(k.app(), msg, time).show();
@@ -33,7 +31,7 @@ public class ToastUtil {
     }
 
     public static void showToast(final Activity ctx, final String msg) {
-        ToastUtils.show("我是吐司");
+        ToastUtils.show(msg);
 //        if (ctx != null) {
 //            //如果是主线程，直接弹出toast
 //            if ("main".equals(Thread.currentThread().getName())) {
@@ -52,7 +50,7 @@ public class ToastUtil {
     }
 
     public static void showToastIos(String msg) {
-        Toast toast = new Toast(k.app());
+        android.widget.Toast toast = new android.widget.Toast(k.app());
         View layout = ViewUtil.getView(k.app(), R.layout.tost_ios, null);
         layout.setAlpha(0.7f);
         toast.setView(layout);
