@@ -11,7 +11,6 @@ import android.telephony.SmsManager;
 
 import java.util.List;
 
-
 import mo.klib.k;
 import mo.klib.utils.appUtils.PermissionUtil;
 import mo.klib.utils.dataUtil.StringUtil;
@@ -71,6 +70,7 @@ public class NextOtherActivityUtil {
      */
     public static void toCall(final String phoneNumber) {
         if (PermissionUtil.INSTANCE.checkSelfPermission(Manifest.permission.CALL_PHONE)) {
+            LogUtil.i("没权限");
             return;
         }
         k.app().startActivity(IntentUtil.getCallIntent(phoneNumber));
@@ -145,16 +145,25 @@ public class NextOtherActivityUtil {
      * @param url 浏览器地址
      */
     public static void toBrowser(String url) {
-        Intent intent = new Intent();
-        intent.setAction("android.intent.action.VIEW");
-        Uri uri = Uri.parse(url);
-        intent.setData(uri);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        k.app().startActivity(intent);
+        String temp;
+        if (!url.contains("http")) {
+            temp = "http://" + url;
+        } else {
+            temp = url;
+        }
+        try {
+            Intent intent = new Intent();
+            intent.setAction("android.intent.action.VIEW");
+            Uri uri = Uri.parse(temp);
+            intent.setData(uri);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            k.app().startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+            LogUtil.i("异常了，");
+        }
 
-//        Uri uri = Uri.parse(url);
-//        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-//        context.startActivity(intent);
+
     }
 
     /**
@@ -183,10 +192,11 @@ public class NextOtherActivityUtil {
 
         }
     }
+
     /**
-    * 这个方法会把吐司也关了
-    */
-    public static void toSettingNotification2(Activity activity){
+     * 这个方法会把吐司也关了
+     */
+    public static void toSettingNotification2(Activity activity) {
         try {
             // 根据isOpened结果，判断是否需要提醒用户跳转AppInfo页面，去打开App通知权限
             Intent intent = new Intent();
@@ -217,7 +227,7 @@ public class NextOtherActivityUtil {
             intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
             Uri uri = Uri.fromParts("package", activity.getPackageName(), null);
             intent.setData(uri);
-            activity. startActivity(intent);
+            activity.startActivity(intent);
         }
     }
 }

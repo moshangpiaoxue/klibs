@@ -64,7 +64,7 @@ public class ToMarketUtil {
         try {
             k.app().startActivity(intent);
         } catch (Exception ex) {
-            LogUtil.i("提示没有安装应用市场");
+            LogUtil.i("没有安装应用市场或参数错了");
             ToastUtil.showToast("提示没有安装应用市场");
             ex.printStackTrace();
         }

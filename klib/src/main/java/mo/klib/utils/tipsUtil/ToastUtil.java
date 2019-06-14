@@ -15,15 +15,18 @@ import mo.klib.utils.viewUtil.ViewUtil;
 /**
  * @ author：mo
  * @ data：2018/10/12
- * @ 功能：https://github.com/getActivity/ToastUtils
+ * @ 功能：
+ * https://github.com/Blincheng/EToast2
+ * https://github.com/getActivity/ToastUtils（在华为有些机型上不弹 比如Nova4）
  */
 public class ToastUtil {
 
     public static void showToast(final String msg) {
         showToast(msg, 1000);
     }
-    public static void showToast(final String msg,int time) {
-        Toast.makeText(k.app(),msg,time).show();
+
+    public static void showToast(final String msg, int time) {
+        Toast.makeText(k.app(), msg, time).show();
 //        ToastUtils.show(msg);
 //        //如果是主线程，直接弹出toast
 //        if ("main".equals(Thread.currentThread().getName())) {
@@ -33,22 +36,21 @@ public class ToastUtil {
 
     public static void showToast(final Activity ctx, final String msg) {
 //        ToastUtils.show(msg);
-        Toast.makeText(ctx,msg,1000).show();
-//        if (ctx != null) {
-//            //如果是主线程，直接弹出toast
-//            if ("main".equals(Thread.currentThread().getName())) {
-//                Toast.makeText(ctx, msg, Toast.LENGTH_SHORT).show();
-//            } else {
-//                //如果不是主线程，则调用context中 runOnUIThread方法弹出toast
-//                ctx.runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        Toast.makeText(ctx, msg, Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-//
-//            }
-//        }
+
+        if (ctx != null) {
+            //如果是主线程，直接弹出toast
+            if ("main".equals(Thread.currentThread().getName())) {
+                Toast.makeText(ctx, msg, 1000).show();
+            } else {
+                //如果不是主线程，则调用context中 runOnUIThread方法弹出toast
+                ctx.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(ctx, msg, 1000).show();
+                    }
+                });
+            }
+        }
     }
 
     public static void showToastIos(String msg) {
