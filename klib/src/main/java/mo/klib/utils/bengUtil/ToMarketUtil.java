@@ -7,7 +7,6 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,6 +50,16 @@ public class ToMarketUtil {
      * 跳转应用商店
      *
      * @param marketPkg 应用商店包名  null==跳默认市场，如果装有多个市场，会弹列表选择，但是 实测装应用宝和华为市场时，默认跳转了应用宝
+     *                  com.android.vending	Google Play
+     *                  com.tencent.android.qqdownloader	应用宝
+     *                  com.qihoo.appstore	360手机助手
+     *                  com.baidu.appsearch	百度手机助
+     *                  com.xiaomi.market	小米应用商店
+     *                  com.wandoujia.phoenix2	豌豆荚
+     *                  com.huawei.appmarket	华为应用市场
+     *                  com.taobao.appcenter	淘宝手机助手
+     *                  com.hiapk.marketpho	安卓市场
+     *                  cn.goapk.market	安智市场
      * @return
      */
     public static void toMarket(String marketPkg) {

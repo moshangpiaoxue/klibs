@@ -6,7 +6,6 @@ import android.content.Context;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.os.Handler;
 import android.os.SystemClock;
 import android.support.annotation.ColorInt;
 import android.support.annotation.IntRange;
@@ -15,7 +14,6 @@ import android.view.TouchDelegate;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -25,7 +23,6 @@ import java.util.Arrays;
 
 import mo.klib.KApplication;
 import mo.klib.utils.ResUtil;
-import mo.klib.utils.animationUtils.TranslateAnimationUtil;
 import mo.klib.utils.dataUtil.StringUtil;
 import mo.klib.utils.dataUtil.dealUtil.ColorUtils;
 import mo.klib.utils.logUtils.LogUtil;
@@ -399,29 +396,6 @@ public class ViewUtil {
         void onClickListen(View view, final long timeBetween, final int times);
     }
 
-    /**
-     * 设置view显示
-     *
-     * @param view
-     */
-    public static void setViewShow(View view) {
-        TranslateAnimation showAnim = TranslateAnimationUtil.showAnim;
-        showAnim.setDuration(500);
-        view.startAnimation(showAnim);
-        view.setVisibility(View.VISIBLE);
-    }
-
-    /**
-     * 设置view隐藏
-     *
-     * @param view
-     */
-    public static void setViewHide(View view) {
-        TranslateAnimation hideAnim = TranslateAnimationUtil.hideAnim;
-        hideAnim.setDuration(500);
-        view.startAnimation(hideAnim);
-        view.setVisibility(View.GONE);
-    }
 
     /**
      * 为指定的 View 及其所有子 View 都设置 selected 状态
@@ -504,7 +478,7 @@ public class ViewUtil {
             @Override
             public void run() {
                 final View v = activity.findViewById(id);
-                if (v!=null){
+                if (v != null) {
                     v.setOnLongClickListener(new View.OnLongClickListener() {
                         @Override
                         public boolean onLongClick(View v) {

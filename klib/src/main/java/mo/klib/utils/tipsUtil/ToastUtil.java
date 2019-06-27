@@ -1,6 +1,7 @@
 package mo.klib.utils.tipsUtil;
 
 import android.app.Activity;
+import android.os.Looper;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
@@ -26,17 +27,23 @@ public class ToastUtil {
     }
 
     public static void showToast(final String msg, int time) {
-        Toast.makeText(k.app(), msg, time).show();
 //        ToastUtils.show(msg);
 //        //如果是主线程，直接弹出toast
 //        if ("main".equals(Thread.currentThread().getName())) {
 //            Toast.makeText(k.app(), msg, time).show();
 //        }
+        try {
+            Toast.makeText(k.app(), msg, time).show();
+        } catch (Exception e) {
+            //解决在子线程中调用Toast的异常情况处理
+            Looper.prepare();
+            Toast.makeText(k.app(), msg, time).show();
+            Looper.loop();
+        }
+
     }
 
     public static void showToast(final Activity ctx, final String msg) {
-//        ToastUtils.show(msg);
-
         if (ctx != null) {
             //如果是主线程，直接弹出toast
             if ("main".equals(Thread.currentThread().getName())) {

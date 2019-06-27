@@ -303,7 +303,6 @@ public class NextActivityUtil {
             mActivity.startActivity(mIntent, options.toBundle());
         } else {
             NextActivityUtil.toNextActivity(mActivity, mIntent, false);
-
         }
     }
 
