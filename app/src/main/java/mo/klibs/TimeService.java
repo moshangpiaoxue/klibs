@@ -4,7 +4,6 @@ import android.app.Service;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.IBinder;
-import android.util.Log;
 
 import mo.klib.utils.logUtils.LogUtil;
 
@@ -28,7 +27,7 @@ public class TimeService extends Service {
         LogUtil.i("后台进程被创建。 ");
 
 //服务启动广播接收器，使得广播接收器能够在程序退出后在后天继续运行。接收系统时间变更广播事件
-        DataChangeReceiver receiver = new DataChangeReceiver();
+        TimeChangeReceiver receiver = new TimeChangeReceiver();
         registerReceiver(receiver, new IntentFilter(Intent.ACTION_TIME_TICK));
 
     }

@@ -11,7 +11,7 @@ import mo.klib.utils.logUtils.LogUtil;
  * @ data：2019/2/15:17:01
  * @ 功能：
  */
-public class DataChangeReceiver extends BroadcastReceiver {
+public class TimeChangeReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
